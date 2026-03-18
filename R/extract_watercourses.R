@@ -32,6 +32,9 @@ extract_watercourses <- function(Basin, WaterLines = TRUE, WaterAreas = FALSE, W
   #catch the O'connell != O'Connell case
   if ("O'connell" %in% Basin) Basin[stringr::str_detect(Basin, "O'connell")] <- "O'Connell"
 
+  #when murray is requested, include the hinchinbrook island watercourses
+  if ("Murray" %in% Basin) Basin <- c(Basin, "Hinchinbrook Island")
+
   #construct a list of allowed basins to request
   allowed_basins <- c(
     "Brisbane", "Burdekin", "Balonne-Condamine", "Coleman", "Barron", "Mary", "Burnett", "Holroyd", "Noosa", "Don", "Border Rivers",
