@@ -1,9 +1,10 @@
 #' Extract Habitat Data from Datasets on File
 #'
 #' @param RawPath Character String. The path to where the full habitat files are found
+#' @param CropPath Character String. The path to where the cropped files should be saved
 #' @param CropObj Sf Object. The object to be used to crop the files.
 #' @param Habitat Character String. Either 'RV' or 'MS' for Riparian Vegetation and Mangrove and Saltmarsh respectively. This 
-#' tells the function where to save files.
+#' tells the function what specific steps to take
 #'
 #' @returns A table object summarising areas and years. Also crops and saves spatial data, and csv versions.
 #'
@@ -11,22 +12,24 @@
 #' @examples
 #' \dontrun{ #dont run because function takes a long time to process
 #' 
-#' p1 <- "path/to/folder"
+#' p1 <- "path/to/folder/"
+#' p2 <- "path/to/second_folder/"
 #' 
 #' n3_region <- build_n3_region()
 #' 
-#' all_data <- extract_habitat(p1, n3_region, "RV")
+#' all_data <- extract_habitat(p1, p2, n3_region, "RV")
 #' }
 #' 
-extract_habitat <- function(RawPath, CropObj, Habitat){
+extract_habitat <- function(RawPath, CropPath, CropObj, Habitat){
 
   #check required arguments
-  if (any(missing(RawPath), missing(CropObj), missing(Habitat))){
-    stop("You must supply the 'RawPath', 'CropObj', and 'Habitat', parameters.")
+  if (any(missing(RawPath), missing(CropPath), missing(CropObj), missing(Habitat))){
+    stop("You must supply the 'RawPath', 'CropPath', 'CropObj', and 'Habitat', parameters.")
   }
   
   #continue to check argument types
   if (!is.character(RawPath)){stop("You must supply a character string to the 'RawPath' parameter.")}
+  if (!is.character(CropPath)){stop("You must supply a character string to the 'CropPath' parameter.")}
   if (!inherits(CropObj, "sf")){stop("You must supply an sf object to the 'CropObj' parameter.")}
   if (!is.character(Habitat)){stop("You must supply an sf object to the 'Habitat' parameter.")}
 
@@ -34,18 +37,19 @@ extract_habitat <- function(RawPath, CropObj, Habitat){
     stop("You must supply either 'RV' (Riparian Vegetation) or 'MS' (Mangrove and Saltmarsh) to the 'Habitat' parameter.")}
   
   if (!"Basin" %in% colnames(CropObj)){
-    stop("The CropObj argument must contain the 'Basin' column or a column renamed to 'Basin'. This column is used to divide the spatial work into more managable chunks.")
+    stop("The CropObj argument should contain the 'Basin' column or a column renamed to 'Basin'. This column is used to divide the spatial work into more managable chunks.")
   }
   
-  #build the relevant output directory
-  if (Habitat == "RV"){
-    dir.create(glue::glue("{dirname(RawPath)}/riparian_vegetation/"))
-    OutPath <- glue::glue("{dirname(RawPath)}/riparian_vegetation/")
-  }
-  if (Habitat == "MS"){
-    dir.create(glue::glue("{dirname(RawPath)}/mangroves_and_saltmarsh/"))
-    OutPath <- glue::glue("{dirname(RawPath)}/mangroves_and_saltmarsh/")
-  }
+  #assign the relevant output directory
+  OutPath <- CropPath
+  #if (Habitat == "RV"){
+  #  dir.create(glue::glue("{dirname(RawPath)}/riparian_vegetation/"))
+  #  OutPath <- glue::glue("{dirname(RawPath)}/riparian_vegetation/")
+  #}
+  #if (Habitat == "MS"){
+  #  dir.create(glue::glue("{dirname(RawPath)}/mangroves_and_saltmarsh/"))
+  #  OutPath <- glue::glue("{dirname(RawPath)}/mangroves_and_saltmarsh/")
+  #}
 
   #list all files in the raw folder
   full_files <- list.files(RawPath, full.names = TRUE)

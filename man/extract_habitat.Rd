@@ -4,15 +4,17 @@
 \alias{extract_habitat}
 \title{Extract Habitat Data from Datasets on File}
 \usage{
-extract_habitat(RawPath, CropObj, Habitat)
+extract_habitat(RawPath, CropPath, CropObj, Habitat)
 }
 \arguments{
 \item{RawPath}{Character String. The path to where the full habitat files are found}
 
+\item{CropPath}{Character String. The path to where the cropped files should be saved}
+
 \item{CropObj}{Sf Object. The object to be used to crop the files.}
 
 \item{Habitat}{Character String. Either 'RV' or 'MS' for Riparian Vegetation and Mangrove and Saltmarsh respectively. This
-tells the function where to save files.}
+tells the function what specific steps to take}
 }
 \value{
 A table object summarising areas and years. Also crops and saves spatial data, and csv versions.
@@ -23,11 +25,12 @@ Extract Habitat Data from Datasets on File
 \examples{
 \dontrun{ #dont run because function takes a long time to process
 
-p1 <- "path/to/folder"
+p1 <- "path/to/folder/"
+p2 <- "path/to/second_folder/"
 
 n3_region <- build_n3_region()
 
-all_data <- extract_habitat(p1, n3_region, "RV")
+all_data <- extract_habitat(p1, p2, n3_region, "RV")
 }
 
 }
