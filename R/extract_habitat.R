@@ -42,6 +42,7 @@ extract_habitat <- function(RawPath, CropPath, CropObj, Habitat){
   
   #assign the relevant output directory
   OutPath <- CropPath
+  dir.create(OutPath)
   #if (Habitat == "RV"){
   #  dir.create(glue::glue("{dirname(RawPath)}/riparian_vegetation/"))
   #  OutPath <- glue::glue("{dirname(RawPath)}/riparian_vegetation/")
