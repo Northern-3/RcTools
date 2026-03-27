@@ -6,6 +6,12 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
 
 # Introduction
 
@@ -27,6 +33,10 @@ The purpose of the following functions is to automate and standardise the constr
 The key function to obtain the n3_region dataset is the [build_n3_region()] function. This function internally calls and runs all other "build" functions. At a high level, this is the only function you need to be concerned with.
 
 The recommended method for running this function in your code is as follows:
+
+```{r setup}
+library(RcTools)
+```
 
 ```{r}
 #| eval: FALSE
@@ -125,29 +135,3 @@ This function relies on data that has been manually extracted from [Environmenta
 A subset of the data is small enough that it has been saved as a data file within this R package. There is no need to manually retrieve the dataset again unless this stored file is lost. Within the function the appropriate pre-cleaning steps are listed.
 
 This function create small, special features within the **marine** Dry Tropics region, such as the the special marine zone around Magnetic Island and the Port of Townsville. Should you wish to add further customisation to the marine portion of the [build_n3_region()] function, this would be the place to include it.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-```{r, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>"
-)
-```
-
-```{r setup}
-library(RcTools)
-```
