@@ -5,12 +5,12 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Build_Northern_Three • RcTools</title>
+<title>Building The Northern Three Spatial File • RcTools</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Build_Northern_Three">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Building The Northern Three Spatial File">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -33,7 +33,7 @@
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/Build_Northern_Three.html">Build_Northern_Three</a></li>
+<li><a class="dropdown-item" href="../articles/Build_Northern_Three.html">Building The Northern Three Spatial File</a></li>
     <li><a class="dropdown-item" href="../articles/Data_Extractions.html">Data_Extractions</a></li>
     <li><a class="dropdown-item" href="../articles/eReefs.html">eReefs</a></li>
     <li><a class="dropdown-item" href="../articles/Misc_Helpers.html">Miscellaneous Helpers</a></li>
@@ -58,7 +58,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
 
-      <h1>Build_Northern_Three</h1>
+      <h1>Building The Northern Three Spatial File</h1>
             
       
 
@@ -67,9 +67,199 @@
 
     
     
+<div class="section level2">
+<h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+</h2>
+<p>Across all three Regional Report Cards spatial context is required,
+and spatial files are used. These files are used for a range of purposes
+including:</p>
+<ol style="list-style-type: decimal">
+<li>Defining Region, Basin, and Environment boundaries</li>
+<li>Identifying relevant Water Quality Objectives based on site
+locations</li>
+<li>Creating site maps for each index</li>
+<li>Extracting datasets within the bounds of the reporting region</li>
+<li>Calculating location sizes</li>
+<li>etc.</li>
+</ol>
+<p>Thus, in almost any case of R analysis, the “Northern Three
+boundaries dataset” (herein referred to as “n3_region”) is a key
+requirement.</p>
+<p>The purpose of the following functions is to automate and standardise
+the construction of the n3_region dataset such that all analyses
+conducted by all users refer to the same underlying dataset. This
+vignette walks through the steps required to obtain the n3_region
+dataset, as well as the method used to build the dataset.</p>
+</div>
+<div class="section level2">
+<h2 id="build_n3_region">build_n3_region<a class="anchor" aria-label="anchor" href="#build_n3_region"></a>
+</h2>
+<p>The key function to obtain the n3_region dataset is the
+[build_n3_region()] function. This function internally calls and runs
+all other “build” functions. At a high level, this is the only function
+you need to be concerned with.</p>
+<p>The recommended method for running this function in your code is as
+follows:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#define where you want the dataset to be saved in your file system</span></span>
+<span><span class="va">file_loc</span> <span class="op">&lt;-</span> <span class="fu">here</span><span class="op">(</span><span class="st">"data/n3_region.gpkg"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">#check the location provided.</span></span>
+<span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.exists</a></span><span class="op">(</span><span class="va">file_loc</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
+<span>  <span class="co">#if the data is there, open the file</span></span>
+<span>  <span class="va">n3_region</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">st_read</a></span><span class="op">(</span><span class="va">file_loc</span><span class="op">)</span></span>
+<span><span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span>  <span class="co">#if the data is not on file, build it and save it for next time</span></span>
+<span>  <span class="va">n3_region</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/build_n3_region.html">build_n3_region</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_write.html" class="external-link">st_write</a></span><span class="op">(</span><span class="va">n3_region</span>, <span class="va">file_loc</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+<p><strong>Note that there are no user inputs required.</strong></p>
+<div class="section level3">
+<h3 id="internal-components">Internal Components<a class="anchor" aria-label="anchor" href="#internal-components"></a>
+</h3>
+<p>Should you be interested in the internal components of the
+[build_n3_region()] function, such as where the data is source from, or
+you have found an error and/or want to update the function, the below
+section covers this in more detail.</p>
+<p>[build_n3_region()] is comprised of 8 internal functions:</p>
+<ul>
+<li>[build_basins()]</li>
+<li>[(build_named_islands)]</li>
+<li>[(build_waterbodies)]</li>
+<li>[(build_waterbody_boundaries)]</li>
+<li>[(build_sub_basins)]</li>
+<li>[(build_water_types)]</li>
+<li>[(build_land_sp)]</li>
+<li>[(build_marine_sp)]</li>
+</ul>
+<div class="section level4">
+<h4 id="build_basins">build_basins<a class="anchor" aria-label="anchor" href="#build_basins"></a>
+</h4>
+<p>This function automatically extracts the following basins from <a href="https://qldspatial.information.qld.gov.au/catalogue/custom/detail.page?fid=%7BF79B22E5-7BD4-44AF-98EB-AC1A46513EDD%7D" class="external-link">Drainage
+Basins - Queensland</a> on Qspatial:</p>
+<ul>
+<li>Black, Ross</li>
+<li>Burdekin, Haughton</li>
+<li>Barron, Daintree, Herbert, Johnstone, Mossman, Murray, Tully,
+Russell, Mulgrave</li>
+<li>Don, O’Connell, Pioneer, Plane, Proserpine</li>
+</ul>
+<p>The dataset is cleaned and organised, and the appropriate N3 region
+is assigned to each basin.</p>
+</div>
+<div class="section level4">
+<h4 id="build_named_islands">build_named_islands<a class="anchor" aria-label="anchor" href="#build_named_islands"></a>
+</h4>
+<p>This function extracts all named islands from with the <a href="https://open-aims.github.io/gisaimsr/articles/examples.html" class="external-link">GISAIMSR
+R package</a>, specifically from the gbr_feat dataset.</p>
+<p>For each island the function assess the closest mainland region and
+the closet mainland basin and assigns this to the island’s metadata. For
+example, Magnetic Island is closest to the Ross Basin, and thus the
+polygon representing Magnetic Island retains its name (Magnetic Island),
+and gains the basin Ross, and the region Dry Tropics.</p>
+<p>Named islands that are outside the boundaries of the N3 region are
+discarged, islands that overlap the mainland (such as sand islands
+present in river mouths) are discarded.</p>
+</div>
+<div class="section level4">
+<h4 id="build_waterbodies">build_waterbodies<a class="anchor" aria-label="anchor" href="#build_waterbodies"></a>
+</h4>
+<p>This function extracts all waterbodies from with the <a href="https://open-aims.github.io/gisaimsr/articles/examples.html" class="external-link">GISAIMSR
+R package</a>, specifically from the wbodies dataset. This dataset is
+the source of the “Enclosed Coastal”, “Open Coastal”, and “Offshore”
+boundaries.</p>
+<p>This data is buffered and cropped to fit perfectly against the
+mainland. The data then has holes cut into it based on the islands
+obtained above. The regions and “zones” (defined as the same level as a
+basin) are not yet defined in this function. However the “sub zone”
+(defined as the same level as a sub basin) is defined inherintly within
+the data. These are the “Enclosed Coastal”, “Open Coastal”,
+definitions.</p>
+</div>
+<div class="section level4">
+<h4 id="build_waterbody_boundaries">build_waterbody_boundaries<a class="anchor" aria-label="anchor" href="#build_waterbody_boundaries"></a>
+</h4>
+<p>This function is a <strong>hardcoded</strong> delineation of the N3
+marine region boundaries. Several border lines were
+<strong>manually</strong> created. The waterbodies dataset is then cut
+into multiple pieces, and each peice is <strong>manually</strong>
+assigned the appropriate region and zone.</p>
+<p>It is very important to understand that there is no online equivalent
+to these hardcoded delineations. While some are based on boundaries
+found in other documents such as EPP WQ guideline documents, others are
+hand drawn and created by the report card’s individual technical team.
+Should these hard coded numbers be lost, this function and the data it
+uses would need to be rebuilt from scratch.</p>
+</div>
+<div class="section level4">
+<h4 id="build_sub_basins">build_sub_basins<a class="anchor" aria-label="anchor" href="#build_sub_basins"></a>
+</h4>
+<p>This function relies on data that has been manually extracted from <a href="https://qldspatial.information.qld.gov.au/catalogue/custom/detail.page?fid=%7BF9713089-2799-4C96-BD9E-E9E2C5FF01E8%7D" class="external-link">Environmental
+Protection (Water and Wetland Biodiversity) Policy 2019 - Environmental
+Value Zones - Queensland</a> on Qspatial.</p>
+<p>A subset of the data is small enough that it has been saved as a data
+file within this R package. There is no need to manually retrieve the
+dataset again unless this stored file is lost. Within the function the
+appropriate pre-cleaning steps are listed.</p>
+<p>This functions creates the required Dry Tropics and Burdekin sub
+basins based on environmental value zones. These sub basins are a custom
+combination of environmental value zones. The sub basins are nested
+within the relevant basins, and a buffer-cut is used to ensure no gaps
+are created.</p>
+</div>
+<div class="section level4">
+<h4 id="build_water_types">build_water_types<a class="anchor" aria-label="anchor" href="#build_water_types"></a>
+</h4>
+<p>This function relies on data that has been manually extracted from <a href="https://qldspatial.information.qld.gov.au/catalogue/custom/detail.page?fid=%7B538A8977-70FD-4612-A043-FE789F1C31D7%7D" class="external-link">Environmental
+Protection (Water and Wetland Biodiversity) Policy 2019 - Water Types -
+Queensland</a> on Qspatial.</p>
+<p>A subset of the data is small enough that it has been saved as a data
+file within this R package. There is no need to manually retrieve the
+dataset again unless this stored file is lost. Within the function the
+appropriate pre-cleaning steps are listed.</p>
+<p>This function assigns the freshwater and estuarine boundaries. It
+intersections across the entire N3 region to assign these labels. At
+this point each polygon (row of data) has been assigned a region,
+basin/zone, sub_basin/sub_zone, and an environment.</p>
+</div>
+<div class="section level4">
+<h4 id="build_land_sp">build_land_sp<a class="anchor" aria-label="anchor" href="#build_land_sp"></a>
+</h4>
+<p>This function relies on data that has been manually extracted from <a href="https://qldspatial.information.qld.gov.au/catalogue/custom/detail.page?fid=%7BF9713089-2799-4C96-BD9E-E9E2C5FF01E8%7D" class="external-link">Environmental
+Protection (Water and Wetland Biodiversity) Policy 2019 - Environmental
+Value Zones - Queensland</a> on Qspatial.</p>
+<p>A subset of the data is small enough that it has been saved as a data
+file within this R package. There is no need to manually retrieve the
+dataset again unless this stored file is lost. Within the function the
+appropriate pre-cleaning steps are listed.</p>
+<p>This function create small, special features within the
+<strong>land</strong> portion Dry Tropics region, such as the boundary
+of the Palumna Dam/Lake sub basin. Should you wish to add further
+customisation to the land portion of the [build_n3_region()] function,
+this would be the place to include it.</p>
+</div>
+<div class="section level4">
+<h4 id="build_marine_sp">build_marine_sp<a class="anchor" aria-label="anchor" href="#build_marine_sp"></a>
+</h4>
+<p>This function relies on data that has been manually extracted from <a href="https://qldspatial.information.qld.gov.au/catalogue/custom/detail.page?fid=%7BDB9A289C-8DD5-4F97-A61C-C452F2AF78F8%7D" class="external-link">Environmental
+Protection (Water and Wetland Biodiversity) Policy 2019 - Management
+Intent - Queensland</a> on Qspatial.</p>
+<p>A subset of the data is small enough that it has been saved as a data
+file within this R package. There is no need to manually retrieve the
+dataset again unless this stored file is lost. Within the function the
+appropriate pre-cleaning steps are listed.</p>
+<p>This function create small, special features within the
+<strong>marine</strong> Dry Tropics region, such as the the special
+marine zone around Magnetic Island and the Port of Townsville. Should
+you wish to add further customisation to the marine portion of the
+[build_n3_region()] function, this would be the place to include it.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://add-am.github.io/RcTools/">RcTools</a></span><span class="op">)</span></span></code></pre></div>
-  </main>
+</div>
+</div>
+</div>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 
