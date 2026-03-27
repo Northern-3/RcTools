@@ -1,0 +1,19 @@
+---
+title: "Report_Card_Scoring"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Report_Card_Scoring}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(RcTools)
+```
