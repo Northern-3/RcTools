@@ -34,6 +34,10 @@ The recommended method for running this function in your code is as
 follows:
 
 ``` r
+library(RcTools)
+```
+
+``` r
 #define where you want the dataset to be saved in your file system
 file_loc <- here("data/n3_region.gpkg")
 
@@ -202,7 +206,3 @@ Tropics region, such as the the special marine zone around Magnetic
 Island and the Port of Townsville. Should you wish to add further
 customisation to the marine portion of the \[build_n3_region()\]
 function, this would be the place to include it.
-
-``` r
-library(RcTools)
-```

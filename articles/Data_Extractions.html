@@ -5,12 +5,12 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Data_Extractions • RcTools</title>
+<title>Data Extractions • RcTools</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Data_Extractions">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Data Extractions">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -34,7 +34,7 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><a class="dropdown-item" href="../articles/Build_Northern_Three.html">Building The Northern Three Spatial File</a></li>
-    <li><a class="dropdown-item" href="../articles/Data_Extractions.html">Data_Extractions</a></li>
+    <li><a class="dropdown-item" href="../articles/Data_Extractions.html">Data Extractions</a></li>
     <li><a class="dropdown-item" href="../articles/eReefs.html">eReefs</a></li>
     <li><a class="dropdown-item" href="../articles/Misc_Helpers.html">Miscellaneous Helpers</a></li>
     <li><a class="dropdown-item" href="../articles/Report_Card_Scoring.html">Report_Card_Scoring</a></li>
@@ -58,7 +58,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
 
-      <h1>Data_Extractions</h1>
+      <h1>Data Extractions</h1>
             
       
 
@@ -67,9 +67,311 @@
 
     
     
+<div class="section level2">
+<h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+</h2>
+<p>All Regional Report Cards use a variety of datasets to develop
+contextual information as well as to calculate scores and grades. Within
+the RcTools package, a range of data extraction functions and methods
+have been provided. Some of these methods are entirely automated, whilst
+others require the user to source raw datasets prior to running the
+extraction code. In all cases, the functions require user inputs. The
+following data extraction functions are provided:</p>
+<ul>
+<li>extract_air_temp</li>
+<li>extract_dhw</li>
+<li>extract_ereefs</li>
+<li>extract_habitat</li>
+<li>extract_land_use</li>
+<li>extract_logger</li>
+<li>extract_rainfall</li>
+<li>extract_sst</li>
+<li>extract_watercourses</li>
+</ul>
+<p>The motivation and use cases behind each are explained below:</p>
+<div class="section level3">
+<h3 id="extract_air_temp">extract_air_temp<a class="anchor" aria-label="anchor" href="#extract_air_temp"></a>
+</h3>
+<p>This function relies on paid datasets that have been purchased from
+BOM. To obtain these datasets refer the the Dry Tropics technical
+team.</p>
+<p>The function requires three inputs:</p>
+<ol style="list-style-type: decimal">
+<li>Where to find the min temperature raw data</li>
+<li>Where to find the max temperature raw data</li>
+<li>The object to crop the data with</li>
+</ol>
+<p>It is generally advised that you provide the n3_region() dataset
+produced by the [build_n3_region()] function as the cropping object.
+Function usage can be defined as follows:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://add-am.github.io/RcTools/">RcTools</a></span><span class="op">)</span></span></code></pre></div>
-  </main>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#create a path to the raw min and max temperature folders</span></span>
+<span><span class="va">min_tmp</span> <span class="op">&lt;-</span> <span class="fu">here</span><span class="op">(</span><span class="st">"data/raw/tmin2"</span><span class="op">)</span></span>
+<span><span class="va">max_tmp</span> <span class="op">&lt;-</span> <span class="fu">here</span><span class="op">(</span><span class="st">"data/raw/tmax2"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">#use custom extraction function to process data</span></span>
+<span><span class="va">n3_temp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/extract_air_temp.html">extract_air_temp</a></span><span class="op">(</span><span class="va">n3_region</span>, <span class="va">min_tmp</span>, <span class="va">max_tmp</span><span class="op">)</span></span></code></pre></div>
+<p>it is important to note that as of 27/03/20206, the output folders
+are build automatically. Further, the construction of these folders
+relies on the raw data path including the string “raw” and replacing it
+with “processed”. This is an outdated methodology that should be updated
+when possible.</p>
+<p>This function is exclusively used with the climate_air_temperature
+script and has been written such that the climate_air_temperature script
+can be run automatically. Please note that the output of this function
+is a list of netCDF STARS files. Further reading on STARS files can be
+found at <a href="">R Stars</a><a href="https://r-spatial.github.io/stars/" class="external-link uri">https://r-spatial.github.io/stars/</a></p>
+</div>
+<div class="section level3">
+<h3 id="extract_dhw">extract_dhw<a class="anchor" aria-label="anchor" href="#extract_dhw"></a>
+</h3>
+<p>This function is entirely automated and thus its documentation is
+minimal. It extracts degree heating week data from <a href="%22https://www.star.nesdis.noaa.gov/pub/socd/mecb/crw/data/5km/v3.1_op/nc/v1.0%22" class="external-link">NOAA’s</a>
+API. The function requires three inputs:</p>
+<ol style="list-style-type: decimal">
+<li>Where to save the raw data</li>
+<li>Where to save the cropped data</li>
+<li>The object to crop the data with</li>
+</ol>
+<p>It is generally advised that you provide the n3_region() dataset
+produced by the [build_n3_region()] function as the cropping object.
+Function usage can be defined as follows:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#define the place where full files should be saved</span></span>
+<span><span class="va">full_file_loc</span> <span class="op">&lt;-</span> <span class="fu">here</span><span class="op">(</span><span class="st">"data/raw/"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">#define the place where cropped files should be saved</span></span>
+<span><span class="va">cropped_file_loc</span> <span class="op">&lt;-</span> <span class="fu">here</span><span class="op">(</span><span class="st">"data/processed/"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">#download, save, crop, and build the data</span></span>
+<span><span class="va">n3_dhw</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/extract_dhw.html">extract_dhw</a></span><span class="op">(</span><span class="va">full_file_loc</span>, <span class="va">cropped_file_loc</span>, <span class="va">n3_region</span><span class="op">)</span></span></code></pre></div>
+<p>This function is exclusively used with the climate_dhw script and has
+been written such that the climate_dhw script can be run automatically.
+Please note that the output of this function is a list of netCDF STARS
+files. Further reading on STARS files can be found at <a href="">R
+Stars</a><a href="https://r-spatial.github.io/stars/" class="external-link uri">https://r-spatial.github.io/stars/</a></p>
+</div>
+<div class="section level3">
+<h3 id="extract_ereefs">extract_ereefs<a class="anchor" aria-label="anchor" href="#extract_ereefs"></a>
+</h3>
+<p>This function is the core function required for the entire eReefs
+workflow. The explaination of its usage can be found under the eReefs
+vignette.</p>
+</div>
+<div class="section level3">
+<h3 id="extract_habitat">extract_habitat<a class="anchor" aria-label="anchor" href="#extract_habitat"></a>
+</h3>
+<p>This function relies on data that has been <strong>manually
+downloaded</strong> from the <a href="https://qldspatial.information.qld.gov.au/catalogue/custom/detail.page?fid=%7B01972496-CD6D-4314-B0C0-DA0E0421FB0A%7D" class="external-link">Biodiversity
+status of pre-clearing and 2021 remnant regional ecosystems - Queensland
+series</a>. Refer to the RcHabitat repository for further information on
+sourcing and saving data. This function requires four inputs:</p>
+<ol style="list-style-type: decimal">
+<li>Where to save the raw data</li>
+<li>Where to save the cropped data</li>
+<li>The object to crop the data with</li>
+<li>The type of data to extract</li>
+</ol>
+<p>Currently, there are only two types of data to extract. The usage of
+the function is as follows:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#point to where the raw data is</span></span>
+<span><span class="va">raw_data_path</span> <span class="op">&lt;-</span> <span class="fu">here</span><span class="op">(</span><span class="st">"data/habitat/"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">#point to where the cropped data should be saved</span></span>
+<span><span class="va">cropped_data_path</span> <span class="op">&lt;-</span> <span class="fu">here</span><span class="op">(</span><span class="st">"data/mangroves_and_saltmarsh/"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">#run the function</span></span>
+<span><span class="va">all_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/extract_habitat.html">extract_habitat</a></span><span class="op">(</span><span class="va">raw_data_path</span>, <span class="va">cropped_data_path</span>, <span class="va">est_region</span>, <span class="st">"MS"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">#alternatively, riparian data can be extracted</span></span>
+<span><span class="va">cropped_data_path_2</span> <span class="op">&lt;-</span> <span class="fu">here</span><span class="op">(</span><span class="st">"data/riparian/"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">#run the function</span></span>
+<span><span class="va">all_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/extract_habitat.html">extract_habitat</a></span><span class="op">(</span><span class="va">raw_data_path</span>, <span class="va">cropped_data_path</span>, <span class="va">n3_riparian_boundaries</span>, <span class="st">"MS"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="extract_land_use">extract_land_use<a class="anchor" aria-label="anchor" href="#extract_land_use"></a>
+</h3>
+<p>This function relies on data that has been <strong>manually
+downloaded</strong> from the <a href="https://qldspatial.information.qld.gov.au/catalogue/custom/detail.page?fid=%7BBE30CE16-B1B9-48B1-BF21-DBE70597FA93%7D" class="external-link">Land
+use mapping series</a>. Refer to the RcClimate repository for further
+information on sourcing and saving data. This function requires three
+inputs:</p>
+<ol style="list-style-type: decimal">
+<li>Where to save the raw data</li>
+<li>Where to save the cropped data</li>
+<li>The object to crop the data with</li>
+</ol>
+<p>The usage of the function is as follows:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#build path to the raw data</span></span>
+<span><span class="va">raw_data_path</span> <span class="op">&lt;-</span> <span class="fu">here</span><span class="op">(</span><span class="st">"data/raw/"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">#build path to where cropped datasets should be saved</span></span>
+<span><span class="va">cropped_data_path</span> <span class="op">&lt;-</span> <span class="fu">here</span><span class="op">(</span><span class="st">"data/processed/"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">#run custom function</span></span>
+<span><span class="va">n3_land</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/extract_land_use.html">extract_land_use</a></span><span class="op">(</span><span class="va">raw_data_path</span>, <span class="va">cropped_data_path</span>, <span class="va">n3_sub_basins</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="extract_logger">extract_logger<a class="anchor" aria-label="anchor" href="#extract_logger"></a>
+</h3>
+<p>This function extracts logger dataset from the THREDDS AODN servers.
+Currently it has been put in place to bridge the gap between manually
+requesting data from AIMS and the eventually front-end storage of data
+on the AODN servers. It is possible that this function will be retired
+but for the time being it is actively in use.</p>
+<p>Basic usage of the function is as follows:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#load the library</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">RcLoggers</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">#run the function (basic)</span></span>
+<span><span class="va">data_extract</span> <span class="op">&lt;-</span> <span class="fu">logger_extract</span><span class="op">(</span></span>
+<span> Years <span class="op">=</span> <span class="fl">2025</span>, </span>
+<span> Loggers <span class="op">=</span> <span class="st">"BUR2"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>Where only the year(s) of data required, and the name(s) of loggers
+requested need to be provided to the function. However, this function
+does have some more advanced options, which are explained below:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="co">#run the function (detailed)</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>data_extract <span class="ot">&lt;-</span> <span class="fu">logger_extract</span>(</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a> <span class="at">Years =</span> <span class="fu">c</span>(<span class="dv">2024</span>, <span class="dv">2025</span>), <span class="co">#you can dowload more than one year</span></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a> <span class="at">Loggers =</span> <span class="fu">c</span>(<span class="st">"BUR1"</span>, <span class="st">"BUR2"</span>), <span class="co">#you can download more than one logger</span></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a> <span class="at">Indicators =</span> <span class="st">"Chlorophyll"</span>, <span class="co"># if you only want one indicator you can define that (it defaults to chlorophyll and turbidity)</span></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a> <span class="at">FilterFlags =</span> <span class="cn">TRUE</span>, <span class="co">#filtering occurs by default, however you can customise or stop filtering</span></span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a> <span class="at">FlagTags =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>), <span class="co">#by default flags 1 and 2 are kept, you can adjust this as needed</span></span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a> <span class="at">Aggregate =</span> <span class="cn">TRUE</span>, <span class="co">#you can aggregate data</span></span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a> <span class="at">AggregationType =</span> <span class="st">"Hourly"</span> <span class="co">#if you do decide to aggregate, you need to define the type of aggregation (hourly or daily)</span></span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a> <span class="at">SmallTables =</span> <span class="cn">TRUE</span> <span class="co">#you can request that outputs are broken into several small tables </span></span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a> <span class="at">RowCount =</span> <span class="dv">1500</span> <span class="co">#if you do want to break up tables, you can define the number of rows per table</span></span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a>)</span></code></pre></div>
+<p>The output of the function (regardless of if small tables is true or
+false) is a list of dataframes. The reason for outputs to be provided as
+a list is to streamline further data processing steps. Each item in the
+list is assigned an appropriate name. This allows the list of dataframes
+to be saved using the following code:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#save</span></span>
+<span><span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map2.html" class="external-link">walk2</a></span><span class="op">(</span><span class="va">data_extract</span>, <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">data_extract</span><span class="op">)</span>, <span class="op">~</span><span class="fu">readr</span><span class="fu">::</span><span class="fu"><a href="https://readr.tidyverse.org/reference/write_delim.html" class="external-link">write_csv</a></span><span class="op">(</span><span class="va">.x</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">.y</span>, <span class="st">".csv"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>However, should <code>SmallTables = TRUE</code> it is reccomended
+that files are saved within broader folders based on logger and year
+using the following code:</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map2.html" class="external-link">walk2</a></span><span class="op">(</span><span class="va">data_extract</span>, <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">data_extract</span><span class="op">)</span>, <span class="op">~</span><span class="op">{</span></span>
+<span></span>
+<span>  <span class="co">#create a folder name based on the first two elements of the dataframe name</span></span>
+<span>  <span class="va">folder_name</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_split.html" class="external-link">str_split</a></span><span class="op">(</span><span class="va">.y</span>, pattern <span class="op">=</span> <span class="st">"_"</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span>, collapse <span class="op">=</span> <span class="st">"_"</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="co">#if you want to expand/move where the folder is located, do that here:</span></span>
+<span>  <span class="co"># folder_name &lt;- paste0("path_to_location/", folder_name)</span></span>
+<span></span>
+<span>  <span class="co">#if the folder doesnt already exist, create it</span></span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.exists</a></span><span class="op">(</span><span class="va">folder_name</span><span class="op">)</span><span class="op">)</span><span class="op">{</span><span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.create</a></span><span class="op">(</span><span class="va">folder_name</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">}</span></span>
+<span></span>
+<span>  <span class="co">#save the dataframe inside the associated folder</span></span>
+<span>  <span class="fu">readr</span><span class="fu">::</span><span class="fu"><a href="https://readr.tidyverse.org/reference/write_delim.html" class="external-link">write_csv</a></span><span class="op">(</span><span class="va">.x</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">folder_name</span>, <span class="st">"/"</span>, <span class="va">.y</span>, <span class="st">".csv"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="op">}</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>This fuction is a utility function that can, and is, used in a
+variety of places. Generally the workflow of this function is purely to
+download and save data to a local machine. Further steps such as loading
+the files into a database or copying data into a master spreadsheet are
+often done outside of the R ecosystem. It is possible to integrate this
+function into an R workflow, however none currently rely on the
+function.</p>
+</div>
+<div class="section level3">
+<h3 id="extract_rainfall">extract_rainfall<a class="anchor" aria-label="anchor" href="#extract_rainfall"></a>
+</h3>
+<p>This function is entirely automated and thus its documentation is
+minimal. It extracts rainfall from the <a href="https://awo.bom.gov.au/" class="external-link">Australia Water Outlook (BOM)</a>
+exclusively within the N3 region. The function only requires one input
+(where to save the data), and its usage can be easily defined as
+follows:</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#define the path and name of the dataset to be saved on file (or read back in)</span></span>
+<span><span class="va">data_name</span> <span class="op">&lt;-</span> <span class="fu">here</span><span class="op">(</span><span class="st">"data/n3_rainfall.nc"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">#if the data is on file, load it, otherwise built it and save it for next time</span></span>
+<span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.exists</a></span><span class="op">(</span><span class="va">data_name</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
+<span>  <span class="va">n3_rain</span> <span class="op">&lt;-</span> <span class="fu">read_stars</span><span class="op">(</span><span class="va">data_name</span><span class="op">)</span></span>
+<span><span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span>  <span class="va">n3_rain</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/extract_rainfall.html">extract_rainfall</a></span><span class="op">(</span><span class="va">n3_region</span><span class="op">)</span></span>
+<span>  <span class="fu">write_mdim</span><span class="op">(</span><span class="va">n3_rain</span>, <span class="va">data_name</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+<p>This function is exclusively used with the climate_rainfall script
+and has been written such that the climate_rainfall script can be run
+automatically. Please note that the output of this function is a netCDF
+STARS file. Further reading on STARS files can be found at <a href="">R
+Stars</a><a href="https://r-spatial.github.io/stars/" class="external-link uri">https://r-spatial.github.io/stars/</a></p>
+</div>
+<div class="section level3">
+<h3 id="extract_sst">extract_sst<a class="anchor" aria-label="anchor" href="#extract_sst"></a>
+</h3>
+<p>This function is entirely automated and thus its documentation is
+minimal. It extracts sea surface temperature from <a href="%22https://www.star.nesdis.noaa.gov/pub/socd/mecb/crw/data/5km/v3.1_op/nc/v1.0/monthly/%22" class="external-link">NOAA’s</a>
+API. The function requires three inputs:</p>
+<ol style="list-style-type: decimal">
+<li>Where to save the raw data</li>
+<li>Where to save the cropped data</li>
+<li>The object to crop the data with</li>
+</ol>
+<p>It is generally advised that you provide the n3_region() dataset
+produced by the [build_n3_region()] function as the cropping object.
+Function usage can be defined as follows:</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#define the place where full files should be saved</span></span>
+<span><span class="va">full_file_loc</span> <span class="op">&lt;-</span> <span class="fu">here</span><span class="op">(</span><span class="st">"data/raw/"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">#define the place where cropped files should be saved</span></span>
+<span><span class="va">cropped_file_loc</span> <span class="op">&lt;-</span> <span class="fu">here</span><span class="op">(</span><span class="st">"data/processed/"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">#download, save, crop, and build the data</span></span>
+<span><span class="va">n3_sst</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/extract_sst.html">extract_sst</a></span><span class="op">(</span><span class="va">full_file_loc</span>, <span class="va">cropped_file_loc</span>, <span class="va">n3_region</span><span class="op">)</span></span></code></pre></div>
+<p>This function is exclusively used with the climate_sst script and has
+been written such that the climate_sst script can be run automatically.
+Please note that the output of this function is a list of netCDF STARS
+files. Further reading on STARS files can be found at <a href="">R
+Stars</a><a href="https://r-spatial.github.io/stars/" class="external-link uri">https://r-spatial.github.io/stars/</a></p>
+</div>
+<div class="section level3">
+<h3 id="extract_watercourses">extract_watercourses<a class="anchor" aria-label="anchor" href="#extract_watercourses"></a>
+</h3>
+<p>This function automatically extracts waterbody information from the
+<a href="https://qldspatial.information.qld.gov.au/catalogue/custom/detail.page?fid=%7B9D9CBCDA-6D4A-49AC-B993-AEF00B2D16F9%7D" class="external-link">Hydrographic
+features - Queensland series</a> on QSpatial.</p>
+<p>At a basic level the function only requires one input: “Basin”. The
+function allows the user to select from all available basins within
+Queensland, if you function selection is invalid it will provide a
+vector of valid inputs to choose from. Basic usage of the function is as
+follows:</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">ross_and_black</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/extract_watercourses.html">extract_watercourses</a></span><span class="op">(</span>Basin <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Black"</span>, <span class="st">"Ross"</span><span class="op">)</span><span class="op">)</span></span>
+<span> </span></code></pre></div>
+<p>However, in this case several assumptions are made. Below, each
+optional input is explained:</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">data_extract</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/extract_watercourses.html">extract_watercourses</a></span><span class="op">(</span></span>
+<span>  Basin <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Black"</span>, <span class="st">"Ross"</span><span class="op">)</span>, <span class="co">#pick one or several basins</span></span>
+<span>  WaterLines <span class="op">=</span> <span class="cn">TRUE</span>, <span class="co">#by default only water lines are returned</span></span>
+<span>  WaterAreas <span class="op">=</span> <span class="cn">FALSE</span>,  <span class="co">#you can request to include water areas (such as wetlands and unnamed lakes)</span></span>
+<span>  WaterLakes <span class="op">=</span> <span class="cn">FALSE</span>,  <span class="co">#you can request to include large, named, lakes</span></span>
+<span>  StreamOrder <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span> <span class="co">#by default all streamorders are returned. However you can provide either a lower bound, or an upper and lower bound for stream orders to return</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>This function is used in several places. Most notably in:</p>
+<ol style="list-style-type: decimal">
+<li>The creation of waterlayers for maps, and</li>
+<li>The creation of the riparian boundaries dataset</li>
+</ol>
+</div>
+</div>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 
