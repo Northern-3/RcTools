@@ -5,7 +5,7 @@
 #' @param CropObj Sf Object. An sf object used to define the area in which data is to be cropped to. Generally,
 #' the n3_region object from the [build_n3_region()] function is used.
 #'
-#' @returns A stars netCDF object AND saves individual laers to file. (Note, this is because each file can only be downloaded
+#' @returns A stars netCDF object AND saves individual layers to file. (Note, this is because each file can only be downloaded
 #' individually. If just the single netCDF was returned, every layer would need to be re-downloaded once a new layer is 
 #' published. Instead, only the new layer is downloaded, and the single netCDF is rebuilt locally).
 #'
