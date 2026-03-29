@@ -100,6 +100,8 @@ conditional_formatter <- function(
 
   } else if (scheme == "summary_statistic"){
 
+    if (length(target_columns) > 1){stop("When exporting summary statistics tables only 1 column can be formatted.")}
+
     #create a list of rule conditions to iterate on
     match_conditions <- list(
       match_vals = c(
