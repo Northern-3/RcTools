@@ -77,6 +77,11 @@ Next the score_to_grade function can be run. In this example we will continue us
 #run the function on our example data
 df <- score_to_grade(df, ValueScore)
 
+```
+
+```{r}
+#| eval: FALSE
+
 #if you wanted to get grades for multiple columns this can be acheived as follows
 x <- score_to_grade(x, c(ScoreA, ScoreB, ScoreC))
 
