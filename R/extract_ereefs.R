@@ -131,7 +131,7 @@ extract_ereefs <- function(Model = "catalog", Region, StartDate, EndDate, Variab
     )
 
   #if the user wants any of the other standard variables, these do have a depth layer, which we need to get rid off
-  } else if (stringr::str_detect(Variable, "Turbidity|Chlorophyll a|DIN|NH4|NO3|pH")) {
+  } else if (stringr::str_detect(Variable, "Turbidity|Chl_a_sum|DIN|NH4|NO3|pH")) {
 
     #extract data using indices to define layer counts plus include depth
     nc_data <- stars::read_ncdf(
