@@ -197,7 +197,7 @@ df <- df |>
   value_to_score(
     value = Value,
     value_type = "Water Quality",
-    water_type = "Inshore",
+    water_type = "Marine",
     indicator = Indicator,
     wqo = Wqo
   )
