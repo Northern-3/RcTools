@@ -5,12 +5,12 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Report_Card_Scoring • RcTools</title>
+<title>Report Card Scoring • RcTools</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Report_Card_Scoring">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Report Card Scoring">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -37,7 +37,7 @@
     <li><a class="dropdown-item" href="../articles/Data_Extractions.html">Data Extractions</a></li>
     <li><a class="dropdown-item" href="../articles/eReefs.html">eReefs</a></li>
     <li><a class="dropdown-item" href="../articles/Misc_Helpers.html">Miscellaneous Helpers</a></li>
-    <li><a class="dropdown-item" href="../articles/Report_Card_Scoring.html">Report_Card_Scoring</a></li>
+    <li><a class="dropdown-item" href="../articles/Report_Card_Scoring.html">Report Card Scoring</a></li>
   </ul>
 </li>
       </ul>
@@ -58,7 +58,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
 
-      <h1>Report_Card_Scoring</h1>
+      <h1>Report Card Scoring</h1>
             
       
 
@@ -67,9 +67,94 @@
 
     
     
+<div class="section level2">
+<h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+</h2>
+<p>A key component of the Northern Three Report Cards is calculating
+scores and grades for a range of indicator. To streamline this process
+three key functions have been developed that work in conjuction:</p>
+<ol style="list-style-type: decimal">
+<li>value_to_score()</li>
+<li>score_to_grade()</li>
+<li>save_n3_table()</li>
+</ol>
+<p>Additional helper functions have been written that support these
+three key functions, which include:</p>
+<ul>
+<li>bind_letter_to_score()</li>
+<li>define_colour_scheme()</li>
+<li>conditional_formatter()</li>
+<li>weight_scores()</li>
+</ul>
+</div>
+<div class="section level2">
+<h2 id="general-workflow">General Workflow<a class="anchor" aria-label="anchor" href="#general-workflow"></a>
+</h2>
+<p>The general workflow of these functions can be demonstrated as
+follows. Take a defined/loaded/calculated dataframe such as this
+one:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://add-am.github.io/RcTools/">RcTools</a></span><span class="op">)</span></span></code></pre></div>
-  </main>
+<code class="sourceCode R"><span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://add-am.github.io/RcTools/">RcTools</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>  Basin <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Black"</span>, <span class="st">"Ross"</span>, <span class="st">"Haughton"</span>, <span class="st">"Suttor"</span><span class="op">)</span>,</span>
+<span>  Indicator <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"DIN"</span>, <span class="st">"DIN"</span>, <span class="st">"Low_DO"</span>, <span class="st">"Low_DO"</span><span class="op">)</span>,</span>
+<span>  Value <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.002</span>, <span class="fl">0.017</span>, <span class="fl">87.6</span>, <span class="fl">104</span><span class="op">)</span>,</span>
+<span>  Wqo <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.02</span>, <span class="fl">0.02</span>, <span class="fl">90</span>, <span class="fl">90</span><span class="op">)</span>,</span>
+<span>  Sf <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.38</span>, <span class="fl">0.38</span>, <span class="fl">70</span>, <span class="fl">70</span><span class="op">)</span>,</span>
+<span>  Eightieth <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.0154</span>, <span class="fl">0.0154</span>, <span class="fl">101.12</span>, <span class="fl">101.12</span><span class="op">)</span>,</span>
+<span>  Twentieth <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.0026</span>, <span class="fl">0.0026</span>, <span class="fl">75.84</span>, <span class="fl">75.84</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>First run the value_to_score() function. This function takes several
+inputs depending on the type of value and the way you wish to score it.
+In this first example, we are scoring using the freshwater water quality
+method, and therefore are required to supply a large amount of
+information:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="co">#run the function on our example data</span></span>
+<span><span class="va">df</span> <span class="op">&lt;-</span> <span class="va">df</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="../reference/value_to_score.html">value_to_score</a></span><span class="op">(</span></span>
+<span>    value <span class="op">=</span> <span class="va">Value</span>,</span>
+<span>    value_type <span class="op">=</span> <span class="st">"Water Quality"</span>,</span>
+<span>    water_type <span class="op">=</span> <span class="st">"Freshwater"</span>,</span>
+<span>    indicator <span class="op">=</span> <span class="va">Indicator</span>,</span>
+<span>    wqo <span class="op">=</span> <span class="va">Wqo</span>,</span>
+<span>    sf <span class="op">=</span> <span class="va">Sf</span>,</span>
+<span>    eightieth <span class="op">=</span> <span class="va">Eightieth</span>,</span>
+<span>    twentieth <span class="op">=</span> <span class="va">Twentieth</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<p>This function returns the original table with an additional column
+added. The column inherits the name of the value column that was
+provided, plus the string “Score” after it. For example if the value
+column was named “MyValue”, the new column would be named
+“MyValueScore”.</p>
+<p>Next the score_to_grade function can be run. In this example we will
+continue using the dataframe from above. However, this function can take
+any number of score columns as inputs and will return the same number of
+new columns with the associated text grade.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="co">#run the function on our example data</span></span>
+<span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/score_to_grade.html">score_to_grade</a></span><span class="op">(</span><span class="va">df</span>, <span class="va">ValueScore</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#if you wanted to get grades for multiple columns this can be acheived as follows</span></span>
+<span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/score_to_grade.html">score_to_grade</a></span><span class="op">(</span><span class="va">x</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">ScoreA</span>, <span class="va">ScoreB</span>, <span class="va">ScoreC</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>The column(s) inherits the name of the score column that was
+provided, plus the string “Grade” after it. Further, if the string
+“Score” is detected, it is replaced with “Grade”. For example if the
+value column was named “MyValue”, the new column would be named
+“MyValueGrade”, or if the column was named “MyValueScore” then the new
+column would be named “MyValueGrade”</p>
+<p>Finally, a table that has been scored and potentially graded can then
+be saved using the save_n3_table() function. This function is unique in
+that it will apply excel native conditional formatting to the outputs of
+the function. I.e., you can save a dataframe with scores, and
+automatically apply the required colour scaling (red to green).</p>
+</div>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 

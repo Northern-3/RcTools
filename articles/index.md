@@ -9,4 +9,5 @@
 - [eReefs](https://add-am.github.io/RcTools/articles/eReefs.md):
 - [Miscellaneous
   Helpers](https://add-am.github.io/RcTools/articles/Misc_Helpers.md):
-- [Report_Card_Scoring](https://add-am.github.io/RcTools/articles/Report_Card_Scoring.md):
+- [Report Card
+  Scoring](https://add-am.github.io/RcTools/articles/Report_Card_Scoring.md):

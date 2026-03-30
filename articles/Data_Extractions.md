@@ -125,13 +125,15 @@ raw_data_path <- here("data/habitat/")
 cropped_data_path <- here("data/mangroves_and_saltmarsh/")
 
 #run the function
-all_data <- extract_habitat(raw_data_path, cropped_data_path, est_region, "MS")
+all_data <- extract_habitat(
+  raw_data_path, cropped_data_path, est_region, "MS")
 
 #alternatively, riparian data can be extracted
 cropped_data_path_2 <- here("data/riparian/")
 
 #run the function
-all_data <- extract_habitat(raw_data_path, cropped_data_path, n3_riparian_boundaries, "MS")
+all_data <- extract_habitat(
+  raw_data_path, cropped_data_path, n3_riparian_boundaries, "RV")
 ```
 
 ### extract_land_use
@@ -163,9 +165,9 @@ n3_land <- extract_land_use(raw_data_path, cropped_data_path, n3_sub_basins)
 
 This function extracts logger dataset from the THREDDS AODN servers.
 Currently it has been put in place to bridge the gap between manually
-requesting data from AIMS and the eventually front-end storage of data
-on the AODN servers. It is possible that this function will be retired
-but for the time being it is actively in use.
+requesting data from AIMS and the eventual front-end storage of data on
+the AODN servers. It is possible that this function will be retired but
+for the time being it is actively in use.
 
 Basic usage of the function is as follows:
 
@@ -207,7 +209,11 @@ to be saved using the following code:
 
 ``` r
 #save
-purrr::walk2(data_extract, names(data_extract), ~readr::write_csv(.x, paste0(.y, ".csv")))
+purrr::walk2(
+  data_extract, 
+  names(data_extract), 
+  ~readr::write_csv(.x, paste0(.y, ".csv"))
+  )
 ```
 
 However, should `SmallTables = TRUE` it is reccomended that files are
@@ -218,7 +224,9 @@ following code:
 purrr::walk2(data_extract, names(data_extract), ~{
 
   #create a folder name based on the first two elements of the dataframe name
-  folder_name <- paste(stringr::str_split(.y, pattern = "_")[[1]][1:2], collapse = "_")
+  folder_name <- paste(
+    stringr::str_split(.y, pattern = "_")[[1]][1:2], 
+    collapse = "_")
 
   #if you want to expand/move where the folder is located, do that here:
   # folder_name <- paste0("path_to_location/", folder_name)

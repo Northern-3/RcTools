@@ -1,5 +1,96 @@
-# Report_Card_Scoring
+# Report Card Scoring
+
+## Introduction
+
+A key component of the Northern Three Report Cards is calculating scores
+and grades for a range of indicator. To streamline this process three
+key functions have been developed that work in conjuction:
+
+1.  value_to_score()
+2.  score_to_grade()
+3.  save_n3_table()
+
+Additional helper functions have been written that support these three
+key functions, which include:
+
+- bind_letter_to_score()
+- define_colour_scheme()
+- conditional_formatter()
+- weight_scores()
+
+## General Workflow
+
+The general workflow of these functions can be demonstrated as follows.
+Take a defined/loaded/calculated dataframe such as this one:
 
 ``` r
+
 library(RcTools)
+
+df <- data.frame(
+  Basin = c("Black", "Ross", "Haughton", "Suttor"),
+  Indicator = c("DIN", "DIN", "Low_DO", "Low_DO"),
+  Value = c(0.002, 0.017, 87.6, 104),
+  Wqo = c(0.02, 0.02, 90, 90),
+  Sf = c(0.38, 0.38, 70, 70),
+  Eightieth = c(0.0154, 0.0154, 101.12, 101.12),
+  Twentieth = c(0.0026, 0.0026, 75.84, 75.84)
+)
 ```
+
+First run the value_to_score() function. This function takes several
+inputs depending on the type of value and the way you wish to score it.
+In this first example, we are scoring using the freshwater water quality
+method, and therefore are required to supply a large amount of
+information:
+
+``` r
+
+#run the function on our example data
+df <- df |> 
+  value_to_score(
+    value = Value,
+    value_type = "Water Quality",
+    water_type = "Freshwater",
+    indicator = Indicator,
+    wqo = Wqo,
+    sf = Sf,
+    eightieth = Eightieth,
+    twentieth = Twentieth
+  )
+```
+
+This function returns the original table with an additional column
+added. The column inherits the name of the value column that was
+provided, plus the string “Score” after it. For example if the value
+column was named “MyValue”, the new column would be named
+“MyValueScore”.
+
+Next the score_to_grade function can be run. In this example we will
+continue using the dataframe from above. However, this function can take
+any number of score columns as inputs and will return the same number of
+new columns with the associated text grade.
+
+``` r
+
+#run the function on our example data
+df <- score_to_grade(df, ValueScore)
+```
+
+``` r
+#if you wanted to get grades for multiple columns this can be acheived as follows
+x <- score_to_grade(x, c(ScoreA, ScoreB, ScoreC))
+```
+
+The column(s) inherits the name of the score column that was provided,
+plus the string “Grade” after it. Further, if the string “Score” is
+detected, it is replaced with “Grade”. For example if the value column
+was named “MyValue”, the new column would be named “MyValueGrade”, or if
+the column was named “MyValueScore” then the new column would be named
+“MyValueGrade”
+
+Finally, a table that has been scored and potentially graded can then be
+saved using the save_n3_table() function. This function is unique in
+that it will apply excel native conditional formatting to the outputs of
+the function. I.e., you can save a dataframe with scores, and
+automatically apply the required colour scaling (red to green).
