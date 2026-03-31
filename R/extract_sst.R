@@ -48,7 +48,15 @@ extract_sst <- function(RawPath, CroppedPath, CropObj){
   base_url <- "https://www.star.nesdis.noaa.gov/pub/socd/mecb/crw/data/5km/v3.1_op/nc/v1.0/monthly/"
 
   #define the most recent completed month (data is approximately 1 month delayed)
-  end_date <- lubridate::floor_date(as.Date(format(Sys.time(), "%Y-%m-%d")), unit = "month") %m-% months(1)
+  #note, that if this function is called in the first 1-4 days of the month the data might not be uploaded yet.
+  #therefore we push date back by 1 month and ~4 days and warn the user
+  end_date <- Sys.Date() %m-% #get current date
+    months(1) %m-% #subtract a month
+    days(4) |> #subtract a few extra days
+    lubridate::floor_date(unit = "month") #round down to nearest month
+
+  if (lubridate::day(Sys.Date()) < 5){
+    warning("Data requests that occur early in the month may error due to delays in data uploads to the server.")}
 
   #build a vector of YYYYMM character strings from 1985 to "now"
   date_vect <- format(seq(as.Date("1985-01-01"), end_date, by = "month"), "%Y%m")
