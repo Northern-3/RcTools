@@ -7,28 +7,23 @@ Partnership, with the ultimate objective being to obtain contextual
 information on the marine zone and river inputs across each region.
 
 Accessing and using eReefs data presents one of the most significant
-hurdles to its adoptions. Thus, a series of functions has been design
+hurdles to its adoption. Thus, a series of functions has been design
 specific for report card use that streamline and simplify the necessary
-aspects of the analysis. There are currently 9 functions conveniently
-split into three groups to discuss:
+aspects of the analysis. There are currently 7 exported functions
+conveniently split into three groups to discuss:
 
 Data Extraction and Preparation Functions:
 
 - extract_ereefs()
 - ereefs_get_date_range()
 - ereefs_reproject()
+- ereefs_input_selection()
 
 Data Visualisation Functions:
 
 - ereefs_map()
 - ereefs_dotplot()
 - ereefs_windrose()
-
-Helpers:
-
-- ereefs_input_selection()
-- ereefs_get_palette()
-- ereefs_list_safety_check_and_convert()
 
 ## Data Extraction and Prepartion
 
@@ -43,8 +38,9 @@ First a spatial boundary needs to be defined, in this case we are using
 a simple rectangle, but it could be any spatial object that you have.
 
 ``` r
+# echo: FALSE
 
-#load library
+#load libraries
 library(RcTools)
 library(tmap)
 
@@ -59,6 +55,9 @@ sf_obj <- sf::st_read(sf_obj)
 #> Dimension:     XY
 #> Bounding box:  xmin: 146.7046 ymin: -19.3219 xmax: 146.9695 ymax: -19.02555
 #> Geodetic CRS:  WGS 84
+```
+
+``` r
 
 #show object
 tmap_mode("view")
@@ -290,7 +289,7 @@ nc <- stars::read_mdim(system.file("extdata/turb_reg.nc", package = "RcTools"))
 ereefs_dotplot(nc) 
 ```
 
-![](eReefs_files/figure-html/unnamed-chunk-13-1.png)
+![](eReefs_files/figure-html/unnamed-chunk-14-1.png)
 
 This function accepts both a list of data objects, or a single object.
 This is again to address the scenario in which multiple requests are
@@ -315,10 +314,10 @@ wind data though:
 nc <- stars::read_mdim(system.file("extdata/wind_reg.nc", package = "RcTools"))
 
 #run the function
-suppressWarnings(ereefs_windrose(nc))
+suppressWarnings(ereefs_windrose(nc, Aggregation = "Annual"))
 ```
 
-![](eReefs_files/figure-html/unnamed-chunk-14-1.png)
+![](eReefs_files/figure-html/unnamed-chunk-15-1.png)
 
 ### Mapping
 
@@ -336,7 +335,8 @@ massively edited the data provided by the extraction function (for
 example by changing variable names), then the function should happily
 accept each type of data.
 
-Examples of each map type are presented below:
+Examples of how to call each map type are presented below, and the true
+colour map is visualised.
 
 ``` r
 tmap_mode("plot")
@@ -362,7 +362,7 @@ ereefs_map(nc, MapType = "True Colour")
 
     #> ℹ tmap modes "plot" - "view"
 
-![](eReefs_files/figure-html/unnamed-chunk-16-1.png)
+![](eReefs_files/figure-html/unnamed-chunk-18-1.png)
 
 This function also accepts both a list of data objects, or a single
 object. This is again to address the scenario in which multiple requests
@@ -383,19 +383,22 @@ locations on land. This function actually produces a tmap object, not a
 map directly. What this means is you can further use the tmap package to
 add additional layers and style the map however you want.
 
-A basic example of further styling is presented below, however it is
-recommended that the R package [Tmap](https://r-tmap.github.io/tmap/) is
-reviewed.
+A basic example of further styling is presented below, and importantly
+please understand that the order of the layers in the code is the order
+in which they are placed on the map (first layer = lowest layer on map,
+second layer is placed on top, etc.). It is recommended that the R
+package [Tmap](https://r-tmap.github.io/tmap/) is reviewed to further
+understanding mapping using this package.
 
 ``` r
 
-#run the function again, but this time save as an object
-my_map <- ereefs_map(nc, MapType = "True Colour")
+#run the function again, but this time save as an object and aggregate to annual
+my_map <- ereefs_map(nc, MapType = "True Colour", Aggregation = "Annual")
 
 #use the standard tmap structure to build extract layers around our data
-tm_shape(sf_obj) + 
-  tm_borders() +
-  my_map #note how the object is added here, it could be added at any point in this call including in between layers
+my_map + #note how the object is added here, it could be added at any point in this call including in between layers or after layers
+  tm_shape(sf_obj) + 
+  tm_borders()
 ```
 
-![](eReefs_files/figure-html/unnamed-chunk-17-1.png)
+![](eReefs_files/figure-html/unnamed-chunk-19-1.png)

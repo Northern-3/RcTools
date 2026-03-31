@@ -3,21 +3,21 @@
 ## Introduction
 
 A key component of the Northern Three Report Cards is calculating scores
-and grades for a range of indicators. To streamline this process three
+and grades for a range of indicators. To streamline this process four
 key functions have been developed that work in conjuction with each
 other:
 
 1.  value_to_score()
-2.  score_to_grade()
-3.  save_n3_table()
+2.  weight_scores()
+3.  score_to_grade()
+4.  save_n3_table()
 
-Additional helper functions have been written that support these three
-key functions, which include:
+Additional helper functions have been written that support these key
+functions, which include:
 
 - bind_letter_to_score()
 - define_colour_scheme()
 - conditional_formatter()
-- weight_scores()
 
 These functions run in the background and are called by the main three
 functions as required.
@@ -71,7 +71,21 @@ provided, plus the string “Score” after it. For example if the value
 column was named “MyValue”, the new column would be named
 “MyValueScore”.
 
-3.  Next the score_to_grade function can be run. In this example we will
+3.  Next, if required (HWP only), weight the scores. This is acheived by
+    having an equal length column in the dataframe that contains the
+    appropriate weightings for each score. We will continue to use the
+    dataframe from above, but add in some example weightings.
+
+``` r
+
+#create a weight column
+df <- df |> dplyr::mutate(Weight = c(0.25, 0.5, 0.3, 0.2))
+
+df <- df |> 
+  weight_score(score = ValueScore, weighting = Weight)
+```
+
+4.  Next the score_to_grade function can be run. In this example we will
     continue using the dataframe from above. However, this function can
     take any number of score columns as inputs and will return the same
     number of new columns with the associated text grade.
@@ -86,7 +100,7 @@ The score to grade function is extremely simple, in all cases just
 return letter grades from A to E for scores from 100 to 0.
 
 ``` r
-#if you wanted to get grades for multiple columns this can be acheived as follows
+#if you wanted to get grades for multiple columns this can be achieved as follows
 x <- score_to_grade(x, c(ScoreA, ScoreB, ScoreC))
 ```
 
@@ -97,7 +111,7 @@ was named “MyValue”, the new column would be named “MyValueGrade”, or if
 the column was named “MyValueScore” then the new column would be named
 “MyValueGrade”
 
-4.  Finally, a table that has been scored and potentially graded can
+5.  Finally, a table that has been scored and potentially graded can
     then be saved using the save_n3_table() function. This function is
     unique in that it will apply excel native conditional formatting to
     the outputs of the function. I.e., you can save a dataframe with
@@ -116,7 +130,7 @@ save_n3_table(
 
 ## Value to Score In Detail
 
-The value in score function covers off all standard Report Card scoring
+The value to score function covers off all standard Report Card scoring
 methods, currently this includes scoring for:
 
 - Freshwater Water Quality
