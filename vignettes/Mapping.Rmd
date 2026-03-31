@@ -5,7 +5,7 @@ format:
   html:
     code-overflow: wrap
 vignette: >
-  %\VignetteIndexEntry{Misc_Helpers}
+  %\VignetteIndexEntry{Mapping}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -114,7 +114,8 @@ First you need to run the function with the required arguments:
 ```{r}
 
 #create an example background object
-black_basin <- sf::st_read("inst/extdata/black.gpkg")
+black_basin <- system.file("extdata/black.gpkg", package = "RcTools")
+black_basin <- sf::st_read(black_basin)
 
 #create example wq sites
 wq_sites <- data.frame(
