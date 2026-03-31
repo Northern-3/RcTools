@@ -32,11 +32,16 @@ This is a simple utility function for anyone writing code using Quarto (new vers
 
 The motivation for this function comes from the dual interactive/static runtime that Quarto has. Specifically, when the script is run interactively (i.e. in RStudio while you are writing code), quarto params are easily accessible. However, when the script is run for a render (i.e. to create a HTML doc), quarto params are not accessible in the same way. No arguments are needed for this function:
 
-```{r setup}
+```{r}
+
 library(RcTools)
 
-params <- get_quarto_params()
+```
 
+```{r setup}
+#| eval: FALSE
+
+#params <- get_quarto_params()
 
 ```
 
