@@ -57,7 +57,7 @@ my_water_layer
 If you spell a basin wrong, or provide an incorrect basin, the function will warn you and give a list to choose from:
 
 ```{r}
-# eval: FALSE
+# error: TRUE
 
 #create the water layer
 my_water_layer <- maps_water_layer("Fake")
@@ -124,9 +124,5 @@ wq_sites <- data.frame(
   sf::st_as_sf(coords = c("Long", "Lat"), crs = sf::st_crs(black_basin))
 
 wq_sites <- wq_sites
- 
-
-
-
 
 ```
