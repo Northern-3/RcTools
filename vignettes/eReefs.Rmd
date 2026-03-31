@@ -152,6 +152,7 @@ During the creation of this documentation (30/03/2026) it has been noted that th
 Once you have your model, you can query its date range as follows:
 
 ```{r}
+#| eval: FALSE
 
 #query date range of the model. Note that if no model is provided, you are redirected to first choose a model
 ereefs_get_date_range("https://dapds00.nci.org.au/thredds/dodsC/fx3/gbr4_bgc_GBR4_H2p0_B3p1_Cfur_Dnrt.ncml")
