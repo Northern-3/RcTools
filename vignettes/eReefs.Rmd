@@ -344,6 +344,10 @@ A basic example of further styling is presented below, and importantly please un
 
 ```{r}
 
+#transform crs
+nc <- nc |> 
+  sf::st_transform(sf::st_crs(sf_obj))
+
 #run the function again, but this time save as an object and aggregate to annual
 my_map <- ereefs_map(nc, MapType = "True Colour", Aggregation = "Annual")
 

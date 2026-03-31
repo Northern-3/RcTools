@@ -119,6 +119,14 @@ The column(s) inherits the name of the score column that was provided, plus the 
 save_n3_table(
   df = df,
   file_name = "my_df",
+  target_columns = "ValueScore",
+  scheme = "Report Card"
+)
+
+#you can provide columns by index, or quoted named
+save_n3_table(
+  df = df,
+  file_name = "my_df",
   target_columns = 8,
   scheme = "Report Card"
 )
@@ -284,17 +292,26 @@ save_n3_table(
   df = df, 
   file_name = "my_final_scores", 
   target_columns = 2:3, 
-  target_rows = 2:5, 
+  target_rows = 2:3, 
+  scheme = "Report Card",
+  include_letter = FALSE
+)
+
+#save table, using quoted names or column indicies
+save_n3_table(
+  df = df, 
+  file_name = "my_final_scores", 
+  target_columns = c("DIN", "TP"), 
+  target_rows = 2:3, 
   scheme = "Report Card",
   include_letter = FALSE
 )
 
 ```
 
-There are two known limitations to this function. With more time they could be addressed:
+There is one known limitations to this function. With more time it could be addressed:
 
  - Column limit of 26. Column numbers are translated to excel column letters (e.g. 1 = A, 2 = B). There is currently no method for adapting numbers greater than 26 (i.e. where 27 = AA).
- - Columns called by number. Currently the function only accepts columns input by their number, not by their name. A name to column index function could be created.
 
  ## Summary Statistic Styling
 

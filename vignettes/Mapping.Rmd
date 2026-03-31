@@ -1,5 +1,5 @@
 ---
-title: "Miscellaneous Helpers"
+title: "Creating Maps"
 output: rmarkdown::html_vignette
 format:
   html:
@@ -19,13 +19,80 @@ knitr::opts_chunk$set(
 
 # Introduction
 
-Within this package there are a few functions that don't neatly fit into one particular theme, these have been gather here under "miscellaneous helpers". Currently the functions discussed here are:
+Maps are a commonly required feature across all Regional Report Cards. Equally, analysis often happens in R across each of the Regional Report Cards. It stands to reason that creating maps in R is both a logical and efficent thing to do. However, maps made in R face a few reoccuring issues:
 
- - get_quarto_params()
- - 
+ - Styling: creating a nicely styled map in R is time consuming and not easy
+ - Repetition: maps are often created across several analysis workflows and thus code is repeated (yuck)
+ - Difficulty: creating maps in R is nowhere near as easy as GIS programs with a GUI
+ - Choice: there are a range of packages use to create maps
 
-Each functions requirements and use will be touched
+To help address some of these issues, two mapping functions have been made:
+
+ 1. maps_water_layer()
+ 2. maps_inset_layer()
+
+These functions have been designed to be as generic as possible, whilst also removing as much repeatable code as possible. The goal is to allow the user to focus on adding the specific dataset for the map, and styling the map how they want. The functions use the Tmap package. This package is one of the most popular and easily understood mapping packages, it handles a wide range of data (such as eReefs) and provides interactive options easily.
+
+# Maps Water Layer
+
+The maps_water_layer() function does exactly as it says, and creates a water layer for your map. Specifically, it creates a rivers, creeks, and lakes layer for your map. The output from this function can be added to any map to instantly improve the "base" of the map. In its most simple form, the function only requires you to provide a basin name that exists within Queensland:
 
 ```{r setup}
+
 library(RcTools)
+library(tmap)
+
 ```
+
+```{r}
+
+#create the water layer
+my_water_layer <- maps_water_layer("Ross")
+
+#visualise
+my_water_layer
+
+```
+
+If you spell a basin wrong, or provide an incorrect basin, the function will warn you and give a list to choose from:
+
+```{r}
+
+#create the water layer
+my_water_layer <- maps_water_layer("Fake")
+
+```
+
+The function does get more complex, here is an example that provides all arguments:
+
+```{r}
+
+my_water_layer <- maps_water_layer("Ross", WaterLines = TRUE, WaterAreas = TRUE, WaterLakes = TRUE, StreamOrder = 2)
+
+my_water_layer
+
+```
+
+In the case of the second map we have:
+
+ - asked for water lines (i.e. rivers, and creeks) - this defaults to TRUE
+ - asked for water areas (i.e. unnamed waterbodies such as wetlands) - this defaults to FALSE
+ - asked for water lakes (i.e. Ross Dam) - this defaults to FALSE
+ - specified the strahler stream order for water lines (we want streamorder 2 or bigger)
+
+Finally, a third variation would be:
+
+```{r}
+
+my_water_layer <- maps_water_layer(c("Ross", "Black"), WaterLines = TRUE, StreamOrder = c(3,5))
+
+my_water_layer
+
+```
+
+Note that in this case we have provided multiple basins and also specified both a min and max strahler stream order.
+
+In all cases, the output of the function can then be passed into your wider tmap mapping call.
+
+# Maps Inset Layer
+
