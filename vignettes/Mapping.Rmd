@@ -97,3 +97,36 @@ In all cases, the output of the function can then be passed into your wider tmap
 
 # Maps Inset Layer
 
+The maps_inset_layer() is exclusively for maps that you want to save to file. This function helps to smooth over the annoyingly tricky process of creating a inset map in the upper right corner of your main map. Inset maps are often needed to provided additional spatial context for where your main map is - particularly if your main map is quite zoomed in.
+
+The function requires a few mandatory inputs, and has some optional extras. Mandoratory inputs are:
+
+ - An sf object that defines the focus of the main map
+ - A background sf object
+ - An aspect ratio
+
+Where, the sf object that defines the focus of the main map would be, for example, a series of water quality sampling sites in the Ross Basin. While the background sf object could be an outline of the Ross Basin itself, or an outline of the entire Dry Tropics region, etc.
+
+Using this function requires a bit more work than the first function:
+
+First you need to run the function with the required arguments:
+
+```{r}
+
+#create an example background object
+black_basin <- sf::st_read("inst/extdata/black.gpkg")
+
+#create example wq sites
+wq_sites <- data.frame(
+  Site = c(1,2,3),
+  Lat = c(-18.89483, -18.81886, -18.79427),
+  Long = c(146.2215, 146.6117, 146.6336)) |> 
+  sf::st_as_sf(coords = c("Long", "Lat"), crs = sf::st_crs(black_basin))
+
+wq_sites <- wq_sites
+ 
+
+
+
+
+```
