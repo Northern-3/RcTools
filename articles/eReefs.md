@@ -167,10 +167,8 @@ data and appears to return NULL values often.
 Once you have your model, you can query its date range as follows:
 
 ``` r
-
 #query date range of the model. Note that if no model is provided, you are redirected to first choose a model
 ereefs_get_date_range("https://dapds00.nci.org.au/thredds/dodsC/fx3/gbr4_bgc_GBR4_H2p0_B3p1_Cfur_Dnrt.ncml")
-#> [1] "The oldest date for this model is: 2019-10-08. The newest date for this model is 2024-01-16"
 ```
 
 Finally, it is often the case that several variables are required within
@@ -391,6 +389,10 @@ package [Tmap](https://r-tmap.github.io/tmap/) is reviewed to further
 understanding mapping using this package.
 
 ``` r
+
+#transform crs
+nc <- nc |> 
+  sf::st_transform(sf::st_crs(sf_obj))
 
 #run the function again, but this time save as an object and aggregate to annual
 my_map <- ereefs_map(nc, MapType = "True Colour", Aggregation = "Annual")

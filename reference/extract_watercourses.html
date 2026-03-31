@@ -21,7 +21,7 @@
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/Build_Northern_Three.html">Building The Northern Three Spatial File</a></li>
     <li><a class="dropdown-item" href="../articles/Data_Extractions.html">Data Extractions</a></li>
     <li><a class="dropdown-item" href="../articles/eReefs.html">eReefs</a></li>
-    <li><a class="dropdown-item" href="../articles/Mapping.html">Miscellaneous Helpers</a></li>
+    <li><a class="dropdown-item" href="../articles/Mapping.html">Creating Maps</a></li>
     <li><a class="dropdown-item" href="../articles/Misc_Helpers.html">Miscellaneous Helpers</a></li>
     <li><a class="dropdown-item" href="../articles/Report_Card_Scoring.html">Report Card Scoring</a></li>
   </ul></li>
@@ -89,12 +89,8 @@ paramter by. Where 1 = the smallest streams and increasing numbers correspond to
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">ross_and_black</span> <span class="op">&lt;-</span> <span class="fu">extract_watercourses</span><span class="op">(</span>Basin <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Black"</span>, <span class="st">"Ross"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> [working] (0 + 0) -&gt; 9 -&gt; 1 | <span style="color: #00BB00;">■■■■                            </span>  10%</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> [working] (0 + 0) -&gt; 8 -&gt; 2 | <span style="color: #00BB00;">■■■■■■■                         </span>  20%</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> [working] (0 + 0) -&gt; 0 -&gt; 10 | <span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ </span> 100%</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in purrr::map(feature_list, function(x) {    layer_url &lt;- glue::glue("https://spatial-gis.information.qld.gov.au/arcgis/rest/services/InlandWaters/WaterCoursesAndBodies/MapServer{x}")    if (x == "/33" &amp; !is.null(StreamOrder)) {        final_query = glue::glue("{basin_query} AND {stream_query}")    }    else {        final_query = basin_query    }    layer &lt;- arcgislayers::arc_open(layer_url)    water_data &lt;- arcgislayers::arc_select(layer, where = final_query)    water_data &lt;- dplyr::select(dplyr::mutate(water_data, ID = x,         Basin = drainage_basin), Basin, ID)    return(water_data)}):</span> <span style="color: #00BBBB;">ℹ</span> In index: 1.</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Caused by error in `x[[i]]`:</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> subscript out of bounds</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

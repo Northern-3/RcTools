@@ -5,12 +5,12 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Miscellaneous Helpers • RcTools</title>
+<title>Creating Maps • RcTools</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Miscellaneous Helpers">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Creating Maps">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -36,7 +36,7 @@
 <li><a class="dropdown-item" href="../articles/Build_Northern_Three.html">Building The Northern Three Spatial File</a></li>
     <li><a class="dropdown-item" href="../articles/Data_Extractions.html">Data Extractions</a></li>
     <li><a class="dropdown-item" href="../articles/eReefs.html">eReefs</a></li>
-    <li><a class="dropdown-item" href="../articles/Mapping.html">Miscellaneous Helpers</a></li>
+    <li><a class="dropdown-item" href="../articles/Mapping.html">Creating Maps</a></li>
     <li><a class="dropdown-item" href="../articles/Misc_Helpers.html">Miscellaneous Helpers</a></li>
     <li><a class="dropdown-item" href="../articles/Report_Card_Scoring.html">Report Card Scoring</a></li>
   </ul>
@@ -59,7 +59,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
 
-      <h1>Miscellaneous Helpers</h1>
+      <h1>Creating Maps</h1>
             
       
 
@@ -71,19 +71,149 @@
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
-<p>Within this package there are a few functions that don’t neatly fit
-into one particular theme, these have been gather here under
-“miscellaneous helpers”. Currently the functions discussed here are:</p>
+<p>Maps are a commonly required feature across all Regional Report
+Cards. Equally, analysis often happens in R across each of the Regional
+Report Cards. It stands to reason that creating maps in R is both a
+logical and efficent thing to do. However, maps made in R face a few
+reoccuring issues:</p>
 <ul>
-<li>get_quarto_params()</li>
-<li>
-</li>
+<li>Styling: creating a nicely styled map in R is time consuming and not
+easy</li>
+<li>Repetition: maps are often created across several analysis workflows
+and thus code is repeated (yuck)</li>
+<li>Difficulty: creating maps in R is nowhere near as easy as GIS
+programs with a GUI</li>
+<li>Choice: there are a range of packages use to create maps</li>
 </ul>
-<p>Each functions requirements and use will be touched</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://add-am.github.io/RcTools/">RcTools</a></span><span class="op">)</span></span></code></pre></div>
+<p>To help address some of these issues, two mapping functions have been
+made:</p>
+<ol style="list-style-type: decimal">
+<li>maps_water_layer()</li>
+<li>maps_inset_layer()</li>
+</ol>
+<p>These functions have been designed to be as generic as possible,
+whilst also removing as much repeatable code as possible. The goal is to
+allow the user to focus on adding the specific dataset for the map, and
+styling the map how they want. The functions use the Tmap package. This
+package is one of the most popular and easily understood mapping
+packages, it handles a wide range of data (such as eReefs) and provides
+interactive options easily.</p>
 </div>
-  </main>
+<div class="section level2">
+<h2 id="maps-water-layer">Maps Water Layer<a class="anchor" aria-label="anchor" href="#maps-water-layer"></a>
+</h2>
+<p>The maps_water_layer() function does exactly as it says, and creates
+a water layer for your map. Specifically, it creates a rivers, creeks,
+and lakes layer for your map. The output from this function can be added
+to any map to instantly improve the “base” of the map. In its most
+simple form, the function only requires you to provide a basin name that
+exists within Queensland:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://add-am.github.io/RcTools/">RcTools</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/r-tmap/tmap" class="external-link">tmap</a></span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="co">#create the water layer</span></span>
+<span><span class="va">my_water_layer</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/maps_water_layer.html">maps_water_layer</a></span><span class="op">(</span><span class="st">"Ross"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Registered S3 method overwritten by 'jsonify':</span></span>
+<span><span class="co">#&gt;   method     from    </span></span>
+<span><span class="co">#&gt;   print.json jsonlite</span></span>
+<span><span class="co">#&gt; [working] (0 + 0) -&gt; 6 -&gt; 1 | <span style="color: #00BB00;">■■■■■                           </span>  14%</span></span>
+<span><span class="co">#&gt; [working] (0 + 0) -&gt; 0 -&gt; 7 | <span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ </span> 100%</span></span>
+<span></span>
+<span><span class="co">#visualise</span></span>
+<span><span class="va">my_water_layer</span></span></code></pre></div>
+<p><img src="Mapping_files/figure-html/unnamed-chunk-2-1.png" class="r-plt" alt="" width="700"></p>
+<p>If you spell a basin wrong, or provide an incorrect basin, the
+function will warn you and give a list to choose from:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#create the water layer</span></span>
+<span><span class="va">my_water_layer</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/maps_water_layer.html">maps_water_layer</a></span><span class="op">(</span><span class="st">"Fake"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">Error</span><span style="font-weight: bold;"> in `extract_watercourses()`:</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> The following basin argument(s) are invalid: 'Fake'. Try one of: Brisbane, Burdekin, Balonne-Condamine, Coleman, Barron, Mary, Burnett, Holroyd, Noosa, Don, Border Rivers, Pine, Ross, Murray, Archer, Paroo, Logan-Albert, Wenlock, Mitchell, Cooper Creek, Normanby, Haughton, South Coast, Diamantina, Fitzroy, Tully, Herbert, Mulgrave-Russell, Burrum, Bulloo, Whitsunday Island, Proserpine, Georgina, Endeavour, Embley, Lockhart, Black, Maroochy, Kolan, Boyne, Waterpark, Calliope, Gilbert, Baffle, Staaten, Johnstone, Moonie, Settlement, Mornington Island, Fraser Island, Curtis Island, Flinders, Jeannie, Olive-Pascoe, Ducie, Daintree, Mossman, Arafura Sea, Jardine, Nicholson, Warrego, Morning, Leichhardt, Norman, Watson, O'Connell, Jacky Jacky, Pioneer, Coral Sea, Stewart, Moreton Bay Islands, Plane, Hinchinbrook Island, Shoalwater, Styx, Torres Strait Islands</span></span></code></pre></div>
+<p>The function does get more complex, here is an example that provides
+all arguments:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="va">my_water_layer</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/maps_water_layer.html">maps_water_layer</a></span><span class="op">(</span><span class="st">"Ross"</span>, WaterLines <span class="op">=</span> <span class="cn">TRUE</span>, WaterAreas <span class="op">=</span> <span class="cn">TRUE</span>, WaterLakes <span class="op">=</span> <span class="cn">TRUE</span>, StreamOrder <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [working] (0 + 0) -&gt; 1 -&gt; 1 | <span style="color: #00BB00;">■■■■■■■■■■■■■■■■                </span>  50%</span></span>
+<span><span class="co">#&gt; [working] (0 + 0) -&gt; 0 -&gt; 2 | <span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ </span> 100%</span></span>
+<span></span>
+<span><span class="va">my_water_layer</span></span></code></pre></div>
+<p><img src="Mapping_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" alt="" width="700"></p>
+<p>In the case of the second map we have:</p>
+<ul>
+<li>asked for water lines (i.e. rivers, and creeks) - this defaults to
+TRUE</li>
+<li>asked for water areas (i.e. unnamed waterbodies such as wetlands) -
+this defaults to FALSE</li>
+<li>asked for water lakes (i.e. Ross Dam) - this defaults to FALSE</li>
+<li>specified the strahler stream order for water lines (we want
+streamorder 2 or bigger)</li>
+</ul>
+<p>Finally, a third variation would be:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="va">my_water_layer</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/maps_water_layer.html">maps_water_layer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Ross"</span>, <span class="st">"Black"</span><span class="op">)</span>, WaterLines <span class="op">=</span> <span class="cn">TRUE</span>, StreamOrder <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">5</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [working] (0 + 0) -&gt; 1 -&gt; 1 | <span style="color: #00BB00;">■■■■■■■■■■■■■■■■                </span>  50%</span></span>
+<span><span class="co">#&gt; [working] (0 + 0) -&gt; 0 -&gt; 2 | <span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ </span> 100%</span></span>
+<span></span>
+<span><span class="va">my_water_layer</span></span></code></pre></div>
+<p><img src="Mapping_files/figure-html/unnamed-chunk-5-1.png" class="r-plt" alt="" width="700"></p>
+<p>Note that in this case we have provided multiple basins and also
+specified both a min and max strahler stream order.</p>
+<p>In all cases, the output of the function can then be passed into your
+wider tmap mapping call.</p>
+</div>
+<div class="section level2">
+<h2 id="maps-inset-layer">Maps Inset Layer<a class="anchor" aria-label="anchor" href="#maps-inset-layer"></a>
+</h2>
+<p>The maps_inset_layer() is exclusively for maps that you want to save
+to file. This function helps to smooth over the annoyingly tricky
+process of creating a inset map in the upper right corner of your main
+map. Inset maps are often needed to provided additional spatial context
+for where your main map is - particularly if your main map is quite
+zoomed in.</p>
+<p>The function requires a few mandatory inputs, and has some optional
+extras. Mandoratory inputs are:</p>
+<ul>
+<li>An sf object that defines the focus of the main map</li>
+<li>A background sf object</li>
+<li>An aspect ratio</li>
+</ul>
+<p>Where, the sf object that defines the focus of the main map would be,
+for example, a series of water quality sampling sites in the Ross Basin.
+While the background sf object could be an outline of the Ross Basin
+itself, or an outline of the entire Dry Tropics region, etc.</p>
+<p>Using this function requires a bit more work than the first
+function:</p>
+<p>First you need to run the function with the required arguments:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="co">#create an example background object</span></span>
+<span><span class="va">black_basin</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/black.gpkg"</span>, package <span class="op">=</span> <span class="st">"RcTools"</span><span class="op">)</span></span>
+<span><span class="va">black_basin</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">st_read</a></span><span class="op">(</span><span class="va">black_basin</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Reading layer `black' from data source </span></span>
+<span><span class="co">#&gt;   `/home/runner/work/_temp/Library/RcTools/extdata/black.gpkg' </span></span>
+<span><span class="co">#&gt;   using driver `GPKG'</span></span>
+<span><span class="co">#&gt; Simple feature collection with 1 feature and 0 fields</span></span>
+<span><span class="co">#&gt; Geometry type: MULTIPOLYGON</span></span>
+<span><span class="co">#&gt; Dimension:     XY</span></span>
+<span><span class="co">#&gt; Bounding box:  xmin: 146.1444 ymin: -19.43266 xmax: 146.6946 ymax: -18.53782</span></span>
+<span><span class="co">#&gt; Geodetic CRS:  GDA2020</span></span>
+<span></span>
+<span><span class="co">#create example wq sites</span></span>
+<span><span class="va">wq_sites</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>  Site <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">3</span><span class="op">)</span>,</span>
+<span>  Lat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">18.89483</span>, <span class="op">-</span><span class="fl">18.81886</span>, <span class="op">-</span><span class="fl">18.79427</span><span class="op">)</span>,</span>
+<span>  Long <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">146.2215</span>, <span class="fl">146.6117</span>, <span class="fl">146.6336</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span>coords <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Long"</span>, <span class="st">"Lat"</span><span class="op">)</span>, crs <span class="op">=</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></span><span class="op">(</span><span class="va">black_basin</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">wq_sites</span> <span class="op">&lt;-</span> <span class="va">wq_sites</span></span></code></pre></div>
+</div>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 

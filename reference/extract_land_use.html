@@ -21,7 +21,7 @@
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/Build_Northern_Three.html">Building The Northern Three Spatial File</a></li>
     <li><a class="dropdown-item" href="../articles/Data_Extractions.html">Data Extractions</a></li>
     <li><a class="dropdown-item" href="../articles/eReefs.html">eReefs</a></li>
-    <li><a class="dropdown-item" href="../articles/Mapping.html">Miscellaneous Helpers</a></li>
+    <li><a class="dropdown-item" href="../articles/Mapping.html">Creating Maps</a></li>
     <li><a class="dropdown-item" href="../articles/Misc_Helpers.html">Miscellaneous Helpers</a></li>
     <li><a class="dropdown-item" href="../articles/Report_Card_Scoring.html">Report Card Scoring</a></li>
   </ul></li>
@@ -80,7 +80,33 @@ the n3_region object from the <code><a href="build_n3_region.html">build_n3_regi
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">n3_region</span> <span class="op">&lt;-</span> <span class="fu"><a href="build_n3_region.html">build_n3_region</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Building Northern Three Basins...</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in x[[1]]:</span> subscript out of bounds</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Building Northern Three Islands...</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>attribute variables are assumed to be spatially constant throughout all geometries</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Building Northern Three Marine Boundary...</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>attribute variables are assumed to be spatially constant throughout all geometries</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>attribute variables are assumed to be spatially constant throughout all geometries</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>attribute variables are assumed to be spatially constant throughout all geometries</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Creating Internal Marine Boundaries...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Building Northern Three Sub Basins...</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>attribute variables are assumed to be spatially constant throughout all geometries</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>repeating attributes for all sub-geometries for which they may not be constant</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>attribute variables are assumed to be spatially constant throughout all geometries</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>attribute variables are assumed to be spatially constant throughout all geometries</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>attribute variables are assumed to be spatially constant throughout all geometries</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>attribute variables are assumed to be spatially constant throughout all geometries</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Assigning Freshwater and Estuarine Zonations...</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>attribute variables are assumed to be spatially constant throughout all geometries</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>attribute variables are assumed to be spatially constant throughout all geometries</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>x is already of type POLYGON.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>repeating attributes for all sub-geometries for which they may not be constant</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>x is already of type POLYGON.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>repeating attributes for all sub-geometries for which they may not be constant</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Adding Special Land Features...</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>attribute variables are assumed to be spatially constant throughout all geometries</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Adding Special Marine Features...</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>attribute variables are assumed to be spatially constant throughout all geometries</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>attribute variables are assumed to be spatially constant throughout all geometries</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>attribute variables are assumed to be spatially constant throughout all geometries</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">lu_data</span> <span class="op">&lt;-</span> <span class="fu">extract_land_use</span><span class="op">(</span><span class="va">p1</span>, <span class="va">p2</span>, <span class="va">n3_region</span><span class="op">)</span></span></span>
 <span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'p1' not found</span>

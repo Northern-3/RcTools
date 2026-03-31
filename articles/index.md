@@ -7,8 +7,7 @@
 - [Data
   Extractions](https://add-am.github.io/RcTools/articles/Data_Extractions.md):
 - [eReefs](https://add-am.github.io/RcTools/articles/eReefs.md):
-- [Miscellaneous
-  Helpers](https://add-am.github.io/RcTools/articles/Mapping.md):
+- [Creating Maps](https://add-am.github.io/RcTools/articles/Mapping.md):
 - [Miscellaneous
   Helpers](https://add-am.github.io/RcTools/articles/Misc_Helpers.md):
 - [Report Card
