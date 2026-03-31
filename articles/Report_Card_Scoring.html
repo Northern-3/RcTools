@@ -36,6 +36,7 @@
 <li><a class="dropdown-item" href="../articles/Build_Northern_Three.html">Building The Northern Three Spatial File</a></li>
     <li><a class="dropdown-item" href="../articles/Data_Extractions.html">Data Extractions</a></li>
     <li><a class="dropdown-item" href="../articles/eReefs.html">eReefs</a></li>
+    <li><a class="dropdown-item" href="../articles/Mapping.html">Miscellaneous Helpers</a></li>
     <li><a class="dropdown-item" href="../articles/Misc_Helpers.html">Miscellaneous Helpers</a></li>
     <li><a class="dropdown-item" href="../articles/Report_Card_Scoring.html">Report Card Scoring</a></li>
   </ul>
@@ -71,8 +72,9 @@
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
 <p>A key component of the Northern Three Report Cards is calculating
-scores and grades for a range of indicator. To streamline this process
-three key functions have been developed that work in conjuction:</p>
+scores and grades for a range of indicators. To streamline this process
+three key functions have been developed that work in conjuction with
+each other:</p>
 <ol style="list-style-type: decimal">
 <li>value_to_score()</li>
 <li>score_to_grade()</li>
@@ -86,13 +88,17 @@ three key functions, which include:</p>
 <li>conditional_formatter()</li>
 <li>weight_scores()</li>
 </ul>
+<p>These functions run in the background and are called by the main
+three functions as required.</p>
 </div>
 <div class="section level2">
 <h2 id="general-workflow">General Workflow<a class="anchor" aria-label="anchor" href="#general-workflow"></a>
 </h2>
 <p>The general workflow of these functions can be demonstrated as
-follows. Take a defined/loaded/calculated dataframe such as this
-one:</p>
+follows:</p>
+<ol style="list-style-type: decimal">
+<li>Take a defined/loaded/calculated dataframe such as this one:</li>
+</ol>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://add-am.github.io/RcTools/">RcTools</a></span><span class="op">)</span></span>
@@ -106,11 +112,13 @@ one:</p>
 <span>  Eightieth <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.0154</span>, <span class="fl">0.0154</span>, <span class="fl">101.12</span>, <span class="fl">101.12</span><span class="op">)</span>,</span>
 <span>  Twentieth <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.0026</span>, <span class="fl">0.0026</span>, <span class="fl">75.84</span>, <span class="fl">75.84</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p>First run the value_to_score() function. This function takes several
+<ol start="2" style="list-style-type: decimal">
+<li>First run the value_to_score() function. This function takes several
 inputs depending on the type of value and the way you wish to score it.
 In this first example, we are scoring using the freshwater water quality
 method, and therefore are required to supply a large amount of
-information:</p>
+information:</li>
+</ol>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co">#run the function on our example data</span></span>
@@ -130,14 +138,18 @@ added. The column inherits the name of the value column that was
 provided, plus the string “Score” after it. For example if the value
 column was named “MyValue”, the new column would be named
 “MyValueScore”.</p>
-<p>Next the score_to_grade function can be run. In this example we will
+<ol start="3" style="list-style-type: decimal">
+<li>Next the score_to_grade function can be run. In this example we will
 continue using the dataframe from above. However, this function can take
 any number of score columns as inputs and will return the same number of
-new columns with the associated text grade.</p>
+new columns with the associated text grade.</li>
+</ol>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co">#run the function on our example data</span></span>
 <span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/score_to_grade.html">score_to_grade</a></span><span class="op">(</span><span class="va">df</span>, <span class="va">ValueScore</span><span class="op">)</span></span></code></pre></div>
+<p>The score to grade function is extremely simple, in all cases just
+return letter grades from A to E for scores from 100 to 0.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#if you wanted to get grades for multiple columns this can be acheived as follows</span></span>
 <span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/score_to_grade.html">score_to_grade</a></span><span class="op">(</span><span class="va">x</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">ScoreA</span>, <span class="va">ScoreB</span>, <span class="va">ScoreC</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
@@ -147,11 +159,323 @@ provided, plus the string “Grade” after it. Further, if the string
 value column was named “MyValue”, the new column would be named
 “MyValueGrade”, or if the column was named “MyValueScore” then the new
 column would be named “MyValueGrade”</p>
-<p>Finally, a table that has been scored and potentially graded can then
-be saved using the save_n3_table() function. This function is unique in
-that it will apply excel native conditional formatting to the outputs of
-the function. I.e., you can save a dataframe with scores, and
-automatically apply the required colour scaling (red to green).</p>
+<ol start="4" style="list-style-type: decimal">
+<li>Finally, a table that has been scored and potentially graded can
+then be saved using the save_n3_table() function. This function is
+unique in that it will apply excel native conditional formatting to the
+outputs of the function. I.e., you can save a dataframe with scores, and
+automatically apply the required colour scaling (red to green):</li>
+</ol>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#save the table</span></span>
+<span><span class="fu"><a href="../reference/save_n3_table.html">save_n3_table</a></span><span class="op">(</span></span>
+<span>  df <span class="op">=</span> <span class="va">df</span>,</span>
+<span>  file_name <span class="op">=</span> <span class="st">"my_df"</span>,</span>
+<span>  target_columns <span class="op">=</span> <span class="fl">8</span>,</span>
+<span>  scheme <span class="op">=</span> <span class="st">"Report Card"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="value-to-score-in-detail">Value to Score In Detail<a class="anchor" aria-label="anchor" href="#value-to-score-in-detail"></a>
+</h2>
+<p>The value in score function covers off all standard Report Card
+scoring methods, currently this includes scoring for:</p>
+<ul>
+<li>Freshwater Water Quality</li>
+<li>Estuarine Water Quality</li>
+<li>Inshore Water Quality</li>
+<li>Pesticides (FW)</li>
+<li>Wetlands (HWP Specfic)</li>
+<li>Mangroves and Saltmarsh (HWP Specfic)</li>
+<li>Riparian (HWP Specfic)</li>
+<li>Fish</li>
+</ul>
+<p>In each case, the required inputs are different. Below, each method
+of scoring is presented:</p>
+<div class="section level3">
+<h3 id="freshwater-water-quality">Freshwater Water Quality<a class="anchor" aria-label="anchor" href="#freshwater-water-quality"></a>
+</h3>
+<p>For freshwater water quality scoring, the score is calculated
+using:</p>
+<ol style="list-style-type: decimal">
+<li>A value,</li>
+<li>A water quality objective,</li>
+<li>A scaling factor,</li>
+<li>The eigtieth pecentile, and</li>
+<li>The twentieth percentile.</li>
+</ol>
+<p>Additionally, you must specify to the function the type of method you
+are trying to score with.</p>
+<p>Generally water quality data is stored in a wide format, with each of
+the required listed above assigned to its own column, the function has
+been structured with this in mind:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="co">#create example data</span></span>
+<span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>  Basin <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Black"</span>, <span class="st">"Ross"</span>, <span class="st">"Haughton"</span>, <span class="st">"Suttor"</span><span class="op">)</span>,</span>
+<span>  Indicator <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"DIN"</span>, <span class="st">"DIN"</span>, <span class="st">"Low_DO"</span>, <span class="st">"Low_DO"</span><span class="op">)</span>,</span>
+<span>  Value <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.002</span>, <span class="fl">0.017</span>, <span class="fl">87.6</span>, <span class="fl">104</span><span class="op">)</span>,</span>
+<span>  Wqo <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.02</span>, <span class="fl">0.02</span>, <span class="fl">90</span>, <span class="fl">90</span><span class="op">)</span>,</span>
+<span>  Sf <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.38</span>, <span class="fl">0.38</span>, <span class="fl">70</span>, <span class="fl">70</span><span class="op">)</span>,</span>
+<span>  Eightieth <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.0154</span>, <span class="fl">0.0154</span>, <span class="fl">101.12</span>, <span class="fl">101.12</span><span class="op">)</span>,</span>
+<span>  Twentieth <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.0026</span>, <span class="fl">0.0026</span>, <span class="fl">75.84</span>, <span class="fl">75.84</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">#run the function on our example data</span></span>
+<span><span class="va">df</span> <span class="op">&lt;-</span> <span class="va">df</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="../reference/value_to_score.html">value_to_score</a></span><span class="op">(</span></span>
+<span>    value <span class="op">=</span> <span class="va">Value</span>,</span>
+<span>    value_type <span class="op">=</span> <span class="st">"Water Quality"</span>,</span>
+<span>    water_type <span class="op">=</span> <span class="st">"Freshwater"</span>,</span>
+<span>    indicator <span class="op">=</span> <span class="va">Indicator</span>,</span>
+<span>    wqo <span class="op">=</span> <span class="va">Wqo</span>,</span>
+<span>    sf <span class="op">=</span> <span class="va">Sf</span>,</span>
+<span>    eightieth <span class="op">=</span> <span class="va">Eightieth</span>,</span>
+<span>    twentieth <span class="op">=</span> <span class="va">Twentieth</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="estuarine-water-quality">Estuarine Water Quality<a class="anchor" aria-label="anchor" href="#estuarine-water-quality"></a>
+</h3>
+<p>Estuarine water quality is scored using the exact same methodology as
+freshwater, however you should change the water_type argument to
+“estuarine”.</p>
+</div>
+<div class="section level3">
+<h3 id="inshore-water-quality">Inshore Water Quality<a class="anchor" aria-label="anchor" href="#inshore-water-quality"></a>
+</h3>
+<p>For inshore water quality scoring, the methodology does not require
+nearly as much information, only:</p>
+<ol style="list-style-type: decimal">
+<li>A value, and</li>
+<li>A water quality objective.</li>
+</ol>
+<p>However, you must still specify to the function the type of method
+you are trying to score with.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="co">#create example data</span></span>
+<span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>  Basin <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Black"</span>, <span class="st">"Ross"</span>, <span class="st">"Haughton"</span>, <span class="st">"Suttor"</span><span class="op">)</span>,</span>
+<span>  Indicator <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"DIN"</span>, <span class="st">"DIN"</span>, <span class="st">"Low_DO"</span>, <span class="st">"Low_DO"</span><span class="op">)</span>,</span>
+<span>  Value <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.002</span>, <span class="fl">0.017</span>, <span class="fl">87.6</span>, <span class="fl">104</span><span class="op">)</span>,</span>
+<span>  Wqo <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.02</span>, <span class="fl">0.02</span>, <span class="fl">90</span>, <span class="fl">90</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">#run the function on our example data</span></span>
+<span><span class="va">df</span> <span class="op">&lt;-</span> <span class="va">df</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="../reference/value_to_score.html">value_to_score</a></span><span class="op">(</span></span>
+<span>    value <span class="op">=</span> <span class="va">Value</span>,</span>
+<span>    value_type <span class="op">=</span> <span class="st">"Water Quality"</span>,</span>
+<span>    water_type <span class="op">=</span> <span class="st">"Marine"</span>,</span>
+<span>    indicator <span class="op">=</span> <span class="va">Indicator</span>,</span>
+<span>    wqo <span class="op">=</span> <span class="va">Wqo</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="pesticides-wetlands-mangroves-and-saltmarsh-riparian-and-fish">Pesticides, Wetlands, Mangroves and Saltmarsh, Riparian, and
+Fish<a class="anchor" aria-label="anchor" href="#pesticides-wetlands-mangroves-and-saltmarsh-riparian-and-fish"></a>
+</h3>
+<p>The remaining scoring methodology requires even less information,
+only:</p>
+<ol style="list-style-type: decimal">
+<li>A value.</li>
+</ol>
+<p>However, you must still specify to the function the type of method
+you are trying to score with. For example:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="co">#create example data</span></span>
+<span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>  Basin <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Black"</span>, <span class="st">"Ross"</span>, <span class="st">"Haughton"</span>, <span class="st">"Suttor"</span><span class="op">)</span>,</span>
+<span>  Value <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">0.6</span>, <span class="fl">0.3</span>, <span class="fl">0.6</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">#run the function on our example data</span></span>
+<span><span class="va">df</span> <span class="op">&lt;-</span> <span class="va">df</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="../reference/value_to_score.html">value_to_score</a></span><span class="op">(</span></span>
+<span>    value <span class="op">=</span> <span class="va">Value</span>,</span>
+<span>    value_type <span class="op">=</span> <span class="st">"Pesticides"</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+</div>
+</div>
+<div class="section level2">
+<h2 id="save-n3-table-in-detail">Save N3 Table in Detail<a class="anchor" aria-label="anchor" href="#save-n3-table-in-detail"></a>
+</h2>
+<p>The save_n3_table() function also has a range of functionality
+embedded. Currently the function can save tables in the following
+styles:</p>
+<ul>
+<li>Report Card</li>
+<li>Summary Statistic</li>
+<li>Presence/Absence</li>
+<li>Rainfall</li>
+<li>Temperature</li>
+</ul>
+<p>The reason for these seemingly disparate options is because in each
+case, the table is styled based on conditional formatting.</p>
+<p>Each option is demonstrated below:</p>
+<div class="section level3">
+<h3 id="report-card-style">Report Card Style<a class="anchor" aria-label="anchor" href="#report-card-style"></a>
+</h3>
+<p>The Report Card style is the classic red to green colour grading. The
+condition formatting that is applied here follows the 0 - 100 scale,
+where &lt;21 = red, 21 - &lt;41 = orange, etc. There is no option to
+apply red to green colour scaling for any other number range (such as
+non-standardised numbers). This method requires:</p>
+<ul>
+<li>One or more target columns <strong>defined by column number
+only</strong>,</li>
+<li>The type of scheme to use (“Report Card”),</li>
+</ul>
+<p>and optionally can also accept:</p>
+<ul>
+<li>a specified range of target rows (defaults to all rows)</li>
+<li>a request to include a letter grade (defaults to no)</li>
+</ul>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#create table</span></span>
+<span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>  Basin <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Black"</span>, <span class="st">"Ross"</span>, <span class="st">"Haughton"</span>, <span class="st">"Suttor"</span><span class="op">)</span>,</span>
+<span>  DIN <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">51</span>, <span class="fl">76</span>, <span class="fl">27</span>, <span class="fl">98</span><span class="op">)</span>,</span>
+<span>  TP <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">90</span>, <span class="fl">57</span>, <span class="fl">34</span>, <span class="fl">72</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">#save table</span></span>
+<span><span class="fu"><a href="../reference/save_n3_table.html">save_n3_table</a></span><span class="op">(</span></span>
+<span>  df <span class="op">=</span> <span class="va">df</span>, </span>
+<span>  file_name <span class="op">=</span> <span class="st">"my_final_scores"</span>, </span>
+<span>  target_columns <span class="op">=</span> <span class="fl">2</span><span class="op">:</span><span class="fl">3</span>, </span>
+<span>  target_rows <span class="op">=</span> <span class="fl">2</span><span class="op">:</span><span class="fl">5</span>, </span>
+<span>  scheme <span class="op">=</span> <span class="st">"Report Card"</span>,</span>
+<span>  include_letter <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>There are two known limitations to this function. With more time they
+could be addressed:</p>
+<ul>
+<li>Column limit of 26. Column numbers are translated to excel column
+letters (e.g. 1 = A, 2 = B). There is currently no method for adapting
+numbers greater than 26 (i.e. where 27 = AA).</li>
+<li>Columns called by number. Currently the function only accepts
+columns input by their number, not by their name. A name to column index
+function could be created.</li>
+</ul>
+<p>## Summary Statistic Styling</p>
+<p>The summary statistic styling is used for tables in the HWP appendix
+and returns a condition blue/orange for raw values compared against
+relevant water quality objectives. This method requires:</p>
+<ul>
+<li>Specifically <strong>one</strong> target column <strong>defined by
+column number only</strong>,</li>
+<li>The type of scheme to use (“Summary Statistic”),</li>
+</ul>
+<p>and optionally can also accept:</p>
+<ul>
+<li>a specified range of target rows (defaults to all rows)</li>
+</ul>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#create table</span></span>
+<span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>  Basin <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Black"</span>, <span class="st">"Ross"</span>, <span class="st">"Haughton"</span>, <span class="st">"Suttor"</span><span class="op">)</span>,</span>
+<span>  value <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.001</span>, <span class="fl">10</span>, <span class="fl">0.4</span>, <span class="fl">3</span><span class="op">)</span>,</span>
+<span>  wqo <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.3</span>, <span class="fl">5</span>, <span class="fl">0.3</span>, <span class="fl">5</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">#save table</span></span>
+<span><span class="fu"><a href="../reference/save_n3_table.html">save_n3_table</a></span><span class="op">(</span></span>
+<span>  df <span class="op">=</span> <span class="va">df</span>, </span>
+<span>  file_name <span class="op">=</span> <span class="st">"my_summary_statistics_table"</span>, </span>
+<span>  target_columns <span class="op">=</span> <span class="fl">2</span>, </span>
+<span>  scheme <span class="op">=</span> <span class="st">"Summary Statistic"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>There are two known limitations to this function. With more time they
+could be addressed:</p>
+<ul>
+<li>Single column target only. The function works by comparing the
+column against a neighbour column. If multiple columns are provided the
+comparison fails.</li>
+<li>Hard coded neighbour column. Currently the water quality objective
+must be immediately to the right of the value column otherwise the
+comparison will fail. The function could be rewritten to independently
+target each column.</li>
+</ul>
+</div>
+<div class="section level3">
+<h3 id="presenceabsence-styling">Presence/Absence Styling<a class="anchor" aria-label="anchor" href="#presenceabsence-styling"></a>
+</h3>
+<p>The presence/absence styling is used for any sort of boolean output
+and returns blue for true, and grey/white for false. For example, the
+presence/absence of fish detected at each sampling site. This method
+requires:</p>
+<ul>
+<li>One or more target columns <strong>defined by column number
+only</strong>,</li>
+<li>The type of scheme to use (“Presence Absence”),</li>
+</ul>
+<p>and optionally can also accept:</p>
+<ul>
+<li>a specified range of target rows (defaults to all rows)</li>
+</ul>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#create table</span></span>
+<span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>  Basin <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Black"</span>, <span class="st">"Ross"</span><span class="op">)</span>,</span>
+<span>  Jan <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">4</span><span class="op">)</span>,</span>
+<span>  Feb <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>,<span class="fl">4</span><span class="op">)</span>,</span>
+<span>  Mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>,<span class="fl">5</span><span class="op">)</span>,</span>
+<span>  Apr <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">3</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">#save table</span></span>
+<span><span class="fu"><a href="../reference/save_n3_table.html">save_n3_table</a></span><span class="op">(</span></span>
+<span>  df <span class="op">=</span> <span class="va">df</span>, </span>
+<span>  file_name <span class="op">=</span> <span class="st">"my_presence_absence_table"</span>, </span>
+<span>  target_columns <span class="op">=</span> <span class="fl">2</span><span class="op">:</span><span class="fl">5</span>, </span>
+<span>  scheme <span class="op">=</span> <span class="st">"Presence Absence"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>There is one known limitations to this function. With more time they
+could be addressed:</p>
+<ul>
+<li>Values must be 0 or 1, with 1 indicating presence.</li>
+</ul>
+<p>## Rainfall and Temperature Styling</p>
+<p>The rainfall and temperature styling is used specifically for the
+summary tables output from the rainfall and temperature (air and sea)
+scripts in the climate repository. They colour cells based on category
+from 1 - 7 where 1 = “lowest on recored”, 4 = “average” and 7 = “highest
+on record”. For rainfall, colours scale from brown to blue, for
+temperature colours scale from white to red. This method requires:</p>
+<ul>
+<li>One or more target columns <strong>defined by column number
+only</strong>,</li>
+<li>The type of scheme to use (“Rainfall” OR “Temperature”),</li>
+</ul>
+<p>and optionally can also accept:</p>
+<ul>
+<li>a specified range of target rows (defaults to all rows)</li>
+</ul>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#create table</span></span>
+<span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>  SiteName <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"site1"</span>, <span class="st">"site2"</span>, <span class="st">"site3"</span>, <span class="st">"sit4"</span><span class="op">)</span>,</span>
+<span>  species1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span>,</span>
+<span>  species2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">#save table</span></span>
+<span><span class="fu"><a href="../reference/save_n3_table.html">save_n3_table</a></span><span class="op">(</span></span>
+<span>  df <span class="op">=</span> <span class="va">df</span>, </span>
+<span>  file_name <span class="op">=</span> <span class="st">"my_rainfall_table"</span>, </span>
+<span>  target_columns <span class="op">=</span> <span class="fl">2</span>, </span>
+<span>  scheme <span class="op">=</span> <span class="st">"Rainfall"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>There is one known limitations to this function. With more time they
+could be addressed:</p>
+<ul>
+<li>Values must be scaled from 1 to 7.</li>
+</ul>
+</div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

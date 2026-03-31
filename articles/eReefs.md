@@ -2,6 +2,400 @@
 
 ## Introduction
 
+eReefs has been a significant body of work for the Northern Three
+Partnership, with the ultimate objective being to obtain contextual
+information on the marine zone and river inputs across each region.
+
+Accessing and using eReefs data presents one of the most significant
+hurdles to its adoptions. Thus, a series of functions has been design
+specific for report card use that streamline and simplify the necessary
+aspects of the analysis. There are currently 9 functions conveniently
+split into three groups to discuss:
+
+Data Extraction and Preparation Functions:
+
+- extract_ereefs()
+- ereefs_get_date_range()
+- ereefs_reproject()
+
+Data Visualisation Functions:
+
+- ereefs_map()
+- ereefs_dotplot()
+- ereefs_windrose()
+
+Helpers:
+
+- ereefs_input_selection()
+- ereefs_get_palette()
+- ereefs_list_safety_check_and_convert()
+
+## Data Extraction and Prepartion
+
+All eReefs data is stored on THREDDS servers in the NetCDF format. It
+cannot be manually downloaded, and it is stored in a curvilinear format.
+Further, at the smallest scale (pre-cropping), the data is still several
+gb in size. Effectively, the data is painful to get a hold of.
+
+At the most basic level, data can be extracted from eReefs as follows:
+
+First a spatial boundary needs to be defined, in this case we are using
+a simple rectangle, but it could be any spatial object that you have.
+
 ``` r
+
+#load library
 library(RcTools)
+library(tmap)
+
+#define a spatial boundary
+sf_obj <- system.file("extdata/boundary.gpkg", package = "RcTools")
+sf_obj <- sf::st_read(sf_obj)
+#> Reading layer `boundary' from data source 
+#>   `/home/runner/work/_temp/Library/RcTools/extdata/boundary.gpkg' 
+#>   using driver `GPKG'
+#> Simple feature collection with 1 feature and 0 fields
+#> Geometry type: POLYGON
+#> Dimension:     XY
+#> Bounding box:  xmin: 146.7046 ymin: -19.3219 xmax: 146.9695 ymax: -19.02555
+#> Geodetic CRS:  WGS 84
+
+#show object
+tmap_mode("view")
+#> ℹ tmap modes "plot" - "view"
+#> ℹ toggle with `tmap::ttm()`
+tm_shape(sf_obj) + tm_borders()
 ```
+
+Next, use the custom extract_ereefs() function.
+
+``` r
+my_data <- extract_ereefs(
+  Model = "https://dapds00.nci.org.au/thredds/dodsC/fx3/gbr4_bgc_GBR4_H2p0_B3p1_Cfur_Dnrt.ncml",
+  Region = sf_obj,
+  StartDate = "2022-03-01",
+  EndDate = "2022-03-03",
+  Variable = "Turbidity",
+  Downsample = 0
+)
+```
+
+Following this, data is converted from a curvilinear grid to a
+rectilinear grid. Note that is not always necessary (and sometimes
+fails), but it does make the data easier to save, understand, and work
+with.
+
+``` r
+
+my_data_square <- ereefs_reproject(my_data)
+#> threshold set to 1054.63 : set a larger value if you see missing values where there shouldn't be
+```
+
+And thats it. You now have an eReefs dataset on your computer.
+
+Here is how to curvilinear object looks:
+
+``` r
+
+tm_shape(my_data[,,,1]) + 
+  tm_raster() +
+  tm_shape(sf_obj) + 
+  tm_borders()
+#> Registered S3 method overwritten by 'jsonify':
+#>   method     from    
+#>   print.json jsonlite
+```
+
+and here is the regular grid:
+
+``` r
+
+tm_shape(my_data_square[,,,1]) + 
+  tm_raster() +
+  tm_shape(sf_obj) + 
+  tm_borders()
+```
+
+### Data Extraction in More Detail
+
+Obviously things can get a bit more complicated than that, and a lot has
+been left unexplained. Below I try to provide a bit more detail.
+
+First of all, the extract_ereefs() function has a few guardrails to be
+aware of:
+
+1.  The variables that can be requested have been limited to only those
+    that the Partnerships might find useful. Specifically, this
+    extraction provides access to: “Turbidity”, “Chlorophyll a”, “DIN”,
+    “NH4”, “NO3”, “Secchi”, “pH”, “Wind”, “True Colour”. There are
+    hundreds of other options.
+2.  Datasets can be very, very, large. The extraction function provides
+    the option to downsample data, that is to reduce the total number of
+    cells extracted. The higher the number provided to the downsample
+    arguement, the greater the reduction.
+3.  There are a range of eReefs models you can access data from, with
+    each of the models exploring a different scenario. The helper
+    function ereefs_input_selection() assists with choosing the correct
+    model and runs in the background when appropriate. (Note, above I
+    just provided the direct link to skip this step).
+4.  Every eReefs model spans a different period of time, some going back
+    a decade, others only a few years, some recording up to 2023, others
+    stopping in 2019. The function ereefs_get_date_range() can be used
+    once you know what model you want, to determine the date range it
+    offers.
+
+Lets first look at picking a model, you will need to run this on your
+own machine as it is an interactive function:
+
+``` r
+#to access this function you have to explicitly call it using the triple colon (:::), as it is not natively exported. This is because it is only supposed to be used within other eReefs functions
+RcTools:::ereefs_input_selection()
+```
+
+Once selected the function returns the appropriate path. When this
+function is called within the main extract function the path is passed
+to the “model” argument.
+
+During the creation of this documentation (30/03/2026) it has been noted
+that the model options provided have been updated. Previously “eReefs
+GBR4 biogeochemistry and sediments v3.1 baseline catchment scenario”
+(option 5) was the preferred model to use. However, it has since been
+marked as “SUPERSEDED”. It is likely that “eReefs GBR4 biogeochemistry
+and sediments v4.2 baseline catchment scenario” (option 11) will become
+the new default, however this model currently does not include recent
+data and appears to return NULL values often.
+
+Once you have your model, you can query its date range as follows:
+
+``` r
+
+#query date range of the model. Note that if no model is provided, you are redirected to first choose a model
+ereefs_get_date_range("https://dapds00.nci.org.au/thredds/dodsC/fx3/gbr4_bgc_GBR4_H2p0_B3p1_Cfur_Dnrt.ncml")
+#> [1] "The oldest date for this model is: 2019-10-08. The newest date for this model is 2024-01-16"
+```
+
+Finally, it is often the case that several variables are required within
+an area of interest, and/or several distinct dates are required. In this
+case, below is the code necessary to generalise the data extraction into
+a multiple extraction, simply create a matrix of input values and use
+pmap to iterate.
+
+``` r
+#put arguments into objects
+all_variables <- c("Turbidity", "Chl_a_sum")
+all_start_dates <- "2022-03-01"
+all_end_dates <- "2022-03-03"
+
+#use expand grid to build a simple table of inputs
+all_arguments <- expand.grid(all_variables, all_start_dates, all_end_dates, stringsAsFactors = FALSE)
+
+#map over each argument, this returns a list of data extracts
+multiple_extraction <- purrr::pmap(
+  all_arguments,  
+  function(Var1, Var2, Var3){
+    extract_ereefs(
+      Model = "https://dapds00.nci.org.au/thredds/dodsC/fx3/gbr4_bgc_GBR4_H2p0_B3p1_Cfur_Dnrt.ncml",
+      Region = sf_obj, StartDate = Var2, EndDate = Var3, Variable = Var1)
+    }
+  )
+
+#alternatively, you can manually build the table if you want more control (note that two different time spans are requested)
+all_arguments_2 <- data.frame(
+  "AllVariables" = c("Turbidity", "Chl_a_sum", "Turbidity", "Chl_a_sum"),
+  "AllStartDates" = c("2022-01-01", "2022-01-01", "2023-01-01", "2023-01-01"),
+  "AllEndDates" = c("2022-01-05", "2022-01-05", "2023-01-05", "2023-01-05")
+)
+
+#you can then reproject with the custom function using another map function
+multiple_extraction <- purrr::map(multiple_extraction, ereefs_reproject)
+```
+
+This method returns a list of datasets, each object in the list is given
+an appropriate name based on the variable requested and its date range.
+
+It is also important to note here that even if you are only interested
+in one variable (such as Chla), if you are requesting data that spans
+more than about a year it is a good idea to break the request into a
+list. Data requests that are too large can overload your computer.
+
+### Saving a Data Extraction
+
+Saving a data extraction from eReefs does not require any custom built
+functions. To save and read back in the files simply use the
+[`stars::write_mdim()`](https://r-spatial.github.io/stars/reference/mdim.html)
+and
+[`stars::read_stars()`](https://r-spatial.github.io/stars/reference/read_stars.html)
+functions. When saving a single dataset this is achived as follows:
+
+``` r
+#save
+stars::write_mdim(my_data_square, "my_data_square.nc")
+
+#read
+my_data_square <- stars::read_stars("my_data_square.nc")
+```
+
+However, if you are unable to convert a curvilinear dataset into a
+regular grid, this saving method will not work. Instead you have to save
+the raw R object. This is obviously a subpar method of saving and locks
+the dataset to an R environment (hence the motivation to convert to a
+regular grid), however is sometimes unavoidable. In this case the method
+is as follows:
+
+``` r
+#save
+save(my_data_square, file = "my_data_square.RData")
+
+#load (note that you do not assign the load to an object - it inherits its previous name from when it was saved).
+load("my_data_square.RData")
+```
+
+Finally, it is often the case that several data objects are extracted
+from eReefs at the same time and returned as a list. In this case, the
+method can be vectorised using the same input table that was used to
+download the list of datasets (input table is from code a few chunks
+back up):
+
+``` r
+#convert each row in the table into a file name
+file_names <- purrr::map(1:nrow(all_arguments), \(x) paste(all_arguments[x, ], collapse = "_"))
+
+#walk across file names and save each (hashed out to not save things unecessarily)
+purrr::walk2(multiple_extraction, file_names, \(x, y) write_mdim(x, glue("{data_path}/{y}.nc")))
+
+#build a list of files with the correct extension
+files_to_read <- list.files(glue("{data_path}"))[str_detect(list.files(glue("{data_path}")), ".nc")]
+
+#read in all files
+mutiple_load <- purrr::map(files_to_read, \(x) read_stars(glue("{data_path}/{x}")))
+```
+
+## Data Visualisation
+
+There are two key ways that eReefs data is currently visualised in the
+Technical Reports. These are as dotplots, and as maps. In both cases
+custom functions have been devised to assist in their creation.
+
+### Plotting
+
+Plotting eReefs data is fairly simple, the only variables you need to
+control are the label names and if you want a log y-axis:
+
+``` r
+
+#load in target data
+nc <- stars::read_mdim(system.file("extdata/turb_reg.nc", package = "RcTools"))
+
+#run the function
+ereefs_dotplot(nc) 
+```
+
+![](eReefs_files/figure-html/unnamed-chunk-13-1.png)
+
+This function accepts both a list of data objects, or a single object.
+This is again to address the scenario in which multiple requests are
+made to eReefs and a list of datasets is returned. You should be careful
+to only provide a list that is A) of a single variable, and B) with a
+chronological order (i.e. don’t provide a list with datasets from the
+same time period).
+
+While this function is quite simple, it should be noted that this is a
+double edge sword. For example, if you want to focus on a particular
+timeframe you will need to edit the data before plotting. If this is of
+interest I highly reccomend learning about [stars
+objects](https://r-spatial.github.io/stars/articles/stars1.html).
+
+In the rare case that you were interested in creating a windrose, that
+option is also available. Obviously you would have to have downloaded
+wind data though:
+
+``` r
+
+#load in target data
+nc <- stars::read_mdim(system.file("extdata/wind_reg.nc", package = "RcTools"))
+
+#run the function
+suppressWarnings(ereefs_windrose(nc))
+```
+
+![](eReefs_files/figure-html/unnamed-chunk-14-1.png)
+
+### Mapping
+
+Mapping eReefs data is a bit more complicated as there are several
+variations of maps packed into the one function. Specifically, you can
+create:
+
+- concentration maps (e.g. for Chla),
+- true colour maps (e.g. to get water colour), or
+- vector field maps (to show wind direction).
+
+In each case, the minimum required inputs are fairly similar, you simply
+need to supply the data and define the map type. As long as you have not
+massively edited the data provided by the extraction function (for
+example by changing variable names), then the function should happily
+accept each type of data.
+
+Examples of each map type are presented below:
+
+``` r
+tmap_mode("plot")
+
+#load in target data
+nc <- stars::read_mdim(system.file("extdata/turb_reg.nc", package = "RcTools"))
+
+#run the function
+ereefs_map(nc, MapType = "Concentration")
+
+#load in target data
+nc <- stars::read_mdim(system.file("extdata/wind_reg.nc", package = "RcTools"))
+
+#run the function
+ereefs_map(nc, MapType = "Vector Field")
+
+#load in target data
+nc <- stars::read_mdim(system.file("extdata/tc_reg.nc", package = "RcTools"))
+
+#run the function
+ereefs_map(nc, MapType = "True Colour")
+```
+
+    #> ℹ tmap modes "plot" - "view"
+
+![](eReefs_files/figure-html/unnamed-chunk-16-1.png)
+
+This function also accepts both a list of data objects, or a single
+object. This is again to address the scenario in which multiple requests
+are made to eReefs and a list of datasets is returned.
+
+If you only provide the dataset and the map type, the mapping function
+will assume some reasonable defaults. For example you can see that in
+this case the maps have been provided with a monthly aggregation. You
+can define how much to aggregate the data using the “Aggregation”
+argument and pick between “Month”, “Season”, “Financial”, “Annual”.
+
+### Extending mapping
+
+You may notice that the maps presented are not the most stylish, for
+example there are no region borders to indicate where the data should
+end, and there are no basin outlines to related data to specific
+locations on land. This function actually produces a tmap object, not a
+map directly. What this means is you can further use the tmap package to
+add additional layers and style the map however you want.
+
+A basic example of further styling is presented below, however it is
+recommended that the R package [Tmap](https://r-tmap.github.io/tmap/) is
+reviewed.
+
+``` r
+
+#run the function again, but this time save as an object
+my_map <- ereefs_map(nc, MapType = "True Colour")
+
+#use the standard tmap structure to build extract layers around our data
+tm_shape(sf_obj) + 
+  tm_borders() +
+  my_map #note how the object is added here, it could be added at any point in this call including in between layers
+```
+
+![](eReefs_files/figure-html/unnamed-chunk-17-1.png)
