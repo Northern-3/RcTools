@@ -124,6 +124,43 @@ wq_sites <- data.frame(
   Long = c(146.2215, 146.6117, 146.6336)) |> 
   sf::st_as_sf(coords = c("Long", "Lat"), crs = sf::st_crs(black_basin))
 
-wq_sites <- wq_sites
+#run the function
+my_inset_objects <- maps_inset_layer(wq_sites, black_basin, 1.1)
 
 ```
+
+The function returns a list of length 2. The two items in the list are: 
+
+ 1. Inset Map
+ 2. Inset Viewport Positioning
+
+To use thse two items, you then need to create a map that the inset map will sit within, which looks as follows:
+
+```{r}
+
+my_main_map <- tm_shape(qld) +
+  tm_polygons() +
+  tm_shape(black_basin, is.main = TRUE) + 
+  tm_polygons() +
+  tm_layout(asp = 1.1) #note to make the aspect of the main map the same as your inset map
+
+my_main_map
+
+```
+
+Then, when you go to save this main map, you can input the two items from the inset mapping function into the tmap saving function
+
+```{r}
+#| eval: FALSE
+
+#save the map
+tmap_save(my_main_map, insets_tm = my_inset_objects[[1]], insets_vp = my_inset_objects[[2]])
+
+```
+
+If you wish to extent the function, the following options/alternatives are provided:
+
+ - you can either use a bounding box to define your area of interest, or use the original spatial object
+ - you can change the outline colour of the area of interest
+ - you can supply a second area of interest, and also customise it the same way (box/outline, and colour)
+ - you can change the colour of the background object
