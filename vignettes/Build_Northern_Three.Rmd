@@ -1,6 +1,9 @@
 ---
 title: "Building The Northern Three Spatial File"
 output: rmarkdown::html_vignette
+format:
+  html:
+    code-overflow: wrap
 vignette: >
   %\VignetteIndexEntry{Build_Northern_Three}
   %\VignetteEngine{knitr::rmarkdown}

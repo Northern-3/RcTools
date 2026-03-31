@@ -14,6 +14,15 @@ knitr::opts_chunk$set(
 )
 ```
 
+# Introduction
+
+Within this package there are a few functions that don't neatly fit into one particular theme, these have been gather here under "miscellaneous helpers". Currently the functions discussed here are:
+
+ - get_quarto_params()
+ - name_cleaning()
+
+Each functions requirements and use will be touched
+
 ```{r setup}
 library(RcTools)
 ```

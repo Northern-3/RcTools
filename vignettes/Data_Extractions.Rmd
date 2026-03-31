@@ -1,6 +1,9 @@
 ---
 title: "Data Extractions"
 output: rmarkdown::html_vignette
+format:
+  html:
+    code-overflow: wrap
 vignette: >
   %\VignetteIndexEntry{Data_Extractions}
   %\VignetteEngine{knitr::rmarkdown}
