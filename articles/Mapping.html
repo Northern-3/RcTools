@@ -119,7 +119,7 @@ exists within Queensland:</p>
 <span><span class="co">#&gt; Registered S3 method overwritten by 'jsonify':</span></span>
 <span><span class="co">#&gt;   method     from    </span></span>
 <span><span class="co">#&gt;   print.json jsonlite</span></span>
-<span><span class="co">#&gt; [working] (0 + 0) -&gt; 6 -&gt; 1 | <span style="color: #00BB00;">■■■■■                           </span>  14%</span></span>
+<span><span class="co">#&gt; [working] (0 + 0) -&gt; 5 -&gt; 2 | <span style="color: #00BB00;">■■■■■■■■■■                      </span>  29%</span></span>
 <span><span class="co">#&gt; [working] (0 + 0) -&gt; 0 -&gt; 7 | <span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ </span> 100%</span></span>
 <span></span>
 <span><span class="co">#visualise</span></span>
@@ -210,7 +210,41 @@ function:</p>
 <span>  Long <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">146.2215</span>, <span class="fl">146.6117</span>, <span class="fl">146.6336</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span>coords <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Long"</span>, <span class="st">"Lat"</span><span class="op">)</span>, crs <span class="op">=</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></span><span class="op">(</span><span class="va">black_basin</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">wq_sites</span> <span class="op">&lt;-</span> <span class="va">wq_sites</span></span></code></pre></div>
+<span><span class="co">#run the function</span></span>
+<span><span class="va">my_inset_objects</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/maps_inset_layer.html">maps_inset_layer</a></span><span class="op">(</span><span class="va">wq_sites</span>, <span class="va">black_basin</span>, <span class="fl">1.1</span><span class="op">)</span></span></code></pre></div>
+<p>The function returns a list of length 2. The two items in the list
+are:</p>
+<ol style="list-style-type: decimal">
+<li>Inset Map</li>
+<li>Inset Viewport Positioning</li>
+</ol>
+<p>To use thse two items, you then need to create a map that the inset
+map will sit within, which looks as follows:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="va">my_main_map</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_shape.html" class="external-link">tm_shape</a></span><span class="op">(</span><span class="va">qld</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_polygons.html" class="external-link">tm_polygons</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_shape.html" class="external-link">tm_shape</a></span><span class="op">(</span><span class="va">black_basin</span>, is.main <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_polygons.html" class="external-link">tm_polygons</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_layout.html" class="external-link">tm_layout</a></span><span class="op">(</span>asp <span class="op">=</span> <span class="fl">1.1</span><span class="op">)</span> <span class="co">#note to make the aspect of the main map the same as your inset map</span></span>
+<span></span>
+<span><span class="va">my_main_map</span></span></code></pre></div>
+<p><img src="Mapping_files/figure-html/unnamed-chunk-7-1.png" class="r-plt" alt="" width="700"></p>
+<p>Then, when you go to save this main map, you can input the two items
+from the inset mapping function into the tmap saving function</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#save the map</span></span>
+<span><span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tmap_save.html" class="external-link">tmap_save</a></span><span class="op">(</span><span class="va">my_main_map</span>, insets_tm <span class="op">=</span> <span class="va">my_inset_objects</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, insets_vp <span class="op">=</span> <span class="va">my_inset_objects</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
+<p>If you wish to extent the function, the following
+options/alternatives are provided:</p>
+<ul>
+<li>you can either use a bounding box to define your area of interest,
+or use the original spatial object</li>
+<li>you can change the outline colour of the area of interest</li>
+<li>you can supply a second area of interest, and also customise it the
+same way (box/outline, and colour)</li>
+<li>you can change the colour of the background object</li>
+</ul>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
