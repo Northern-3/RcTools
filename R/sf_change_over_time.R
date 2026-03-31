@@ -1,4 +1,3 @@
-#write the initial generalised function to calculate before and after codes
 #' Compare how a dataset changes over time
 #'
 #' @param sf An sf object. Generally the object should contain polygons geometries, and must contain at least 2 years of data.
