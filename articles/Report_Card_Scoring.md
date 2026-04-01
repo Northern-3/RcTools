@@ -32,15 +32,20 @@ The general workflow of these functions can be demonstrated as follows:
 
 library(RcTools)
 
+#create an example dataframe
 df <- data.frame(
-  Basin = c("Black", "Ross", "Haughton", "Suttor"),
-  Indicator = c("DIN", "DIN", "Low_DO", "Low_DO"),
-  Value = c(0.002, 0.017, 87.6, 104),
-  Wqo = c(0.02, 0.02, 90, 90),
-  Sf = c(0.38, 0.38, 70, 70),
-  Eightieth = c(0.0154, 0.0154, 101.12, 101.12),
-  Twentieth = c(0.0026, 0.0026, 75.84, 75.84)
+  WQIndicator = c(rep("DIN", 3), rep("Low DO", 3)),
+  WQObjective = c(rep(0.02, 3), rep(90, 3)),
+  WQScalingFactor = c(rep(0.38, 3), rep(70, 3)),
+  WQValue = c(0.002, 0.017, 0.029, 65, 93, 101)
 )
+
+#calculate the twentieth and eightieth percentile values
+df <- df |> 
+  dplyr::mutate(
+    WQEightieth = quantile(WQValue, probs = 0.8),
+    WQTwentieth = quantile(WQValue, probs = 0.2)
+  )
 ```
 
 2.  First run the value_to_score() function. This function takes several
@@ -51,17 +56,17 @@ df <- data.frame(
 
 ``` r
 
-#run the function on our example data
+#run the scoring function
 df <- df |> 
   value_to_score(
-    value = Value,
+    value = WQValue,
     value_type = "Water Quality",
     water_type = "Freshwater",
-    indicator = Indicator,
-    wqo = Wqo,
-    sf = Sf,
-    eightieth = Eightieth,
-    twentieth = Twentieth
+    indicator = WQIndicator,
+    wqo = WQObjective,
+    sf = WQScalingFactor,
+    eightieth = WQEightieth,
+    twentieth = WQTwentieth
   )
 ```
 
@@ -79,10 +84,10 @@ column was named “MyValue”, the new column would be named
 ``` r
 
 #create a weight column
-df <- df |> dplyr::mutate(Weight = c(0.25, 0.5, 0.3, 0.2))
+df <- df |> dplyr::mutate(Weight = c(0.1, 0.4, 0.2, 0.05, 0.05, 0.2))
 
 df <- df |> 
-  weight_score(score = ValueScore, weighting = Weight)
+  weight_score(score = WQValueScore, weighting = Weight)
 ```
 
 4.  Next the score_to_grade function can be run. In this example we will
@@ -93,11 +98,18 @@ df <- df |>
 ``` r
 
 #run the function on our example data
-df <- score_to_grade(df, ValueScore)
+df <- score_to_grade(df, WQValueScore)
 ```
 
 The score to grade function is extremely simple, in all cases just
-return letter grades from A to E for scores from 100 to 0.
+return letter grades from A to E for scores from 100 to 0. Currently
+this function will provide grades that adhere to the following range:
+
+- 81 to 100 = A
+- 61 to 80 = B
+- 41 to 60 = C
+- 21 to 40 = D
+- 0 to 20 = E
 
 ``` r
 #if you wanted to get grades for multiple columns this can be achieved as follows
@@ -123,7 +135,7 @@ the column was named “MyValueScore” then the new column would be named
 save_n3_table(
   df = df,
   file_name = "my_df",
-  target_columns = "ValueScore",
+  target_columns = "WQValueScore",
   scheme = "Report Card"
 )
 
@@ -172,30 +184,40 @@ been structured with this in mind:
 
 ``` r
 
-#create example data
+#create an example dataframe
 df <- data.frame(
-  Basin = c("Black", "Ross", "Haughton", "Suttor"),
-  Indicator = c("DIN", "DIN", "Low_DO", "Low_DO"),
-  Value = c(0.002, 0.017, 87.6, 104),
-  Wqo = c(0.02, 0.02, 90, 90),
-  Sf = c(0.38, 0.38, 70, 70),
-  Eightieth = c(0.0154, 0.0154, 101.12, 101.12),
-  Twentieth = c(0.0026, 0.0026, 75.84, 75.84)
+  WQIndicator = c(rep("DIN", 3), rep("Low DO", 3)),
+  WQObjective = c(rep(0.02, 3), rep(90, 3)),
+  WQScalingFactor = c(rep(0.38, 3), rep(70, 3)),
+  WQValue = c(0.002, 0.017, 0.029, 65, 93, 101)
 )
 
-#run the function on our example data
+#calculate the twentieth and eightieth percentile values
+df <- df |> 
+  dplyr::mutate(
+    WQEightieth = quantile(WQValue, probs = 0.8),
+    WQTwentieth = quantile(WQValue, probs = 0.2)
+  )
+
+#run the scoring function
 df <- df |> 
   value_to_score(
-    value = Value,
+    value = WQValue,
     value_type = "Water Quality",
     water_type = "Freshwater",
-    indicator = Indicator,
-    wqo = Wqo,
-    sf = Sf,
-    eightieth = Eightieth,
-    twentieth = Twentieth
+    indicator = WQIndicator,
+    wqo = WQObjective,
+    sf = WQScalingFactor,
+    eightieth = WQEightieth,
+    twentieth = WQTwentieth
   )
 ```
+
+Note that the arguments that are **not** provided in quotes are flexible
+(i.e. they can be provided with or without quotes), this adheres to
+tidyverse principles. However, the two arguments that **have** been
+provided in quotes are not flexible - they must have quotes. These two
+arguments are handled by the function internally a different way.
 
 ### Estuarine Water Quality
 
@@ -293,33 +315,58 @@ and optionally can also accept:
 - a request to include a letter grade (defaults to no)
 
 ``` r
-#create table
+#create an example dataframe
 df <- data.frame(
-  Basin = c("Black", "Ross", "Haughton", "Suttor"),
-  DIN = c(51, 76, 27, 98),
-  TP = c(90, 57, 34, 72)
+  RiparianValue = c(1, 0, -0.1, -1, -3, -5),
+  RiparianValueScore = c(81.19, 80.90, 61.00, 21.00, 20.48, 20.06)
 )
 
-#save table
+#run the "save as n3 table" function
 save_n3_table(
-  df = df, 
-  file_name = "my_final_scores", 
-  target_columns = 2:3, 
-  target_rows = 2:3, 
+  df = df,
+  file_name = "Riparian Scores and Grades", 
+  target_columns = 2, 
+  target_rows = 1:nrow(df), 
   scheme = "Report Card",
-  include_letter = FALSE
-)
+  )
 
 #save table, using quoted names or column indicies
 save_n3_table(
   df = df, 
-  file_name = "my_final_scores", 
-  target_columns = c("DIN", "TP"), 
-  target_rows = 2:3, 
+  file_name = "Riparian Scores and Grades", 
+  target_columns = "RiparianValue", 
+  target_rows = 2:3, #note you can target specific rows as well 
   scheme = "Report Card",
   include_letter = FALSE
 )
 ```
+
+Which looks like this:
+
+![](articles/images/README-save_n3_table-example_1.png)
+
+It is also possible to apply styling to the grade column as well.
+However, a side effect of this is the score column inherits the grades
+as well (as formatting is now done by character not value):
+
+``` r
+#run the grading function.
+df <- score_to_grade(df, RiparianValueScore)
+
+#run the "save as n3 table" function
+save_n3_table(
+  df = df,
+  file_name = "Riparian Scores and Grades", 
+  target_columns = 2:3, #note we expanded the column range
+  target_rows = 1:nrow(df), 
+  scheme = "Report Card", 
+  include_letter = TRUE
+  )
+```
+
+Which looks like this:
+
+![](articles/images/README-save_n3_table-example_2.png)
 
 There is one known limitations to this function. With more time it could
 be addressed:
@@ -357,6 +404,8 @@ save_n3_table(
   scheme = "Summary Statistic"
 )
 ```
+
+![](articles/images/README-after-summary-statistic-formatting.png)
 
 There are two known limitations to this function. With more time they
 could be addressed:
@@ -402,6 +451,8 @@ save_n3_table(
 )
 ```
 
+![](articles/images/README-after-presence-absence-formatting.png)
+
 There is one known limitations to this function. With more time they
 could be addressed:
 
@@ -439,6 +490,10 @@ save_n3_table(
   scheme = "Rainfall"
 )
 ```
+
+![](articles/images/README-after-rainfall-formatting.png)
+
+![](articles/images/README-after-temperature-formatting.png)
 
 There is one known limitations to this function. With more time they
 could be addressed:

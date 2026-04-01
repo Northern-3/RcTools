@@ -70,7 +70,6 @@ Next, use the custom extract_ereefs() function.
 
 ``` r
 my_data <- extract_ereefs(
-  Model = "https://dapds00.nci.org.au/thredds/dodsC/fx3/gbr4_bgc_GBR4_H2p0_B3p1_Cfur_Dnrt.ncml",
   Region = sf_obj,
   StartDate = "2022-03-01",
   EndDate = "2022-03-03",
@@ -79,9 +78,12 @@ my_data <- extract_ereefs(
 )
 ```
 
-Following this, data is converted from a curvilinear grid to a
-rectilinear grid. Note that is not always necessary (and sometimes
-fails), but it does make the data easier to save, understand, and work
+Following this, the `ereefs_reproject` function takes a curvilinear
+netCDF object and returns a regular grid netCDF object. The curvilinear
+netCDF object is generally produced by the `ereefs_extract` function.
+Note, this function tends to fail when the curvilinear netCDF object has
+a complex border, such as at the edge of the Mackay Whitsunday Isaac
+region but it does make the data easier to save, understand, and work
 with.
 
 ``` r
@@ -289,6 +291,13 @@ ereefs_dotplot(nc)
 
 ![](eReefs_files/figure-html/unnamed-chunk-14-1.png)
 
+``` r
+
+ereefs_dotplot(nc, )
+```
+
+![](eReefs_files/figure-html/unnamed-chunk-14-2.png)
+
 This function accepts both a list of data objects, or a single object.
 This is again to address the scenario in which multiple requests are
 made to eReefs and a list of datasets is returned. You should be careful
@@ -302,9 +311,12 @@ timeframe you will need to edit the data before plotting. If this is of
 interest I highly reccomend learning about [stars
 objects](https://r-spatial.github.io/stars/articles/stars1.html).
 
-In the rare case that you were interested in creating a windrose, that
-option is also available. Obviously you would have to have downloaded
-wind data though:
+In the rare case that you were interested in creating a windrose, the
+`ereefs_windplot` function takes a list regular grid netCDF objects
+(specifically the four objects produced when requesting wind from the
+`ereefs_extract` function) and returns a windrose plot summarising wind
+strength and direction. Obviously you would have to have downloaded wind
+data though:
 
 ``` r
 
@@ -333,8 +345,7 @@ massively edited the data provided by the extraction function (for
 example by changing variable names), then the function should happily
 accept each type of data.
 
-Examples of how to call each map type are presented below, and the true
-colour map is visualised.
+Examples of how to call each map type are presented below:
 
 ``` r
 tmap_mode("plot")
@@ -344,6 +355,8 @@ nc <- stars::read_mdim(system.file("extdata/turb_reg.nc", package = "RcTools"))
 
 #run the function
 ereefs_map(nc, MapType = "Concentration")
+
+ereefs_map(nc,)
 
 #load in target data
 nc <- stars::read_mdim(system.file("extdata/wind_reg.nc", package = "RcTools"))
@@ -357,6 +370,10 @@ nc <- stars::read_mdim(system.file("extdata/tc_reg.nc", package = "RcTools"))
 #run the function
 ereefs_map(nc, MapType = "True Colour")
 ```
+
+And here is how a map looks, specifically the true colour map. Note that
+the visuals of true colour maps suffer from temporal aggregation (it
+would be a good choice to opt for short animations if possible).
 
     #> ℹ tmap modes "plot" - "view"
 

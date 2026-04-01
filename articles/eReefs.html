@@ -137,17 +137,19 @@ have.</p>
 <script type="application/json" data-for="htmlwidget-ac96cb3ee4656e2e9ec3">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}},"attributionControl":true},"calls":[{"method":"createMapPane","args":["tmap401",401]},{"method":"addLayersControl","args":[["Esri.WorldGrayCanvas","OpenStreetMap","Esri.WorldTopoMap"],"sf_obj",{"collapsed":true,"autoZIndex":true,"position":"topleft"}]},{"method":"addProviderTiles","args":["Esri.WorldGrayCanvas",null,"Esri.WorldGrayCanvas",{"minZoom":0,"maxZoom":18,"maxNativeZoom":17,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"pane":"tilePane"}]},{"method":"addProviderTiles","args":["OpenStreetMap",null,"OpenStreetMap",{"minZoom":0,"maxZoom":18,"maxNativeZoom":17,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"pane":"tilePane"}]},{"method":"addProviderTiles","args":["Esri.WorldTopoMap",null,"Esri.WorldTopoMap",{"minZoom":0,"maxZoom":18,"maxNativeZoom":17,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"pane":"tilePane"}]},{"method":"addPolygons","args":[[[[{"lng":[146.70464,146.96948,146.96948,146.70464,146.70464],"lat":[-19.3219,-19.3219,-19.02555,-19.02555,-19.3219]}]]],"X1","sf_obj",{"interactive":false,"className":"","pane":"tmap401","stroke":true,"color":"#404040","weight":1,"opacity":1,"fill":true,"fillColor":"#00000000","fillOpacity":1,"dashArray":"","smoothFactor":1,"noClip":false},null,null,null,{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]}],"fitBounds":[-19.327827,146.6993432,-19.019623,146.9747768,[]],"limits":{"lat":[-19.3219,-19.02555],"lng":[146.70464,146.96948]}},"evals":[],"jsHooks":[]}</script><p>Next, use the custom extract_ereefs() function.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">my_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/extract_ereefs.html">extract_ereefs</a></span><span class="op">(</span></span>
-<span>  Model <span class="op">=</span> <span class="st">"https://dapds00.nci.org.au/thredds/dodsC/fx3/gbr4_bgc_GBR4_H2p0_B3p1_Cfur_Dnrt.ncml"</span>,</span>
 <span>  Region <span class="op">=</span> <span class="va">sf_obj</span>,</span>
 <span>  StartDate <span class="op">=</span> <span class="st">"2022-03-01"</span>,</span>
 <span>  EndDate <span class="op">=</span> <span class="st">"2022-03-03"</span>,</span>
 <span>  Variable <span class="op">=</span> <span class="st">"Turbidity"</span>,</span>
 <span>  Downsample <span class="op">=</span> <span class="fl">0</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p>Following this, data is converted from a curvilinear grid to a
-rectilinear grid. Note that is not always necessary (and sometimes
-fails), but it does make the data easier to save, understand, and work
-with.</p>
+<p>Following this, the <code>ereefs_reproject</code> function takes a
+curvilinear netCDF object and returns a regular grid netCDF object. The
+curvilinear netCDF object is generally produced by the
+<code>ereefs_extract</code> function. Note, this function tends to fail
+when the curvilinear netCDF object has a complex border, such as at the
+edge of the Mackay Whitsunday Isaac region but it does make the data
+easier to save, understand, and work with.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">my_data_square</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ereefs_reproject.html">ereefs_reproject</a></span><span class="op">(</span><span class="va">my_data</span><span class="op">)</span></span>
@@ -330,6 +332,10 @@ control are the label names and if you want a log y-axis:</p>
 <span><span class="co">#run the function</span></span>
 <span><span class="fu"><a href="../reference/ereefs_dotplot.html">ereefs_dotplot</a></span><span class="op">(</span><span class="va">nc</span><span class="op">)</span> </span></code></pre></div>
 <p><img src="eReefs_files/figure-html/unnamed-chunk-14-1.png" class="r-plt" alt="" width="700"></p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="fu"><a href="../reference/ereefs_dotplot.html">ereefs_dotplot</a></span><span class="op">(</span><span class="va">nc</span>, <span class="op">)</span></span></code></pre></div>
+<p><img src="eReefs_files/figure-html/unnamed-chunk-14-2.png" class="r-plt" alt="" width="700"></p>
 <p>This function accepts both a list of data objects, or a single
 object. This is again to address the scenario in which multiple requests
 are made to eReefs and a list of datasets is returned. You should be
@@ -341,10 +347,13 @@ a double edge sword. For example, if you want to focus on a particular
 timeframe you will need to edit the data before plotting. If this is of
 interest I highly reccomend learning about <a href="https://r-spatial.github.io/stars/articles/stars1.html" class="external-link">stars
 objects</a>.</p>
-<p>In the rare case that you were interested in creating a windrose,
-that option is also available. Obviously you would have to have
-downloaded wind data though:</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<p>In the rare case that you were interested in creating a windrose, the
+<code>ereefs_windplot</code> function takes a list regular grid netCDF
+objects (specifically the four objects produced when requesting wind
+from the <code>ereefs_extract</code> function) and returns a windrose
+plot summarising wind strength and direction. Obviously you would have
+to have downloaded wind data though:</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co">#load in target data</span></span>
 <span><span class="va">nc</span> <span class="op">&lt;-</span> <span class="fu">stars</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/stars/reference/mdim.html" class="external-link">read_mdim</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/wind_reg.nc"</span>, package <span class="op">=</span> <span class="st">"RcTools"</span><span class="op">)</span><span class="op">)</span></span>
@@ -369,9 +378,8 @@ simply need to supply the data and define the map type. As long as you
 have not massively edited the data provided by the extraction function
 (for example by changing variable names), then the function should
 happily accept each type of data.</p>
-<p>Examples of how to call each map type are presented below, and the
-true colour map is visualised.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<p>Examples of how to call each map type are presented below:</p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tmap_mode.html" class="external-link">tmap_mode</a></span><span class="op">(</span><span class="st">"plot"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">#load in target data</span></span>
@@ -379,6 +387,8 @@ true colour map is visualised.</p>
 <span></span>
 <span><span class="co">#run the function</span></span>
 <span><span class="fu"><a href="../reference/ereefs_map.html">ereefs_map</a></span><span class="op">(</span><span class="va">nc</span>, MapType <span class="op">=</span> <span class="st">"Concentration"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/ereefs_map.html">ereefs_map</a></span><span class="op">(</span><span class="va">nc</span>,<span class="op">)</span></span>
 <span></span>
 <span><span class="co">#load in target data</span></span>
 <span><span class="va">nc</span> <span class="op">&lt;-</span> <span class="fu">stars</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/stars/reference/mdim.html" class="external-link">read_mdim</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/wind_reg.nc"</span>, package <span class="op">=</span> <span class="st">"RcTools"</span><span class="op">)</span><span class="op">)</span></span>
@@ -391,6 +401,9 @@ true colour map is visualised.</p>
 <span></span>
 <span><span class="co">#run the function</span></span>
 <span><span class="fu"><a href="../reference/ereefs_map.html">ereefs_map</a></span><span class="op">(</span><span class="va">nc</span>, MapType <span class="op">=</span> <span class="st">"True Colour"</span><span class="op">)</span></span></code></pre></div>
+<p>And here is how a map looks, specifically the true colour map. Note
+that the visuals of true colour maps suffer from temporal aggregation
+(it would be a good choice to opt for short animations if possible).</p>
 <pre><code><span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> tmap modes <span style="color: #0000BB; font-weight: bold;">"plot"</span> - <span style="color: #0000BB;">"view"</span></span></span></code></pre>
 <p><img src="eReefs_files/figure-html/unnamed-chunk-18-1.png" class="r-plt" alt="" width="700"></p>
 <p>This function also accepts both a list of data objects, or a single
@@ -418,7 +431,7 @@ is the order in which they are placed on the map (first layer = lowest
 layer on map, second layer is placed on top, etc.). It is recommended
 that the R package <a href="https://r-tmap.github.io/tmap/" class="external-link">Tmap</a> is
 reviewed to further understanding mapping using this package.</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co">#transform crs</span></span>
 <span><span class="va">nc</span> <span class="op">&lt;-</span> <span class="va">nc</span> <span class="op">|&gt;</span> </span>
