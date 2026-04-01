@@ -89,7 +89,7 @@ This function returns the original table with an additional column added. The co
 df <- df |> dplyr::mutate(Weight = c(0.1, 0.4, 0.2, 0.05, 0.05, 0.2))
 
 df <- df |> 
-  weight_score(score = ValueScore, weighting = Weight)
+  weight_score(score = WQValueScore, weighting = Weight)
 
 ```
 
@@ -98,7 +98,7 @@ df <- df |>
 ```{r}
 
 #run the function on our example data
-df <- score_to_grade(df, ValueScore)
+df <- score_to_grade(df, WQValueScore)
 
 ```
 
@@ -129,7 +129,7 @@ The column(s) inherits the name of the score column that was provided, plus the 
 save_n3_table(
   df = df,
   file_name = "my_df",
-  target_columns = "ValueScore",
+  target_columns = "WQValueScore",
   scheme = "Report Card"
 )
 

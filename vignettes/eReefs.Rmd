@@ -71,7 +71,6 @@ Next, use the custom extract_ereefs() function.
 #| eval: FALSE
 
 my_data <- extract_ereefs(
-  Model = "https://dapds00.nci.org.au/thredds/dodsC/fx3/gbr4_bgc_GBR4_H2p0_B3p1_Cfur_Dnrt.ncml",
   Region = sf_obj,
   StartDate = "2022-03-01",
   EndDate = "2022-03-03",
@@ -261,6 +260,8 @@ nc <- stars::read_mdim(system.file("extdata/turb_reg.nc", package = "RcTools"))
 #run the function
 ereefs_dotplot(nc) 
 
+ereefs_dotplot(nc, )
+
 ```
 
 This function accepts both a list of data objects, or a single object. This is again to address the scenario in which multiple requests are made to  eReefs and a list of datasets is returned. You should be careful to only provide a list that is A) of a single variable, and B) with a chronological order (i.e. don't provide a list with datasets from the same time period).
@@ -301,6 +302,8 @@ nc <- stars::read_mdim(system.file("extdata/turb_reg.nc", package = "RcTools"))
 
 #run the function
 ereefs_map(nc, MapType = "Concentration")
+
+ereefs_map(nc,)
 
 #load in target data
 nc <- stars::read_mdim(system.file("extdata/wind_reg.nc", package = "RcTools"))
