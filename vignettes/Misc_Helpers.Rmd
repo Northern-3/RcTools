@@ -4,7 +4,7 @@ output: rmarkdown::html_vignette
 params:
   script_fyear: 2020 
 vignette: >
-  %\VignetteIndexEntry{Misc_Helpers}
+  %\VignetteIndexEntry{Misc Helpers}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

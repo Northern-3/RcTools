@@ -40,4 +40,4 @@ library(RcTools)
 
 ```
 
-Once you have successfully  loaded the package you are good to go!
+Once you have successfully loaded the package you are good to go!

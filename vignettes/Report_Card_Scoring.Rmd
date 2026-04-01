@@ -2,7 +2,7 @@
 title: "Report Card Scoring"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Report_Card_Scoring}
+  %\VignetteIndexEntry{Report Card Scoring}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -90,7 +90,6 @@ df <- df |> dplyr::mutate(Weight = c(0.1, 0.4, 0.2, 0.05, 0.05, 0.2))
 
 df <- df |> 
   weight_score(score = ValueScore, weighting = Weight)
-
 
 ```
 

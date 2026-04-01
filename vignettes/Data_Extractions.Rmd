@@ -5,7 +5,7 @@ format:
   html:
     code-overflow: wrap
 vignette: >
-  %\VignetteIndexEntry{Data_Extractions}
+  %\VignetteIndexEntry{Data Extractions}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

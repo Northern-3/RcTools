@@ -5,11 +5,13 @@ format:
   html:
     code-overflow: wrap
 vignette: >
-  %\VignetteIndexEntry{Build_Northern_Three}
+  %\VignetteIndexEntry{Build Northern Three}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
-```{r, include = FALSE}
+```{r}
+#| include: FALSE
+
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
