@@ -8,6 +8,13 @@
 \description{
 "This package makes a collection of Report Card functions available to the technical team of the Northern Three Partnerships. Tools are focused on the final steps of anaylsis and report writing, such as styling tabular outputs for inclusion in the Technical Report, and providing scoring functions and grading functions."
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://add-am.github.io/RcTools/}
+}
+
+}
 \author{
 \strong{Maintainer}: Adam Shand \email{adamshand22@gmail.com}
 

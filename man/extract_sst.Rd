@@ -15,7 +15,7 @@ extract_sst(RawPath, CroppedPath, CropObj)
 the n3_region object from the \code{\link[=build_n3_region]{build_n3_region()}} function is used.}
 }
 \value{
-A stars netCDF object AND saves individual laers to file. (Note, this is because each file can only be downloaded
+A stars netCDF object AND saves individual layers to file. (Note, this is because each file can only be downloaded
 individually. If just the single netCDF was returned, every layer would need to be re-downloaded once a new layer is
 published. Instead, only the new layer is downloaded, and the single netCDF is rebuilt locally).
 }
