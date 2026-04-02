@@ -343,7 +343,7 @@ save_n3_table(
 
 Which looks like this:
 
-![](articles/images/README-save_n3_table-example_1.png)
+![](images/README-save_n3_table-example_1.png)
 
 It is also possible to apply styling to the grade column as well.
 However, a side effect of this is the score column inherits the grades
@@ -366,7 +366,7 @@ save_n3_table(
 
 Which looks like this:
 
-![](articles/images/README-save_n3_table-example_2.png)
+![](images/README-save_n3_table-example_2.png)
 
 There is one known limitations to this function. With more time it could
 be addressed:
@@ -405,7 +405,7 @@ save_n3_table(
 )
 ```
 
-![](articles/images/README-after-summary-statistic-formatting.png)
+![](images/README-after-summary-statistic-formatting.png)
 
 There are two known limitations to this function. With more time they
 could be addressed:
@@ -451,7 +451,7 @@ save_n3_table(
 )
 ```
 
-![](articles/images/README-after-presence-absence-formatting.png)
+![](images/README-after-presence-absence-formatting.png)
 
 There is one known limitations to this function. With more time they
 could be addressed:
@@ -491,9 +491,9 @@ save_n3_table(
 )
 ```
 
-![](articles/images/README-after-rainfall-formatting.png)
+![](images/README-after-rainfall-formatting.png)
 
-![](articles/images/README-after-temperature-formatting.png)
+![](images/README-after-temperature-formatting.png)
 
 There is one known limitations to this function. With more time they
 could be addressed:

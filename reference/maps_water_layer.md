@@ -51,5 +51,6 @@ A Tmap Object
 ``` r
 ross_and_black <- maps_water_layer(Basin = c("Black", "Ross"))
 #> [working] (0 + 0) -> 9 -> 1 | ■■■■                              10%
+#> [working] (0 + 0) -> 1 -> 9 | ■■■■■■■■■■■■■■■■■■■■■■■■■■■■      90%
 #> [working] (0 + 0) -> 0 -> 10 | ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  100%
 ```
