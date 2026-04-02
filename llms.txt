@@ -28,7 +28,7 @@ Following this, you can install the development version of RcTools from
 
 ``` r
 # install.packages("pak")
-pak::pak("add-am/RcTools")
+pak::pak("Northern-3/RcTools")
 ```
 
 Finally, load the package just like you would any other R package:
