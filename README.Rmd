@@ -15,7 +15,7 @@ The goal of RcTools is to provide a collection of tools (functions) to be utilis
 
 Specifically, the tools focus on tasks such as building commonly used spatial files, downloading datasets from APIs, calculating scores and grades, and producing stylised visual products such as plots, maps, and formatted xlsx files.
 
-A website is available to fully explore what this package has to offer: [RcTools Website.](https://add-am.github.io/RcTools/index.html)
+A website is available to fully explore what this package has to offer: [RcTools Website.](https://northern-3.github.io/RcTools/index.html)
 
 # Getting Started
 
