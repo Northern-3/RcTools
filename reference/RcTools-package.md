@@ -6,6 +6,12 @@ on the final steps of anaylsis and report writing, such as styling
 tabular outputs for inclusion in the Technical Report, and providing
 scoring functions and grading functions."
 
+## See also
+
+Useful links:
+
+- <https://add-am.github.io/RcTools/>
+
 ## Author
 
 **Maintainer**: Adam Shand <adamshand22@gmail.com>

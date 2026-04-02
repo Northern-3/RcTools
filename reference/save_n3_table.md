@@ -28,7 +28,7 @@ save_n3_table(
 - target_columns:
 
   Numeric Vector. The columns that colour grading should be applied to.
-  e.g. 1:10. Defaults to all.
+  e.g. 1. 1:10. 1,2.
 
 - target_rows:
 

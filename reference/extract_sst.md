@@ -29,8 +29,8 @@ extract_sst(RawPath, CroppedPath, CropObj)
 
 ## Value
 
-A stars netCDF object AND saves individual laers to file. (Note, this is
-because each file can only be downloaded individually. If just the
+A stars netCDF object AND saves individual layers to file. (Note, this
+is because each file can only be downloaded individually. If just the
 single netCDF was returned, every layer would need to be re-downloaded
 once a new layer is published. Instead, only the new layer is
 downloaded, and the single netCDF is rebuilt locally).
