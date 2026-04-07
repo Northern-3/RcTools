@@ -9,7 +9,14 @@
 #'
 #' @export
 #' @examples
+#' \dontrun{ #dont run because function takes a long time
 #' 
+#' raw_path <- "path/to/raw folder/"
+#' crop_path <- "path/to/crop folder/"
+#' n3_region <- build_n3_region()
+#' 
+#' dme_cropped <- dem_pre_processing(raw_path, crop_path, "n3_dem_100m", n3_region)
+#' }
 #' 
 dem_pre_processing <- function(RawPath, CropPath, OutputName, CropObj){
 
