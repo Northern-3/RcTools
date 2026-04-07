@@ -4,6 +4,7 @@
 #' @param CropPath The path where the function should save the processed data
 #' @param OutputName The name of the file when it is saved
 #' @param CropObj The object to use for cropping the dataset
+#' @param OverWrite Boolean. Do you want to overwrite the previously saved dataset with the same name
 #' 
 #' @returns A saved .nc file, plus a netcdf object in the active session
 #'
@@ -15,7 +16,7 @@
 #' crop_path <- "path/to/crop folder/"
 #' n3_region <- build_n3_region()
 #' 
-#' dme_cropped <- dem_pre_processing(raw_path, crop_path, "n3_dem_100m", n3_region)
+#' dme_cropped <- dem_pre_processing(raw_path, crop_path, "n3_dem_100m", n3_region, Overwrite = FALSE)
 #' }
 #' 
 dem_pre_processing <- function(RawPath, CropPath, OutputName, CropObj){
@@ -41,7 +42,7 @@ dem_pre_processing <- function(RawPath, CropPath, OutputName, CropObj){
   })
 
   #if more than one item in list (30m data) merge the objects. If 1, extract from list
-  if(length(all_tif) > 1) {all_tif <- merge(all_tif) |> terra::project("EPSG:7844")}
+  if(length(all_tif) > 1) {all_tif <- merge(all_tif[[1]], all_tif[[2]], all_tif[[3]], all_tif[[4]]) |> terra::project("EPSG:7844")}
   if(length(all_tif) == 1) {all_tif <- all_tif[[1]] |> terra::project("EPSG:7844")}
 
   #prepare cropping object
@@ -55,7 +56,7 @@ dem_pre_processing <- function(RawPath, CropPath, OutputName, CropObj){
   all_tif <- terra::trim(terra::mask(all_tif, CropObj))
 
   #save using the name provided
-  terra::writeCDF(all_tif, glue::glue("{CropPath}/{OutputName}.nc")) 
+  terra::writeCDF(all_tif, glue::glue("{CropPath}/{OutputName}.nc"), overwrite = OverWrite) 
 
   #return the object to the active environment as well
   return(all_tif)
