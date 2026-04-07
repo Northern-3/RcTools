@@ -26,6 +26,8 @@
   : A Helper That Presents Conditional Formatting Options
 - [`define_colour_scheme()`](https://add-am.github.io/RcTools/reference/define_colour_scheme.md)
   : Helper to Select Various Colour Schemes
+- [`dem_pre_processing()`](https://add-am.github.io/RcTools/reference/dem_pre_processing.md)
+  : Preprocess Digital Elevation Model data from AUSSEABED for the GBR
 - [`ereefs_dotplot()`](https://add-am.github.io/RcTools/reference/ereefs_dotplot.md)
   : Plotting eReefs Data
 - [`ereefs_get_date_range()`](https://add-am.github.io/RcTools/reference/ereefs_get_date_range.md)
