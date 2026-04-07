@@ -26,6 +26,11 @@ dem_pre_processing(RawPath, CropPath, OutputName, CropObj)
 
   The object to use for cropping the dataset
 
+- OverWrite:
+
+  Boolean. Do you want to overwrite the previously saved dataset with
+  the same name
+
 ## Value
 
 A saved .nc file, plus a netcdf object in the active session
@@ -71,7 +76,7 @@ n3_region <- build_n3_region()
 #> Warning: attribute variables are assumed to be spatially constant throughout all geometries
 #> Warning: attribute variables are assumed to be spatially constant throughout all geometries
 
-dme_cropped <- dem_pre_processing(raw_path, crop_path, "n3_dem_100m", n3_region)
-#> Error: object 'raw_path' not found
+dme_cropped <- dem_pre_processing(raw_path, crop_path, "n3_dem_100m", n3_region, Overwrite = FALSE)
+#> Error in dem_pre_processing(raw_path, crop_path, "n3_dem_100m", n3_region,     Overwrite = FALSE): unused argument (Overwrite = FALSE)
  # \dontrun{}
 ```
