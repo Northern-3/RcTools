@@ -31,7 +31,7 @@ dem_pre_processing <- function(RawPath, CropPath, OutputName, CropObj, Overwrite
   if (!is.character(CropPath)){stop("The argument supplied to the 'CropPath' parameter must be of character type.")}
   if (!is.character(OutputName)){stop("The argument supplied to the 'OutputName' parameter must be of numeric type.")}
   if (!inherits(CropObj, "sf")){stop("The argument supplied to the 'CropObj' parameter must be of type sf.")}
-  if (is.logical(Overwrite)){stop("The argument supplied to the 'Overwrite' parameter must be boolean (TRUE or FALSE).")}
+  if (!is.logical(Overwrite)){stop("The argument supplied to the 'Overwrite' parameter must be boolean (TRUE or FALSE).")}
 
   #if overwrite is false and the file exists, open it
   if (!Overwrite & file.exists(glue::glue("{CropPath}{OutputName}.nc"))){
