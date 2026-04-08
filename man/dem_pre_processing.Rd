@@ -4,7 +4,7 @@
 \alias{dem_pre_processing}
 \title{Preprocess Digital Elevation Model data from AUSSEABED for the GBR}
 \usage{
-dem_pre_processing(RawPath, CropPath, OutputName, CropObj)
+dem_pre_processing(RawPath, CropPath, OutputName, CropObj, Overwrite)
 }
 \arguments{
 \item{RawPath}{The path to where to find the raw, unprocessed data}
@@ -15,7 +15,8 @@ dem_pre_processing(RawPath, CropPath, OutputName, CropObj)
 
 \item{CropObj}{The object to use for cropping the dataset}
 
-\item{OverWrite}{Boolean. Do you want to overwrite the previously saved dataset with the same name}
+\item{Overwrite}{Boolean. Do you want to overwrite the previously saved dataset with the same name? If FALSE function will reload data
+with the same name if it exists, if it does not it will then fall back to recreating the data}
 }
 \value{
 A saved .nc file, plus a netcdf object in the active session
