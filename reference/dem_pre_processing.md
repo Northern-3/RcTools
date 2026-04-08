@@ -5,7 +5,7 @@ Preprocess Digital Elevation Model data from AUSSEABED for the GBR
 ## Usage
 
 ``` r
-dem_pre_processing(RawPath, CropPath, OutputName, CropObj)
+dem_pre_processing(RawPath, CropPath, OutputName, CropObj, Overwrite)
 ```
 
 ## Arguments
@@ -26,10 +26,12 @@ dem_pre_processing(RawPath, CropPath, OutputName, CropObj)
 
   The object to use for cropping the dataset
 
-- OverWrite:
+- Overwrite:
 
   Boolean. Do you want to overwrite the previously saved dataset with
-  the same name
+  the same name? If FALSE function will reload data with the same name
+  if it exists, if it does not it will then fall back to recreating the
+  data
 
 ## Value
 
@@ -77,6 +79,6 @@ n3_region <- build_n3_region()
 #> Warning: attribute variables are assumed to be spatially constant throughout all geometries
 
 dme_cropped <- dem_pre_processing(raw_path, crop_path, "n3_dem_100m", n3_region, Overwrite = FALSE)
-#> Error in dem_pre_processing(raw_path, crop_path, "n3_dem_100m", n3_region,     Overwrite = FALSE): unused argument (Overwrite = FALSE)
+#> Error: object 'raw_path' not found
  # \dontrun{}
 ```
