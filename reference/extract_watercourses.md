@@ -50,7 +50,6 @@ A sf object
 
 ``` r
 ross_and_black <- extract_watercourses(Basin = c("Black", "Ross"))
-#> [working] (0 + 0) -> 5 -> 5 | ■■■■■■■■■■■■■■■■                  50%
-#> [working] (0 + 0) -> 2 -> 8 | ■■■■■■■■■■■■■■■■■■■■■■■■■         80%
+#> [working] (0 + 0) -> 9 -> 1 | ■■■■                              10%
 #> [working] (0 + 0) -> 0 -> 10 | ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  100%
 ```
