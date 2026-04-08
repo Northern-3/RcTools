@@ -32,7 +32,7 @@
 #' )
 #' }
 #' 
-dem_pre_processing <- function(
+dem_base_map <- function(
   sr, Resolution, OutputPath, FileName, Reload = TRUE, 
   Overwrite = TRUE, Texture = "Desert", Zscale = NULL, SeaLevel = 0){
 
