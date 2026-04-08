@@ -4,8 +4,8 @@
 #' @param CropPath The path where the function should save the processed data
 #' @param OutputName The name of the file when it is saved
 #' @param CropObj The object to use for cropping the dataset
-#' @param Overwrite Boolean. Do you want to overwrite the previously saved dataset with the same name? If FALSE function will reload data 
-#' with the same name if it exists, if it does not it will then fall back to recreating the data
+#' @param Reload Boolean. Do you want to try and reload a prior saved dataset with the same name? Defaults to TRUE.
+#' @param Overwrite Boolean. Do you want to overwrite the previously saved dataset with the same name? Defaults to FALSE
 #' 
 #' @returns A saved .nc file, plus a netcdf object in the active session
 #'
@@ -17,24 +17,25 @@
 #' crop_path <- "path/to/crop folder/"
 #' n3_region <- build_n3_region()
 #' 
-#' dme_cropped <- dem_pre_processing(raw_path, crop_path, "n3_dem_100m", n3_region, Overwrite = FALSE)
+#' dem_cropped <- dem_pre_processing(raw_path, crop_path, "n3_dem_100m", n3_region, Reload = TRUE, Overwrite = FALSE)
 #' }
 #' 
-dem_pre_processing <- function(RawPath, CropPath, OutputName, CropObj, Overwrite){
+dem_pre_processing <- function(RawPath, CropPath, OutputName, CropObj, Reload, Overwrite){
 
   #check required arguments
-  if (any(missing(RawPath), missing(CropPath), missing(OutputName), missing(CropObj), missing(Overwrite))){
-    stop("You must supply all arguments: 'RawPath', 'CropPath', 'OutputName', 'CropObj' and 'Overwrite'.")}
+  if (any(missing(RawPath), missing(CropPath), missing(OutputName), missing(CropObj), missing(Reload), missing(Overwrite))){
+    stop("You must supply all arguments: 'RawPath', 'CropPath', 'OutputName', 'CropObj', 'Reload', and 'Overwrite'.")}
 
   #check required arguement types
   if (!is.character(RawPath)){stop("The argument supplied to the 'RawPath' parameter must be of character type.")}
   if (!is.character(CropPath)){stop("The argument supplied to the 'CropPath' parameter must be of character type.")}
   if (!is.character(OutputName)){stop("The argument supplied to the 'OutputName' parameter must be of numeric type.")}
   if (!inherits(CropObj, "sf")){stop("The argument supplied to the 'CropObj' parameter must be of type sf.")}
+  if (!is.logical(Reload)){stop("The argument supplied to the 'Reload' parameter must be boolean (TRUE or FALSE).")}
   if (!is.logical(Overwrite)){stop("The argument supplied to the 'Overwrite' parameter must be boolean (TRUE or FALSE).")}
 
-  #if overwrite is false and the file exists, open it
-  if (!Overwrite & file.exists(glue::glue("{CropPath}{OutputName}.nc"))){
+  #if reload is true and the file exists, open it
+  if (Reload & file.exists(glue::glue("{CropPath}{OutputName}.nc"))){
 
     #open
     all_tif <- terra::rast(glue::glue("{CropPath}{OutputName}.nc")) 
@@ -42,7 +43,7 @@ dem_pre_processing <- function(RawPath, CropPath, OutputName, CropObj, Overwrite
     #return the object to the active environment
     return(all_tif)
 
-  #if overwrite is true, or the file does not exist, build from scratch
+  #if reload is false, or the file does not exist, build from scratch
   } else {
 
     #list all .tif files at the raw path
@@ -65,9 +66,6 @@ dem_pre_processing <- function(RawPath, CropPath, OutputName, CropObj, Overwrite
     if(length(all_tif) > 1) {all_tif <- merge(all_tif[[1]], all_tif[[2]], all_tif[[3]], all_tif[[4]])}
     if(length(all_tif) == 1) {all_tif <- all_tif[[1]]}
 
-    #remove temp file and temp directory
-    unlink("C:/tmp", recursive = TRUE, force = TRUE)
-
     #prepare cropping object
     CropObj <- CropObj |> 
       sf::st_bbox() |> 
@@ -79,7 +77,10 @@ dem_pre_processing <- function(RawPath, CropPath, OutputName, CropObj, Overwrite
     all_tif <- terra::trim(terra::mask(all_tif, CropObj))
 
     #save using the name provided
-    terra::writeCDF(all_tif, glue::glue("{CropPath}/{OutputName}.nc"), overwrite = TRUE) 
+    terra::writeCDF(all_tif, glue::glue("{CropPath}/{OutputName}.nc"), overwrite = Overwrite)
+    
+    #remove temp file and temp directory
+    unlink("C:/tmp", recursive = TRUE, force = TRUE)
 
     #return the object to the active environment as well
     return(all_tif)
