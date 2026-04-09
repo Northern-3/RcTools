@@ -33,7 +33,7 @@ dem_pre_processing <- function(RawPath, CropPath, OutputName, CropObj, Reload, O
   if (!inherits(CropObj, "sf")){stop("The argument supplied to the 'CropObj' parameter must be of type sf.")}
   if (!is.logical(Reload)){stop("The argument supplied to the 'Reload' parameter must be boolean (TRUE or FALSE).")}
   if (!is.logical(Overwrite)){stop("The argument supplied to the 'Overwrite' parameter must be boolean (TRUE or FALSE).")}
-  if (!is.numeric(Crs)){stop("The argument supplied to the 'Crs' parameter must be of numeric type.")}
+  if (!is.character(Crs)){stop("The argument supplied to the 'Crs' parameter must be of numeric type.")}
 
   #if reload is true and the file exists, open it
   if (Reload & file.exists(glue::glue("{CropPath}{OutputName}.nc"))){
