@@ -70,7 +70,8 @@ dem_polygon_highlight <- function(Highlight, Extent, MapArray){
   
   #return the difference between the two object
   highlight_inversion <- highlight_inversion |> 
-    sf::st_difference(sf::st_union(Highlight))
+    sf::st_difference(sf::st_union(Highlight)) |> 
+    sf::st_as_sf()
 
   #create the overlay
   overlay_1 <- rayshader::generate_polygon_overlay(
