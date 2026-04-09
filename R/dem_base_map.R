@@ -37,7 +37,7 @@
 #' 
 dem_base_map <- function(
   sr, OutputPath, FileName, Zscale, CropObj = NULL, Reload = TRUE, 
-  Overwrite = TRUE, Texture = "Desert", SeaLevel = 0){
+  Overwrite = TRUE, Texture = "Desert", SeaLevel = 0, Crs = "EPSG:7844"){
   
   #check required arguments
   if (any(missing(sr), missing(OutputPath), missing(FileName), missing(Zscale))){
@@ -59,6 +59,7 @@ dem_base_map <- function(
   if (!is.logical(Overwrite)){stop("The argument supplied to the 'Overwrite' parameter must be boolean (TRUE or FALSE).")}
   if (!is.numeric(SeaLevel)){stop("The argument supplied to the 'SeaLevel' parameter must be of numeric type.")}
   if (!is.character(Texture)){stop("The argument supplied to the 'Texture' parameter must be of character type.")}
+  if (!is.character(Crs)){stop("The argument supplied to the 'Crs' parameter must be of character type.")}
 
   #check if texture argument is correct
   Texture <- stringr::str_to_lower(Texture)
@@ -95,7 +96,7 @@ dem_base_map <- function(
     if (!is.null(CropObj)){
 
       CropObj <- CropObj |> 
-        sf::st_transform("EPSG:4326") |> 
+        sf::st_transform(Crs) |> 
         sf::st_bbox() |> 
         sf::st_as_sfc() |> 
         terra::vect()
