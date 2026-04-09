@@ -69,6 +69,8 @@ Once you have successfully loaded the package you are good to go!
   : Helper to Select Various Colour Schemes
 - [`dem_base_map()`](https://add-am.github.io/RcTools/reference/dem_base_map.md)
   : Create the base map elements for a DEM map
+- [`dem_polygon_highlight()`](https://add-am.github.io/RcTools/reference/dem_polygon_highlight.md)
+  : Create the base map elements for a DEM map
 - [`dem_pre_processing()`](https://add-am.github.io/RcTools/reference/dem_pre_processing.md)
   : Preprocess Digital Elevation Model data from AUSSEABED for the GBR
 - [`ereefs_dotplot()`](https://add-am.github.io/RcTools/reference/ereefs_dotplot.md)
