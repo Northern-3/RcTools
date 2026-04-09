@@ -66,22 +66,24 @@ dem_base_map <- function(
     stop("The Texture argument must be one of: 'imhof1', 'imhof2', 'imhof3', 'imhof4', 'desert', 'bw', 'unicorn'.")
   }
 
-  #create full paths to where the matrix and array will be stored
+  #create full paths to where the matrix and array will be stored and raster
+  sr_path <- glue::glue("{OutputPath}/{FileName}_raster.nc")
   array_path <- glue::glue("{OutputPath}/{FileName}_array")
   matrix_path <- glue::glue("{OutputPath}/{FileName}_matrix")
 
   #reload files if requested and existing
-  if (Reload & all(file.exists(c(array_path, matrix_path)))){
+  if (Reload & all(file.exists(c(sr_path, array_path, matrix_path)))){
 
     #read in
+    sr <- terra::rast(sr_path)
     area_array <- readRDS(file = array_path)
     area_matrix <- readRDS(file = matrix_path)
 
     #store in a list
-    base_map_objects <- list(area_array, area_matrix)
+    base_map_objects <- list(sr, area_array, area_matrix)
 
     #update names
-    names(base_map_objects) <- c("array", "matrix")
+    names(base_map_objects) <- c("raster", "array", "matrix")
 
     #return and end
     return(base_map_objects)
@@ -154,15 +156,16 @@ dem_base_map <- function(
       print("Bathymetry maxtrix added.")
     }
 
-    #save the array and associated matrix so they don't have to be recalculated every time
+    #save the raster, array and associated matrix so they don't have to be recalculated every time
     saveRDS(area_array, array_path)
     saveRDS(area_matrix, matrix_path)
+    terra::writeCDF(sr, sr_path, overwrite = Overwrite)
 
     #store in a list
-    base_map_objects <- list(area_array, area_matrix)
+    base_map_objects <- list(sr, area_array, area_matrix)
 
     #update names
-    names(base_map_objects) <- c("array", "matrix")
+    names(base_map_objects) <- c("raster", "array", "matrix")
     
     #return and end
     return(base_map_objects)
