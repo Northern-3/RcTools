@@ -52,7 +52,7 @@ my_water_layer <- maps_water_layer("Ross")
 #> Registered S3 method overwritten by 'jsonify':
 #>   method     from    
 #>   print.json jsonlite
-#> [working] (0 + 0) -> 5 -> 2 | ■■■■■■■■■■                        29%
+#> [working] (0 + 0) -> 6 -> 1 | ■■■■■                             14%
 #> [working] (0 + 0) -> 0 -> 7 | ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  100%
 
 #visualise
