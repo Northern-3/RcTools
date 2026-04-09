@@ -80,13 +80,13 @@ dem_polygon_highlight <- function(Highlight, Extent, MapArray){
     Highlight, extent = Extent, MapArray, palette = "transparent", linecolor = "white", linewidth = "1.5")
 
   overlay_3 <- rayshader::generate_polygon_overlay(
-    Highlight, extent = Extent, MapArray, palette = "black", linecolor = "black", linewidth = "0")
+    highlight_inversion, extent = Extent, MapArray, palette = "black", linecolor = "black", linewidth = "0")
 
   #put the overlays into the main array
   MapArray <- MapArray |> 
     rayshader::add_overlay(overlay_1) |>
     rayshader::add_overlay(overlay_2) |> 
-    rayshader::add_overlay(overlay_3, alphalayer = 0.6)
+    rayshader::add_overlay(overlay_3, alphalayer = 0.7)
 
   #return the array
   return(MapArray)
