@@ -2,6 +2,7 @@
 
 export(build_n3_region)
 export(dem_base_map)
+export(dem_polygon_highlight)
 export(dem_pre_processing)
 export(ereefs_dotplot)
 export(ereefs_get_date_range)
