@@ -6,33 +6,33 @@
 \usage{
 dem_base_map(
   sr,
-  Resolution,
   OutputPath,
   FileName,
+  Zscale,
+  CropObj = NULL,
   Reload = TRUE,
   Overwrite = TRUE,
   Texture = "Desert",
-  Zscale = NULL,
   SeaLevel = 0
 )
 }
 \arguments{
 \item{sr}{A SpatRaster object, generally produced by the dem_pre_processing() function.}
 
-\item{Resolution}{A numeric vector, either 30 or 100. This should match the resolution of the sr object provided.}
-
 \item{OutputPath}{A character vector that defines the path to the folder where the outputs should be saved}
 
 \item{FileName}{A character vector that uniquely identifies the outputs. Do not include a file type}
+
+\item{Zscale}{A numeric vector. Defines ratio between x and y spacing. Defaults to Resolution input (realistic). Decrease
+Zscale to exagerate heights}
+
+\item{CropObj}{A sf or SpatVector object. This is optionally used to further crop the data to a specific location}
 
 \item{Reload}{Boolean. Do you want to try and reload a prior saved dataset with the same name? Defaults to TRUE.}
 
 \item{Overwrite}{Boolean. Do you want to overwrite the previously saved dataset with the same name? Defaults to FALSE}
 
 \item{Texture}{A character vector. Describes the colour palette to use. One of: “imhof1”, “imhof2”, “imhof3”, “imhof4”, “desert”, “bw”, “unicorn”.}
-
-\item{Zscale}{A numeric vector. Defines ratio between x and y spacing. Defaults to Resolution input (realistic). Decrease
-Zscale to exagerate heights}
 
 \item{SeaLevel}{A numeric vector. Defines the elevation of sea level. Defaults to 0m. Decrease or increse to simulate
 various sea levels.}
@@ -46,15 +46,18 @@ Create the base map elements for a DEM map
 \examples{
 \dontrun{ #dont run because function takes a long time
 
+ross <- build_n3_region() |> 
+  filter(BasinOrZone == "Ross")
+
 dem_cropped <- dem_base_map(
   sr = my_spat_raster,
-  Resolution = 30,
   OutputPath = "path/to/output folder/",
-  FileNmae = "my_file",
+  FileName = "my_file",
+  Zscale = 30,
+  CropObj = ross,
   Reload = FALSE,
   Overwrite = FALSE,
   Texture = "Desert",
-  Zscale = 30,
   SeaLevel = 0
 )
 }

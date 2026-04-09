@@ -12,12 +12,14 @@ Imports:
     dplyr, glue, openxlsx2, rlang, stringr, tidyr, ncdf4, sf, stars, utils, ereefs, ncmeta, ggplot2,
     lubridate, scales, purrr, stats, tmap, climaemet, busdater, grid, RColorBrewer, metR, oce, rcartocolor,
     arcgislayers, janitor, lwgeom, nngeo, terra, thredds, xml2, gdalUtilities, readr, rmarkdown, rstudioapi,
-    units
+    units, zoo
 Remotes:
     open-AIMS/ereefs,
-    open-AIMS/gisaimsr
+    open-AIMS/gisaimsr,
+    tylermorganwall/rayshader
 Suggests:
     gisaimsr,
+    rayshader,
     FNN,
     testthat (>= 3.0.0),
     knitr
@@ -25,5 +27,5 @@ Depends:
     R (>= 4.1)
 LazyData: true
 Config/testthat/edition: 3
-URL: https://add-am.github.io/RcTools/
+URL: https://northern-3.github.io/RcTools/
 VignetteBuilder: knitr
