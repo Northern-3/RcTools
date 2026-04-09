@@ -51,8 +51,8 @@ dem_base_map <- function(
 
   #check optional arguments
   if (!is.null(CropObj)){
-    if (!inherits(CropObj, "SpatVector") | !inherits(CropObj, "sf")){
-      stop("The object supplied it 'CropOb' is neither a SpatRaster or sf object.")
+    if (!(inherits(CropObj, "SpatVector") | inherits(CropObj, "sf"))){
+      stop("The object supplied to 'CropObj' is neither a SpatRaster or sf object.")
     }
   }
   if (!is.logical(Reload)){stop("The argument supplied to the 'Reload' parameter must be boolean (TRUE or FALSE).")}
