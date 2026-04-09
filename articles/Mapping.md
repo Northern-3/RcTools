@@ -52,7 +52,7 @@ my_water_layer <- maps_water_layer("Ross")
 #> Registered S3 method overwritten by 'jsonify':
 #>   method     from    
 #>   print.json jsonlite
-#> [working] (0 + 0) -> 6 -> 1 | ■■■■■                             14%
+#> [working] (0 + 0) -> 5 -> 2 | ■■■■■■■■■■                        29%
 #> [working] (0 + 0) -> 0 -> 7 | ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  100%
 
 #visualise
@@ -100,6 +100,8 @@ Finally, a third variation would be:
 ``` r
 
 my_water_layer <- maps_water_layer(c("Ross", "Black"), WaterLines = TRUE, StreamOrder = c(3,5))
+#> [working] (0 + 0) -> 1 -> 1 | ■■■■■■■■■■■■■■■■                  50%
+#> [working] (0 + 0) -> 0 -> 2 | ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  100%
 
 my_water_layer
 ```
