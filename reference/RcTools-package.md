@@ -10,7 +10,7 @@ scoring functions and grading functions."
 
 Useful links:
 
-- <https://add-am.github.io/RcTools/>
+- <https://northern-3.github.io/RcTools/>
 
 ## Author
 
