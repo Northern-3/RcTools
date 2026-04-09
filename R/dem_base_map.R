@@ -80,6 +80,9 @@ dem_base_map <- function(
     #store in a list
     base_map_objects <- list(area_array, area_matrix)
 
+    #update names
+    names(base_map_objects) <- c("array", "matrix")
+
     #return and end
     return(base_map_objects)
 
@@ -161,7 +164,11 @@ dem_base_map <- function(
     #store in a list
     base_map_objects <- list(area_array, area_matrix)
 
+    #update names
+    names(base_map_objects) <- c("array", "matrix")
+    
     #return and end
-    return(base_map_objects)  
+    return(base_map_objects)
+    
   }
 }
