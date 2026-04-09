@@ -59,10 +59,17 @@ dem_polygon_highlight <- function(Highlight, Extent, MapArray){
     stop("The object supplied to 'Extent' must be sf, an sf bbox, or a SpatExtent object")
   }
 
-  #create an inversion of the targeted polygon without required external "help" or user input
+  #create an inversion of the targeted polygon without required external "help" or user input:
+  #convert the extent back to an sf object
   highlight_inversion <- Extent |>
     sf::st_bbox() |> 
-    sf::st_as_sfc() |> 
+    sf::st_as_sfc()
+
+  #give the object the crs again
+  sf::st_crs(highlight_inversion) <- "EPSG:4326"
+  
+  #return the difference between the two object
+  highlight_inversion <- highlight_inversion |> 
     sf::st_difference(sf::st_union(Highlight))
 
   #create the overlay
