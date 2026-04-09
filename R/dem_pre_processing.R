@@ -17,10 +17,10 @@
 #' crop_path <- "path/to/crop folder/"
 #' n3_region <- build_n3_region()
 #' 
-#' dem_cropped <- dem_pre_processing(raw_path, crop_path, "n3_dem_100m", n3_region, Reload = TRUE, Overwrite = FALSE)
+#' dem_cropped <- dem_pre_processing(raw_path, crop_path, "n3_dem_100m", n3_region, Reload = TRUE, Overwrite = FALSE, Crs = "EPSG:7844")
 #' }
 #' 
-dem_pre_processing <- function(RawPath, CropPath, OutputName, CropObj, Reload, Overwrite){
+dem_pre_processing <- function(RawPath, CropPath, OutputName, CropObj, Reload, Overwrite, Crs = "EPSG:7844"){
 
   #check required arguments
   if (any(missing(RawPath), missing(CropPath), missing(OutputName), missing(CropObj), missing(Reload), missing(Overwrite))){
@@ -33,6 +33,7 @@ dem_pre_processing <- function(RawPath, CropPath, OutputName, CropObj, Reload, O
   if (!inherits(CropObj, "sf")){stop("The argument supplied to the 'CropObj' parameter must be of type sf.")}
   if (!is.logical(Reload)){stop("The argument supplied to the 'Reload' parameter must be boolean (TRUE or FALSE).")}
   if (!is.logical(Overwrite)){stop("The argument supplied to the 'Overwrite' parameter must be boolean (TRUE or FALSE).")}
+  if (!is.numeric(Crs)){stop("The argument supplied to the 'Crs' parameter must be of numeric type.")}
 
   #if reload is true and the file exists, open it
   if (Reload & file.exists(glue::glue("{CropPath}{OutputName}.nc"))){
@@ -71,7 +72,10 @@ dem_pre_processing <- function(RawPath, CropPath, OutputName, CropObj, Reload, O
       sf::st_bbox() |> 
       sf::st_as_sfc() |> 
       terra::vect() |>
-      terra::project(glue::glue("EPSG:{terra::crs(all_tif, describe = TRUE)$code}")) 
+      terra::project(Crs)
+
+    #prep the cropped object
+    all_tif <- terra::project(all_tif, Crs)
 
     #crop data by cropping object
     all_tif <- terra::trim(terra::mask(all_tif, CropObj))
