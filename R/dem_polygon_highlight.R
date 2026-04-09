@@ -32,46 +32,25 @@ dem_polygon_highlight <- function(Highlight, Extent, MapArray){
 
   #check types
   if (!inherits(Highlight, "sf")){
-    stop("The object supplied to 'Highlight' must be either a sf or SpatVector polygon object.")
+    stop("The object supplied to 'Highlight' must be either a sf object.")
+  }
+  if (!inherits(Extent, "sf")){
+    stop("The object supplied to 'Extent' must be either a sf object.")
   }
   if (!(inherits(MapArray, "array") | inherits(MapArray, "rayimg"))){
     stop("The object supplied to 'MapArray' must be an array produced by the dem_pre_processing function.")
   }
 
-  #update crs of highlight sf object
+  #update crs of sf objects
   Highlight <- sf::st_transform(Highlight, "EPSG:4326")
+  Extent <- sf::st_transform(Extent, "EPSG:4326")
   
-  #convert the object defining extent if it is an sf or bbox object
-  if (inherits(Extent, "sf")){
-    Extent <- Extent |> 
-      sf::st_transform("EPSG:4326") |> 
-      terra::vect() |> 
-      terra::ext()
-  } else if (inherits(Extent, "bbox")){
-    Extent <- Extent |> 
-      sf::st_as_sfc() |> 
-      sf::st_transform("EPSG:4326") |> 
-      terra::vect() |> 
-      terra::ext()
-  } else if (inherits(Extent, "SpatExtent")){
-    Extent <- Extent
-  } else {
-    stop("The object supplied to 'Extent' must be sf, an sf bbox, or a SpatExtent object")
-  }
-
   #create an inversion of the targeted polygon without required external "help" or user input:
-  #convert the extent back to an sf object
-  highlight_inversion <- Extent |>
-    sf::st_bbox() |> 
-    sf::st_as_sfc()
-
-  #give the object the crs again
-  sf::st_crs(highlight_inversion) <- "EPSG:4326"
-  
-  #return the difference between the two object
-  highlight_inversion <- highlight_inversion |> 
-    sf::st_difference(sf::st_union(Highlight)) |> 
-    sf::st_as_sf()
+  highlight_inversion <- Extent |> 
+    sf::st_bbox() |>
+    sf::st_as_sfc() |> 
+    sf::st_union() |> 
+    sf::st_difference(sf::st_union(Highlight))
 
   #create the overlay
   overlay_1 <- rayshader::generate_polygon_overlay(

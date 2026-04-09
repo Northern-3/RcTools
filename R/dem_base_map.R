@@ -5,7 +5,7 @@
 #' @param FileName A character vector that uniquely identifies the outputs. Do not include a file type
 #' @param Zscale A numeric vector. Defines ratio between x and y spacing. Defaults to Resolution input (realistic). Decrease 
 #' Zscale to exagerate heights
-#' @param CropObj A sf or SpatVector object. This is optionally used to further crop the data to a specific location
+#' @param CropObj A sf object. This is optionally used to further crop the data to a specific location
 #' @param Reload Boolean. Do you want to try and reload a prior saved dataset with the same name? Defaults to TRUE.
 #' @param Overwrite Boolean. Do you want to overwrite the previously saved dataset with the same name? Defaults to FALSE
 #' @param Texture A character vector. Describes the colour palette to use. One of: “imhof1”, “imhof2”, “imhof3”, “imhof4”, “desert”, “bw”, “unicorn”.
@@ -51,8 +51,8 @@ dem_base_map <- function(
 
   #check optional arguments
   if (!is.null(CropObj)){
-    if (!(inherits(CropObj, "SpatVector") | inherits(CropObj, "sf"))){
-      stop("The object supplied to 'CropObj' is neither a SpatRaster or sf object.")
+    if (!inherits(CropObj, "sf")){
+      stop("The object supplied to 'CropObj' is not an sf object.")
     }
   }
   if (!is.logical(Reload)){stop("The argument supplied to the 'Reload' parameter must be boolean (TRUE or FALSE).")}
@@ -92,17 +92,14 @@ dem_base_map <- function(
     #if a crop object has been provide, further crop the data
     if (!is.null(CropObj)){
 
-      #if the object is SpatVector, go straight to ext
-      if (inherits(CropObj, "SpatVector")){CropObj <- ext(CropObj)
-
-      #if the object is sf, get bbox, then convert to spatraster
-      } else {CropObj <- vect(st_as_sfc(st_bbox(CropObj)))}
-
-      #update the crs of the object
-      CropObj <- terra::project(CropObj, "EPSG:4326")
+      CropObj <- CropObj |> 
+        sf::st_transform("EPSG:4326") |> 
+        sf::st_bbox() |> 
+        sf::st_as_sfc() |> 
+        terra::vect()
 
       #crop the SpatRaster
-      sr <- trim(mask(sr, CropObj))
+      sr <- terra::trim(terra::mask(sr, CropObj))
       
     } 
 
