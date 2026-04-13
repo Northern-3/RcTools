@@ -81,7 +81,13 @@ dem_pre_processing <- function(RawPath, CropPath, OutputName, CropObj, Reload, O
     all_tif <- terra::trim(terra::mask(all_tif, CropObj))
 
     #save using the name provided
-    terra::writeCDF(all_tif, glue::glue("{CropPath}/{OutputName}.nc"), overwrite = Overwrite)
+    terra::writeRaster(
+      all_tif, 
+      glue::glue("{CropPath}/{OutputName}.nc"), 
+      overwrite = Overwrite,
+      filetype = "CDF",
+      varname = "elevation"
+    )
 
     # reload from the saved file
     all_tif <- terra::rast(glue::glue("{CropPath}/{OutputName}.nc"))
