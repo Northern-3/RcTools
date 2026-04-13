@@ -1,8 +1,9 @@
-#' Create the base map elements for a DEM map
+#' Highlight a specific area defined by a polygon
 #'
 #' @param Highlight An sf object that defines the area of interest. Must be within map boundaries
 #' @param Extent An sf object that defines the full map boundaries
 #' @param MapArray An array object created specifically by the 'dem_base_map()' function
+#' @param MapMatrix A matrix object created specifically by the 'dem_base_map()' function
 #' 
 #' 
 #' @returns The provided array object with highlights now embedded.
@@ -25,10 +26,10 @@
 #' )
 #' }
 #' 
-dem_polygon_highlight <- function(Highlight, Extent, MapArray){
+dem_polygon_highlight <- function(Highlight, Extent, MapArray, MapMatrix){
   
   #all arguments are required
-  if (any(missing(Highlight), missing(Extent), missing(MapArray))){stop("All arguments are required.")}
+  if (any(missing(Highlight), missing(Extent), missing(MapArray), missing(MapMatrix))){stop("All arguments are required.")}
 
   #check types
   if (!inherits(Highlight, "sf")){
@@ -39,6 +40,9 @@ dem_polygon_highlight <- function(Highlight, Extent, MapArray){
   }
   if (!(inherits(MapArray, "array") | inherits(MapArray, "rayimg"))){
     stop("The object supplied to 'MapArray' must be an array produced by the dem_pre_processing function.")
+  }
+  if (!(inherits(MapMatrix, "matrix") | inherits(MapArray, "array"))){
+    stop("The object supplied to 'MapMatrix' must be an matrix produced by the dem_pre_processing function.")
   }
 
   #update crs of sf objects
@@ -55,13 +59,13 @@ dem_polygon_highlight <- function(Highlight, Extent, MapArray){
 
   #create the overlay
   overlay_1 <- rayshader::generate_polygon_overlay(
-    Highlight, extent = Extent, MapArray, palette = "transparent", linecolor = "black", linewidth = "2")
+    Highlight, extent = Extent, MapMatrix, palette = "transparent", linecolor = "black", linewidth = "2")
 
   overlay_2 <- rayshader::generate_polygon_overlay(
-    Highlight, extent = Extent, MapArray, palette = "transparent", linecolor = "white", linewidth = "1.5")
+    Highlight, extent = Extent, MapMatrix, palette = "transparent", linecolor = "white", linewidth = "1.5")
 
   overlay_3 <- rayshader::generate_polygon_overlay(
-    highlight_inversion, extent = Extent, MapArray, palette = "black", linecolor = "black", linewidth = "0")
+    highlight_inversion, extent = Extent, MapMatrix, palette = "black", linecolor = "black", linewidth = "0")
 
   #put the overlays into the main array
   MapArray <- MapArray |> 
