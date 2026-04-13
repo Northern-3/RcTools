@@ -13,7 +13,8 @@ dem_base_map(
   Reload = TRUE,
   Overwrite = TRUE,
   Texture = "Desert",
-  SeaLevel = 0
+  SeaLevel = 0,
+  Crs = "EPSG:7844"
 )
 }
 \arguments{
@@ -26,7 +27,7 @@ dem_base_map(
 \item{Zscale}{A numeric vector. Defines ratio between x and y spacing. Defaults to Resolution input (realistic). Decrease
 Zscale to exagerate heights}
 
-\item{CropObj}{A sf or SpatVector object. This is optionally used to further crop the data to a specific location}
+\item{CropObj}{A sf object. This is optionally used to further crop the data to a specific location}
 
 \item{Reload}{Boolean. Do you want to try and reload a prior saved dataset with the same name? Defaults to TRUE.}
 

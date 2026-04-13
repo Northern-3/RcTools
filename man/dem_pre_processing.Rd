@@ -4,7 +4,15 @@
 \alias{dem_pre_processing}
 \title{Preprocess Digital Elevation Model data from AUSSEABED for the GBR}
 \usage{
-dem_pre_processing(RawPath, CropPath, OutputName, CropObj, Reload, Overwrite)
+dem_pre_processing(
+  RawPath,
+  CropPath,
+  OutputName,
+  CropObj,
+  Reload,
+  Overwrite,
+  Crs = "EPSG:7844"
+)
 }
 \arguments{
 \item{RawPath}{The path to where to find the raw, unprocessed data}
@@ -32,7 +40,7 @@ raw_path <- "path/to/raw folder/"
 crop_path <- "path/to/crop folder/"
 n3_region <- build_n3_region()
 
-dem_cropped <- dem_pre_processing(raw_path, crop_path, "n3_dem_100m", n3_region, Reload = TRUE, Overwrite = FALSE)
+dem_cropped <- dem_pre_processing(raw_path, crop_path, "n3_dem_100m", n3_region, Reload = TRUE, Overwrite = FALSE, Crs = "EPSG:7844")
 }
 
 }

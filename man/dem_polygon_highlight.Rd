@@ -2,22 +2,24 @@
 % Please edit documentation in R/dem_polygon_highlight.R
 \name{dem_polygon_highlight}
 \alias{dem_polygon_highlight}
-\title{Create the base map elements for a DEM map}
+\title{Highlight a specific area defined by a polygon}
 \usage{
-dem_polygon_highlight(Highlight, Extent, MapArray)
+dem_polygon_highlight(Highlight, Extent, MapArray, MapMatrix)
 }
 \arguments{
 \item{Highlight}{An sf object that defines the area of interest. Must be within map boundaries}
 
-\item{Extent}{An sf object, bbox object, or SpatExtent that defines the full map boundaries}
+\item{Extent}{An sf object that defines the full map boundaries}
 
 \item{MapArray}{An array object created specifically by the 'dem_base_map()' function}
+
+\item{MapMatrix}{A matrix object created specifically by the 'dem_base_map()' function}
 }
 \value{
 The provided array object with highlights now embedded.
 }
 \description{
-Create the base map elements for a DEM map
+Highlight a specific area defined by a polygon
 }
 \examples{
 \dontrun{ #dont run because function takes a long time
