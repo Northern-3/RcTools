@@ -1,11 +1,11 @@
-# Create the base map elements for a DEM map
+# Highlight a specific area defined by a polygon
 
-Create the base map elements for a DEM map
+Highlight a specific area defined by a polygon
 
 ## Usage
 
 ``` r
-dem_polygon_highlight(Highlight, Extent, MapArray)
+dem_polygon_highlight(Highlight, Extent, MapArray, MapMatrix)
 ```
 
 ## Arguments
@@ -17,12 +17,15 @@ dem_polygon_highlight(Highlight, Extent, MapArray)
 
 - Extent:
 
-  An sf object, bbox object, or SpatExtent that defines the full map
-  boundaries
+  An sf object that defines the full map boundaries
 
 - MapArray:
 
   An array object created specifically by the 'dem_base_map()' function
+
+- MapMatrix:
+
+  A matrix object created specifically by the 'dem_base_map()' function
 
 ## Value
 
@@ -47,6 +50,6 @@ dem_cropped <- dem_polygon_highlight(
   Extent = map_ext,
   MapArray = map_array
 )
-#> Error: object 'maggie' not found
+#> Error in dem_polygon_highlight(Highlight = maggie, Extent = map_ext, MapArray = map_array): All arguments are required.
  # \dontrun{}
 ```

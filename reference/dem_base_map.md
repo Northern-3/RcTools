@@ -14,7 +14,8 @@ dem_base_map(
   Reload = TRUE,
   Overwrite = TRUE,
   Texture = "Desert",
-  SeaLevel = 0
+  SeaLevel = 0,
+  Crs = "EPSG:7844"
 )
 ```
 
@@ -42,8 +43,8 @@ dem_base_map(
 
 - CropObj:
 
-  A sf or SpatVector object. This is optionally used to further crop the
-  data to a specific location
+  A sf object. This is optionally used to further crop the data to a
+  specific location
 
 - Reload:
 

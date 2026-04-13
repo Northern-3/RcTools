@@ -29,9 +29,11 @@
 - [`dem_base_map()`](https://add-am.github.io/RcTools/reference/dem_base_map.md)
   : Create the base map elements for a DEM map
 - [`dem_polygon_highlight()`](https://add-am.github.io/RcTools/reference/dem_polygon_highlight.md)
-  : Create the base map elements for a DEM map
+  : Highlight a specific area defined by a polygon
 - [`dem_pre_processing()`](https://add-am.github.io/RcTools/reference/dem_pre_processing.md)
   : Preprocess Digital Elevation Model data from AUSSEABED for the GBR
+- [`dem_water_overlay()`](https://add-am.github.io/RcTools/reference/dem_water_overlay.md)
+  : Create a river overlay for the area
 - [`ereefs_dotplot()`](https://add-am.github.io/RcTools/reference/ereefs_dotplot.md)
   : Plotting eReefs Data
 - [`ereefs_get_date_range()`](https://add-am.github.io/RcTools/reference/ereefs_get_date_range.md)

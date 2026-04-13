@@ -5,7 +5,15 @@ Preprocess Digital Elevation Model data from AUSSEABED for the GBR
 ## Usage
 
 ``` r
-dem_pre_processing(RawPath, CropPath, OutputName, CropObj, Reload, Overwrite)
+dem_pre_processing(
+  RawPath,
+  CropPath,
+  OutputName,
+  CropObj,
+  Reload,
+  Overwrite,
+  Crs = "EPSG:7844"
+)
 ```
 
 ## Arguments
@@ -81,7 +89,7 @@ n3_region <- build_n3_region()
 #> Warning: attribute variables are assumed to be spatially constant throughout all geometries
 #> Warning: attribute variables are assumed to be spatially constant throughout all geometries
 
-dem_cropped <- dem_pre_processing(raw_path, crop_path, "n3_dem_100m", n3_region, Reload = TRUE, Overwrite = FALSE)
+dem_cropped <- dem_pre_processing(raw_path, crop_path, "n3_dem_100m", n3_region, Reload = TRUE, Overwrite = FALSE, Crs = "EPSG:7844")
 #> Error: object 'raw_path' not found
  # \dontrun{}
 ```
