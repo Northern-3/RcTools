@@ -1,7 +1,7 @@
 #' Create a river overlay for the area
 #'
 #' @param Lines An sf object that defines the line waterbodies to be put onto the map (e.g. rivers)
-#' @param Polygons An sf object that defines the polygon waterbodies to be put onto the map (e.g. lakes)
+#' @param Polygons An sf object that defines the polygon waterbodies to be put onto the map (e.g. lakes). Optional
 #' @param Extent An sf object that defines the full map boundaries
 #' @param MapArray An array object created specifically by the 'dem_base_map()' function
 #' @param MapMatrix A matrix object created specifically by the 'dem_base_map()' function
@@ -29,7 +29,7 @@
 #' )
 #' }
 #' 
-dem_water_overlay <- function(Lines, Polygons, Extent, MapArray, MapMatrix){
+dem_water_overlay <- function(Lines, Polygons = NULL, Extent, MapArray, MapMatrix){
   
   #all arguments are required
   if (any(missing(Lines), missing(Extent), missing(MapArray), missing(MapMatrix))){
@@ -40,7 +40,7 @@ dem_water_overlay <- function(Lines, Polygons, Extent, MapArray, MapMatrix){
     stop("The object supplied to 'Lines' must be a sf object.")
   }
   #check types
-  if (exists(Polygons) & !inherits(Polygons, "sf")){
+  if (!is.null(Polygons) & !inherits(Polygons, "sf")){
     stop("The object supplied to 'Polygons' must be a sf object.")
   }
 
@@ -56,7 +56,7 @@ dem_water_overlay <- function(Lines, Polygons, Extent, MapArray, MapMatrix){
 
   #update crs of sf objects
   Lines <- sf::st_transform(Lines, "EPSG:7844")
-  if (exists(Polygons)){Polygons <- sf::st_transform(Polygons, "EPSG:7844")}
+  if (!is.null(Polygons)){Polygons <- sf::st_transform(Polygons, "EPSG:7844")}
   Extent <- sf::st_transform(Extent, "EPSG:7844")
 
   #create the overlay
