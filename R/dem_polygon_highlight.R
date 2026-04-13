@@ -51,7 +51,6 @@ dem_polygon_highlight <- function(Highlight, Extent, MapArray){
     sf::st_as_sfc() |> 
     sf::st_union() |> 
     sf::st_difference(sf::st_union(Highlight)) |> 
-    sf::st_as_sfc() |> 
     sf::st_as_sf()
 
   #create the overlay
