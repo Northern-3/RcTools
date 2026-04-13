@@ -53,6 +53,7 @@ my_water_layer <- maps_water_layer("Ross")
 #>   method     from    
 #>   print.json jsonlite
 #> [working] (0 + 0) -> 6 -> 1 | ■■■■■                             14%
+#> [working] (0 + 0) -> 1 -> 6 | ■■■■■■■■■■■■■■■■■■■■■■■■■■■       86%
 #> [working] (0 + 0) -> 0 -> 7 | ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  100%
 
 #visualise
