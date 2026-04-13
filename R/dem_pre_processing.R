@@ -82,9 +82,12 @@ dem_pre_processing <- function(RawPath, CropPath, OutputName, CropObj, Reload, O
 
     #save using the name provided
     terra::writeCDF(all_tif, glue::glue("{CropPath}/{OutputName}.nc"), overwrite = Overwrite)
+
+    # reload from the saved file
+    all_tif <- terra::rast(glue::glue("{CropPath}/{OutputName}.nc"))
     
     #remove temp file and temp directory
-    #unlink("C:/tmp", recursive = TRUE, force = TRUE)
+    unlink("C:/tmp", recursive = TRUE, force = TRUE)
 
     #return the object to the active environment as well
     return(all_tif)
