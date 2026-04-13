@@ -1,7 +1,7 @@
 #' Create the base map elements for a DEM map
 #'
 #' @param Highlight An sf object that defines the area of interest. Must be within map boundaries
-#' @param Extent An sf object, bbox object, or SpatExtent that defines the full map boundaries
+#' @param Extent An sf object that defines the full map boundaries
 #' @param MapArray An array object created specifically by the 'dem_base_map()' function
 #' 
 #' 
@@ -32,10 +32,10 @@ dem_polygon_highlight <- function(Highlight, Extent, MapArray){
 
   #check types
   if (!inherits(Highlight, "sf")){
-    stop("The object supplied to 'Highlight' must be either a sf object.")
+    stop("The object supplied to 'Highlight' must be a sf object.")
   }
   if (!inherits(Extent, "sf")){
-    stop("The object supplied to 'Extent' must be either a sf object.")
+    stop("The object supplied to 'Extent' must be a sf object.")
   }
   if (!(inherits(MapArray, "array") | inherits(MapArray, "rayimg"))){
     stop("The object supplied to 'MapArray' must be an array produced by the dem_pre_processing function.")
@@ -50,7 +50,9 @@ dem_polygon_highlight <- function(Highlight, Extent, MapArray){
     sf::st_bbox() |>
     sf::st_as_sfc() |> 
     sf::st_union() |> 
-    sf::st_difference(sf::st_union(Highlight))
+    sf::st_difference(sf::st_union(Highlight)) |> 
+    sf::st_as_sfc() |> 
+    sf::st_as_sf()
 
   #create the overlay
   overlay_1 <- rayshader::generate_polygon_overlay(
