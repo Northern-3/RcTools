@@ -101,6 +101,9 @@ dem_base_map <- function(
         sf::st_as_sfc() |> 
         terra::vect()
 
+      #force file into memory
+      terra::setMinMax(sr)
+
       #crop the SpatRaster
       sr <- terra::trim(terra::mask(sr, CropObj))
       
