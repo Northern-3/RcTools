@@ -6,6 +6,8 @@
   File](https://add-am.github.io/RcTools/articles/Build_Northern_Three.md):
 - [Data
   Extractions](https://add-am.github.io/RcTools/articles/Data_Extractions.md):
+- [Digital Elevation
+  Models](https://add-am.github.io/RcTools/articles/Digital_Elevation_Models.md):
 - [eReefs](https://add-am.github.io/RcTools/articles/eReefs.md):
 - [Creating Maps](https://add-am.github.io/RcTools/articles/Mapping.md):
 - [Miscellaneous

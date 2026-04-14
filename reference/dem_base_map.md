@@ -15,7 +15,7 @@ dem_base_map(
   Overwrite = TRUE,
   Texture = "Desert",
   SeaLevel = 0,
-  Crs = "EPSG:7844"
+  Crs = "EPSG:4326"
 )
 ```
 
@@ -66,10 +66,15 @@ dem_base_map(
   A numeric vector. Defines the elevation of sea level. Defaults to 0m.
   Decrease or increse to simulate various sea levels.
 
+- Crs:
+
+  A character string that describes the cooridnate reference system to
+  use. Defaults to "EPSG:4326"
+
 ## Value
 
-A matrix object and an array object. Both are saved to the path
-specified and returned to the active environment
+A raster object, matrix object, array object, and extent object. All are
+saved to the path specified and returned to the active environment
 
 ## Examples
 
@@ -88,7 +93,8 @@ dem_cropped <- dem_base_map(
   Reload = FALSE,
   Overwrite = FALSE,
   Texture = "Desert",
-  SeaLevel = 0
+  SeaLevel = 0,
+  Crs = "EPSG:4326"
 )
 #> Error: object 'my_spat_raster' not found
  # \dontrun{}

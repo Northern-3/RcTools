@@ -5,7 +5,13 @@ Highlight a specific area defined by a polygon
 ## Usage
 
 ``` r
-dem_polygon_highlight(Highlight, Extent, MapArray, MapMatrix)
+dem_polygon_highlight(
+  Highlight,
+  Extent,
+  MapArray,
+  MapMatrix,
+  Crs = "EPSG:4326"
+)
 ```
 
 ## Arguments
@@ -26,6 +32,11 @@ dem_polygon_highlight(Highlight, Extent, MapArray, MapMatrix)
 - MapMatrix:
 
   A matrix object created specifically by the 'dem_base_map()' function
+
+- Crs:
+
+  A character string that describes the cooridnate reference system to
+  use. Defaults to "EPSG:4326"
 
 ## Value
 
@@ -48,8 +59,10 @@ map_array <- dem_base_map(...)
 dem_cropped <- dem_polygon_highlight(
   Highlight = maggie,
   Extent = map_ext,
-  MapArray = map_array
+  MapArray = map_array,
+  MapMatrix = map_matrix,
+  Crs = "EPSG:4326"
 )
-#> Error in dem_polygon_highlight(Highlight = maggie, Extent = map_ext, MapArray = map_array): All arguments are required.
+#> Error: object 'maggie' not found
  # \dontrun{}
 ```

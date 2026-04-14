@@ -7,12 +7,12 @@ Preprocess Digital Elevation Model data from AUSSEABED for the GBR
 ``` r
 dem_pre_processing(
   RawPath,
-  CropPath,
-  OutputName,
+  OutputPath,
+  FileName,
   CropObj,
   Reload,
   Overwrite,
-  Crs = "EPSG:7844"
+  Crs = "EPSG:4326"
 )
 ```
 
@@ -22,11 +22,11 @@ dem_pre_processing(
 
   The path to where to find the raw, unprocessed data
 
-- CropPath:
+- OutputPath:
 
   The path where the function should save the processed data
 
-- OutputName:
+- FileName:
 
   The name of the file when it is saved
 
@@ -43,6 +43,11 @@ dem_pre_processing(
 
   Boolean. Do you want to overwrite the previously saved dataset with
   the same name? Defaults to FALSE
+
+- Crs:
+
+  A character string that describes the cooridnate reference system to
+  use. Defaults to "EPSG:4326"
 
 ## Value
 
@@ -89,7 +94,7 @@ n3_region <- build_n3_region()
 #> Warning: attribute variables are assumed to be spatially constant throughout all geometries
 #> Warning: attribute variables are assumed to be spatially constant throughout all geometries
 
-dem_cropped <- dem_pre_processing(raw_path, crop_path, "n3_dem_100m", n3_region, Reload = TRUE, Overwrite = FALSE, Crs = "EPSG:7844")
+dem_cropped <- dem_pre_processing(raw_path, crop_path, "n3_dem_100m", n3_region, Reload = TRUE, Overwrite = FALSE, Crs = "EPSG:4326")
 #> Error: object 'raw_path' not found
  # \dontrun{}
 ```
