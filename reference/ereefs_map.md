@@ -21,7 +21,7 @@ ereefs_map(
 
   A single NetCDF (stars) object OR a list of NetCDF (stars) objects,
   generally produced by the
-  [`extract_ereefs()`](https://add-am.github.io/RcTools/reference/extract_ereefs.md)
+  [`extract_ereefs()`](https://northern-3.github.io/RcTools/reference/extract_ereefs.md)
   function
 
 - MapType:

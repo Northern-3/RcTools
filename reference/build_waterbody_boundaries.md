@@ -13,7 +13,7 @@ build_waterbody_boundaries(waterbodies)
 - waterbodies:
 
   An sf object produced by the
-  [`build_waterbodies()`](https://add-am.github.io/RcTools/reference/build_waterbodies.md)
+  [`build_waterbodies()`](https://northern-3.github.io/RcTools/reference/build_waterbodies.md)
   function
 
 ## Value

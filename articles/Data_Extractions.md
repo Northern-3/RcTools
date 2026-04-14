@@ -61,7 +61,7 @@ script and has been written such that the climate_air_temperature script
 can be run automatically. Please note that the output of this function
 is a list of netCDF STARS files. Further reading on STARS files can be
 found at [R
-Stars](https://add-am.github.io/RcTools/articles/)<https://r-spatial.github.io/stars/>
+Stars](https://northern-3.github.io/RcTools/articles/)<https://r-spatial.github.io/stars/>
 
 ### extract_dhw
 
@@ -92,7 +92,7 @@ This function is exclusively used with the climate_dhw script and has
 been written such that the climate_dhw script can be run automatically.
 Please note that the output of this function is a list of netCDF STARS
 files. Further reading on STARS files can be found at [R
-Stars](https://add-am.github.io/RcTools/articles/)<https://r-spatial.github.io/stars/>
+Stars](https://northern-3.github.io/RcTools/articles/)<https://r-spatial.github.io/stars/>
 
 ### extract_ereefs
 
@@ -274,7 +274,7 @@ This function is exclusively used with the climate_rainfall script and
 has been written such that the climate_rainfall script can be run
 automatically. Please note that the output of this function is a netCDF
 STARS file. Further reading on STARS files can be found at [R
-Stars](https://add-am.github.io/RcTools/articles/)<https://r-spatial.github.io/stars/>
+Stars](https://northern-3.github.io/RcTools/articles/)<https://r-spatial.github.io/stars/>
 
 ### extract_sst
 
@@ -305,7 +305,7 @@ This function is exclusively used with the climate_sst script and has
 been written such that the climate_sst script can be run automatically.
 Please note that the output of this function is a list of netCDF STARS
 files. Further reading on STARS files can be found at [R
-Stars](https://add-am.github.io/RcTools/articles/)<https://r-spatial.github.io/stars/>
+Stars](https://northern-3.github.io/RcTools/articles/)<https://r-spatial.github.io/stars/>
 
 ### extract_watercourses
 

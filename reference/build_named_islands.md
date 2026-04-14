@@ -13,7 +13,7 @@ build_named_islands(basins)
 - basins:
 
   An sf object produced by the
-  [`build_basins()`](https://add-am.github.io/RcTools/reference/build_basins.md)
+  [`build_basins()`](https://northern-3.github.io/RcTools/reference/build_basins.md)
   function
 
 ## Value

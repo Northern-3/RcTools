@@ -13,7 +13,7 @@ build_land_sp(n3_land)
 - n3_land:
 
   An sf object produced within the
-  [`build_n3_region()`](https://add-am.github.io/RcTools/reference/build_n3_region.md)
+  [`build_n3_region()`](https://northern-3.github.io/RcTools/reference/build_n3_region.md)
   function
 
 ## Value

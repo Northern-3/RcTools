@@ -13,7 +13,7 @@ ereefs_reproject(nc)
 - nc:
 
   A single NetCDF (stars) object, generally produced by the
-  [`extract_ereefs()`](https://add-am.github.io/RcTools/reference/extract_ereefs.md)
+  [`extract_ereefs()`](https://northern-3.github.io/RcTools/reference/extract_ereefs.md)
   function
 
 ## Value

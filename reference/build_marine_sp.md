@@ -13,13 +13,13 @@ build_marine_sp(n3_marine, n3_land)
 - n3_marine:
 
   An sf object produced within the
-  [`build_waterbody_boundaries()`](https://add-am.github.io/RcTools/reference/build_waterbody_boundaries.md)
+  [`build_waterbody_boundaries()`](https://northern-3.github.io/RcTools/reference/build_waterbody_boundaries.md)
   function
 
 - n3_land:
 
   An sf object produced within the
-  [`build_n3_region()`](https://add-am.github.io/RcTools/reference/build_n3_region.md)
+  [`build_n3_region()`](https://northern-3.github.io/RcTools/reference/build_n3_region.md)
   function
 
 ## Value

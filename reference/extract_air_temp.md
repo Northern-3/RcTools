@@ -26,7 +26,7 @@ extract_air_temp(MinPath, MaxPath, CropObj)
 
   Sf Object. An sf object used to define the area in which data is to be
   cropped to. Generally, the n3_region object from the
-  [`build_n3_region()`](https://add-am.github.io/RcTools/reference/build_n3_region.md)
+  [`build_n3_region()`](https://northern-3.github.io/RcTools/reference/build_n3_region.md)
   function is used.
 
 ## Value

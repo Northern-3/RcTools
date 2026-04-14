@@ -13,13 +13,13 @@ build_waterbodies(basins, named_islands)
 - basins:
 
   An sf object produced by the
-  [`build_basins()`](https://add-am.github.io/RcTools/reference/build_basins.md)
+  [`build_basins()`](https://northern-3.github.io/RcTools/reference/build_basins.md)
   function
 
 - named_islands:
 
   An sf object produced by the
-  [`build_named_islands()`](https://add-am.github.io/RcTools/reference/build_named_islands.md)
+  [`build_named_islands()`](https://northern-3.github.io/RcTools/reference/build_named_islands.md)
   function
 
 ## Value
