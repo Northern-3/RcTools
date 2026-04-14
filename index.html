@@ -83,6 +83,27 @@
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://northern-3.github.io/RcTools/">RcTools</a></span><span class="op">)</span></span></code></pre></div>
 <p>Once you have successfully loaded the package you are good to go!</p>
 </div>
+<div class="section level1">
+<h1 id="updating-the-website">Updating the Website<a class="anchor" aria-label="anchor" href="#updating-the-website"></a>
+</h1>
+<p>To update the website you will need to clone this repository as normal and make your edits on your local machine. Before pushing your edits back to the remote, run the following command:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">usethis</span><span class="fu">::</span><span class="fu"><a href="https://usethis.r-lib.org/reference/use_pkgdown.html" class="external-link">use_pkgdown_github_pages</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p>This will update all of the necessary behind the scenes information for the website to then be updated.</p>
+</div>
+<div class="section level1">
+<h1 id="update-the-readme">Update the README<a class="anchor" aria-label="anchor" href="#update-the-readme"></a>
+</h1>
+<p>To update the readme (this document) you will need to clone this repository as normal and make your edits on your local machine. Before pushing your edits back to the remote, run the following command:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/build_readme.html" class="external-link">build_readme</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p>This will update all of the necessary behind the scenes information for the readme to then be updated. Note that this is different to the normal way of updating the readme.</p>
+</div>
+<div class="section level1">
+<h1 id="creatingediting-functions">Creating/Editing Functions<a class="anchor" aria-label="anchor" href="#creatingediting-functions"></a>
+</h1>
+<p>Creating and editing functions takes a bit more work. Refer to <a href="https://r-pkgs.org/whole-game.html" class="external-link">R Packages 2nd Edition</a> to learn more.</p>
+</div>
 
   </main><aside class="col-md-3"><div class="license">
 <h2 data-toc-skip>License</h2>
