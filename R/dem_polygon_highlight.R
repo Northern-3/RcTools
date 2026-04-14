@@ -4,6 +4,7 @@
 #' @param Extent An sf object that defines the full map boundaries
 #' @param MapArray An array object created specifically by the 'dem_base_map()' function
 #' @param MapMatrix A matrix object created specifically by the 'dem_base_map()' function
+#' @param Crs A character string that describes the cooridnate reference system to use. Defaults to "EPSG:4326"
 #' 
 #' 
 #' @returns The provided array object with highlights now embedded.
@@ -22,14 +23,19 @@
 #' dem_cropped <- dem_polygon_highlight(
 #'   Highlight = maggie,
 #'   Extent = map_ext,
-#'   MapArray = map_array
+#'   MapArray = map_array,
+#'   MapMatrix = map_matrix,
+#'   Crs = "EPSG:4326"
 #' )
 #' }
 #' 
-dem_polygon_highlight <- function(Highlight, Extent, MapArray, MapMatrix){
+dem_polygon_highlight <- function(Highlight, Extent, MapArray, MapMatrix, Crs = "EPSG:4326"){
   
   #all arguments are required
-  if (any(missing(Highlight), missing(Extent), missing(MapArray), missing(MapMatrix))){stop("All arguments are required.")}
+  if (any(missing(Highlight), missing(Extent), missing(MapArray), missing(MapMatrix))){
+    stop("The 'Highlight', 'Extent', 'MapArray' and 'MapMatrix' arguments are required.")}
+
+  if (!is.character(Crs)){stop("The argument supplied to the 'Crs' parameter must be of character type.")}
 
   #check types
   if (!inherits(Highlight, "sf")){
@@ -46,8 +52,8 @@ dem_polygon_highlight <- function(Highlight, Extent, MapArray, MapMatrix){
   }
 
   #update crs of sf objects
-  Highlight <- sf::st_transform(Highlight, "EPSG:4326")
-  Extent <- sf::st_transform(Extent, "EPSG:4326")
+  Highlight <- sf::st_transform(Highlight, Crs)
+  Extent <- sf::st_transform(Extent, Crs)
   
   #create an inversion of the targeted polygon without required external "help" or user input:
   highlight_inversion <- Extent |> 

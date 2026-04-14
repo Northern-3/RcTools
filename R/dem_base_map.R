@@ -11,9 +11,10 @@
 #' @param Texture A character vector. Describes the colour palette to use. One of: “imhof1”, “imhof2”, “imhof3”, “imhof4”, “desert”, “bw”, “unicorn”.
 #' @param SeaLevel A numeric vector. Defines the elevation of sea level. Defaults to 0m. Decrease or increse to simulate
 #' various sea levels.
+#' @param Crs A character string that describes the cooridnate reference system to use. Defaults to "EPSG:4326"
 #' 
 #' 
-#' @returns A matrix object and an array object. Both are saved to the path specified and returned to the active environment
+#' @returns A raster object, matrix object, array object, and extent object. All are saved to the path specified and returned to the active environment
 #'
 #' @export
 #' @examples
@@ -31,13 +32,14 @@
 #'   Reload = FALSE,
 #'   Overwrite = FALSE,
 #'   Texture = "Desert",
-#'   SeaLevel = 0
+#'   SeaLevel = 0,
+#'   Crs = "EPSG:4326"
 #' )
 #' }
 #' 
 dem_base_map <- function(
   sr, OutputPath, FileName, Zscale, CropObj = NULL, Reload = TRUE, 
-  Overwrite = TRUE, Texture = "Desert", SeaLevel = 0, Crs = "EPSG:7844"){
+  Overwrite = TRUE, Texture = "Desert", SeaLevel = 0, Crs = "EPSG:4326"){
   
   #check required arguments
   if (any(missing(sr), missing(OutputPath), missing(FileName), missing(Zscale))){
@@ -71,20 +73,22 @@ dem_base_map <- function(
   sr_path <- glue::glue("{OutputPath}/{FileName}_raster.nc")
   array_path <- glue::glue("{OutputPath}/{FileName}_array")
   matrix_path <- glue::glue("{OutputPath}/{FileName}_matrix")
+  extent_path <- glue::glue("{OutputPath}/{FileName}_extent.gpkg")
 
   #reload files if requested and existing
-  if (Reload & all(file.exists(c(sr_path, array_path, matrix_path)))){
+  if (Reload & all(file.exists(c(sr_path, array_path, matrix_path, extent_path)))){
 
     #read in
     sr <- terra::rast(sr_path)
     area_array <- readRDS(file = array_path)
     area_matrix <- readRDS(file = matrix_path)
+    sr_extent <- sf::st_read(extent_path)
 
     #store in a list
-    base_map_objects <- list(sr, area_array, area_matrix)
+    base_map_objects <- list(sr, area_array, area_matrix, sr_extent)
 
     #update names
-    names(base_map_objects) <- c("raster", "array", "matrix")
+    names(base_map_objects) <- c("raster", "array", "matrix", "extent")
 
     #return and end
     return(base_map_objects)
@@ -95,10 +99,15 @@ dem_base_map <- function(
     #if a crop object has been provide, further crop the data
     if (!is.null(CropObj)){
 
+      #convert the crop object into a simple box of the area
       CropObj <- CropObj |> 
-        sf::st_transform(Crs) |> 
-        sf::st_bbox() |> 
+        sf::st_transform(Crs) |>
+        sf::st_bbox() |>
         sf::st_as_sfc() |> 
+        sf::st_union()
+
+      #change it to a vect object just for the cropping part
+      CropObj <- CropObj |> 
         terra::vect()
 
       #force file into memory
@@ -107,7 +116,13 @@ dem_base_map <- function(
       #crop the SpatRaster
       sr <- terra::trim(terra::mask(sr, CropObj))
       
-    } 
+    }
+
+    #get full ext of the raster (crop or unchanged) and convert it to a polygon
+    sr_extent <- terra::as.polygons(terra::ext(sr), crs = Crs)
+
+    #convert the polygon to an sfc object (for later)
+    sr_extent <- sf::st_as_sf(sr_extent)
 
     #convert raster into a matrix
     area_matrix <- rayshader::raster_to_matrix(sr)
@@ -166,10 +181,10 @@ dem_base_map <- function(
     terra::writeCDF(sr, sr_path, overwrite = Overwrite)
 
     #store in a list
-    base_map_objects <- list(sr, area_array, area_matrix)
+    base_map_objects <- list(sr, area_array, area_matrix, sr_extent)
 
     #update names
-    names(base_map_objects) <- c("raster", "array", "matrix")
+    names(base_map_objects) <- c("raster", "array", "matrix", "extent")
     
     #return and end
     return(base_map_objects)

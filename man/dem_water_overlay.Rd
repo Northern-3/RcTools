@@ -4,16 +4,27 @@
 \alias{dem_water_overlay}
 \title{Create a river overlay for the area}
 \usage{
-dem_water_overlay(Lines, Polygons, Extent, MapArray)
+dem_water_overlay(
+  Lines,
+  Polygons = NULL,
+  Extent,
+  MapArray,
+  MapMatrix,
+  Crs = "EPSG:4326"
+)
 }
 \arguments{
 \item{Lines}{An sf object that defines the line waterbodies to be put onto the map (e.g. rivers)}
 
-\item{Polygons}{An sf object that defines the polygon waterbodies to be put onto the map (e.g. lakes)}
+\item{Polygons}{An sf object that defines the polygon waterbodies to be put onto the map (e.g. lakes). Optional}
 
 \item{Extent}{An sf object that defines the full map boundaries}
 
 \item{MapArray}{An array object created specifically by the 'dem_base_map()' function}
+
+\item{MapMatrix}{A matrix object created specifically by the 'dem_base_map()' function}
+
+\item{Crs}{A character string that describes the cooridnate reference system to use. Defaults to "EPSG:4326"}
 }
 \value{
 The provided array object with waterbodies now embedded.
@@ -24,17 +35,19 @@ Create a river overlay for the area
 \examples{
 \dontrun{ #dont run because function takes a long time
 
-ross_waters <- extract_watercourses("Ross", WaterAreas = TRUE, WaterLakes = TRUE, StreamOrder = 1
+ross_waters <- extract_watercourses("Ross", WaterAreas = TRUE, WaterLakes = TRUE, StreamOrder = 2)
 
 map_ext <- ext(my_spat_raster)
 
 map_array <- dem_base_map(...)
+map_matrix <- dem_base_map(...)
 
 dem_cropped <- dem_water_overlay(
   Lines = ross_waters,
   Polygons = ross_waters,
   Extent = map_ext,
-  MapArray = map_array
+  MapArray = map_array,
+  MapMatrix = map_matrix
 )
 }
 

@@ -14,7 +14,7 @@ dem_base_map(
   Overwrite = TRUE,
   Texture = "Desert",
   SeaLevel = 0,
-  Crs = "EPSG:7844"
+  Crs = "EPSG:4326"
 )
 }
 \arguments{
@@ -37,9 +37,11 @@ Zscale to exagerate heights}
 
 \item{SeaLevel}{A numeric vector. Defines the elevation of sea level. Defaults to 0m. Decrease or increse to simulate
 various sea levels.}
+
+\item{Crs}{A character string that describes the cooridnate reference system to use. Defaults to "EPSG:4326"}
 }
 \value{
-A matrix object and an array object. Both are saved to the path specified and returned to the active environment
+A raster object, matrix object, array object, and extent object. All are saved to the path specified and returned to the active environment
 }
 \description{
 Create the base map elements for a DEM map
@@ -59,7 +61,8 @@ dem_cropped <- dem_base_map(
   Reload = FALSE,
   Overwrite = FALSE,
   Texture = "Desert",
-  SeaLevel = 0
+  SeaLevel = 0,
+  Crs = "EPSG:4326"
 )
 }
 

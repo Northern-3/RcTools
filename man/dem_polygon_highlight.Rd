@@ -4,7 +4,13 @@
 \alias{dem_polygon_highlight}
 \title{Highlight a specific area defined by a polygon}
 \usage{
-dem_polygon_highlight(Highlight, Extent, MapArray, MapMatrix)
+dem_polygon_highlight(
+  Highlight,
+  Extent,
+  MapArray,
+  MapMatrix,
+  Crs = "EPSG:4326"
+)
 }
 \arguments{
 \item{Highlight}{An sf object that defines the area of interest. Must be within map boundaries}
@@ -14,6 +20,8 @@ dem_polygon_highlight(Highlight, Extent, MapArray, MapMatrix)
 \item{MapArray}{An array object created specifically by the 'dem_base_map()' function}
 
 \item{MapMatrix}{A matrix object created specifically by the 'dem_base_map()' function}
+
+\item{Crs}{A character string that describes the cooridnate reference system to use. Defaults to "EPSG:4326"}
 }
 \value{
 The provided array object with highlights now embedded.
@@ -34,7 +42,9 @@ map_array <- dem_base_map(...)
 dem_cropped <- dem_polygon_highlight(
   Highlight = maggie,
   Extent = map_ext,
-  MapArray = map_array
+  MapArray = map_array,
+  MapMatrix = map_matrix,
+  Crs = "EPSG:4326"
 )
 }
 

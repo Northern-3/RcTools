@@ -1,11 +1,12 @@
 #' Preprocess Digital Elevation Model data from AUSSEABED for the GBR
 #'
 #' @param RawPath The path to where to find the raw, unprocessed data
-#' @param CropPath The path where the function should save the processed data
-#' @param OutputName The name of the file when it is saved
+#' @param OutputPath The path where the function should save the processed data
+#' @param FileName The name of the file when it is saved
 #' @param CropObj The object to use for cropping the dataset
 #' @param Reload Boolean. Do you want to try and reload a prior saved dataset with the same name? Defaults to TRUE.
 #' @param Overwrite Boolean. Do you want to overwrite the previously saved dataset with the same name? Defaults to FALSE
+#' @param Crs A character string that describes the cooridnate reference system to use. Defaults to "EPSG:4326"
 #' 
 #' @returns A saved .nc file, plus a netcdf object in the active session
 #'
@@ -17,29 +18,29 @@
 #' crop_path <- "path/to/crop folder/"
 #' n3_region <- build_n3_region()
 #' 
-#' dem_cropped <- dem_pre_processing(raw_path, crop_path, "n3_dem_100m", n3_region, Reload = TRUE, Overwrite = FALSE, Crs = "EPSG:7844")
+#' dem_cropped <- dem_pre_processing(raw_path, crop_path, "n3_dem_100m", n3_region, Reload = TRUE, Overwrite = FALSE, Crs = "EPSG:4326")
 #' }
 #' 
-dem_pre_processing <- function(RawPath, CropPath, OutputName, CropObj, Reload, Overwrite, Crs = "EPSG:7844"){
+dem_pre_processing <- function(RawPath, OutputPath, FileName, CropObj, Reload, Overwrite, Crs = "EPSG:4326"){
 
   #check required arguments
-  if (any(missing(RawPath), missing(CropPath), missing(OutputName), missing(CropObj), missing(Reload), missing(Overwrite))){
-    stop("You must supply all arguments: 'RawPath', 'CropPath', 'OutputName', 'CropObj', 'Reload', and 'Overwrite'.")}
+  if (any(missing(RawPath), missing(OutputPath), missing(FileName), missing(CropObj), missing(Reload), missing(Overwrite))){
+    stop("You must supply all arguments: 'RawPath', 'OutputPath', 'FileName', 'CropObj', 'Reload', and 'Overwrite'.")}
 
   #check required arguement types
   if (!is.character(RawPath)){stop("The argument supplied to the 'RawPath' parameter must be of character type.")}
-  if (!is.character(CropPath)){stop("The argument supplied to the 'CropPath' parameter must be of character type.")}
-  if (!is.character(OutputName)){stop("The argument supplied to the 'OutputName' parameter must be of numeric type.")}
+  if (!is.character(OutputPath)){stop("The argument supplied to the 'OutputPath' parameter must be of character type.")}
+  if (!is.character(FileName)){stop("The argument supplied to the 'FileName' parameter must be of numeric type.")}
   if (!inherits(CropObj, "sf")){stop("The argument supplied to the 'CropObj' parameter must be of type sf.")}
   if (!is.logical(Reload)){stop("The argument supplied to the 'Reload' parameter must be boolean (TRUE or FALSE).")}
   if (!is.logical(Overwrite)){stop("The argument supplied to the 'Overwrite' parameter must be boolean (TRUE or FALSE).")}
   if (!is.character(Crs)){stop("The argument supplied to the 'Crs' parameter must be of numeric type.")}
 
   #if reload is true and the file exists, open it
-  if (Reload & file.exists(glue::glue("{CropPath}{OutputName}.nc"))){
+  if (Reload & file.exists(glue::glue("{OutputPath}{FileName}.nc"))){
 
     #open
-    all_tif <- terra::rast(glue::glue("{CropPath}{OutputName}.nc")) 
+    all_tif <- terra::rast(glue::glue("{OutputPath}{FileName}.nc")) 
 
     #return the object to the active environment
     return(all_tif)
@@ -81,10 +82,10 @@ dem_pre_processing <- function(RawPath, CropPath, OutputName, CropObj, Reload, O
     all_tif <- terra::trim(terra::mask(all_tif, CropObj))
 
     #save using the name provided
-    terra::writeCDF(all_tif, glue::glue("{CropPath}/{OutputName}.nc"), overwrite = Overwrite)
+    terra::writeCDF(all_tif, glue::glue("{OutputPath}/{FileName}.nc"), overwrite = Overwrite)
 
     # reload from the saved file
-    all_tif <- terra::rast(glue::glue("{CropPath}/{OutputName}.nc"))
+    all_tif <- terra::rast(glue::glue("{OutputPath}/{FileName}.nc"))
     
     #remove temp file and temp directory
     unlink("C:/tmp", recursive = TRUE, force = TRUE)

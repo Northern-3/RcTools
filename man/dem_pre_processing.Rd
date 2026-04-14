@@ -6,26 +6,28 @@
 \usage{
 dem_pre_processing(
   RawPath,
-  CropPath,
-  OutputName,
+  OutputPath,
+  FileName,
   CropObj,
   Reload,
   Overwrite,
-  Crs = "EPSG:7844"
+  Crs = "EPSG:4326"
 )
 }
 \arguments{
 \item{RawPath}{The path to where to find the raw, unprocessed data}
 
-\item{CropPath}{The path where the function should save the processed data}
+\item{OutputPath}{The path where the function should save the processed data}
 
-\item{OutputName}{The name of the file when it is saved}
+\item{FileName}{The name of the file when it is saved}
 
 \item{CropObj}{The object to use for cropping the dataset}
 
 \item{Reload}{Boolean. Do you want to try and reload a prior saved dataset with the same name? Defaults to TRUE.}
 
 \item{Overwrite}{Boolean. Do you want to overwrite the previously saved dataset with the same name? Defaults to FALSE}
+
+\item{Crs}{A character string that describes the cooridnate reference system to use. Defaults to "EPSG:4326"}
 }
 \value{
 A saved .nc file, plus a netcdf object in the active session
@@ -40,7 +42,7 @@ raw_path <- "path/to/raw folder/"
 crop_path <- "path/to/crop folder/"
 n3_region <- build_n3_region()
 
-dem_cropped <- dem_pre_processing(raw_path, crop_path, "n3_dem_100m", n3_region, Reload = TRUE, Overwrite = FALSE, Crs = "EPSG:7844")
+dem_cropped <- dem_pre_processing(raw_path, crop_path, "n3_dem_100m", n3_region, Reload = TRUE, Overwrite = FALSE, Crs = "EPSG:4326")
 }
 
 }

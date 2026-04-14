@@ -5,6 +5,7 @@
 #' @param Extent An sf object that defines the full map boundaries
 #' @param MapArray An array object created specifically by the 'dem_base_map()' function
 #' @param MapMatrix A matrix object created specifically by the 'dem_base_map()' function
+#' @param Crs A character string that describes the cooridnate reference system to use. Defaults to "EPSG:4326"
 #' 
 #' 
 #' @returns The provided array object with waterbodies now embedded.
@@ -29,11 +30,13 @@
 #' )
 #' }
 #' 
-dem_water_overlay <- function(Lines, Polygons = NULL, Extent, MapArray, MapMatrix){
+dem_water_overlay <- function(Lines, Polygons = NULL, Extent, MapArray, MapMatrix, Crs = "EPSG:4326"){
   
   #all arguments are required
   if (any(missing(Lines), missing(Extent), missing(MapArray), missing(MapMatrix))){
     stop("'Lines', 'Extent', 'MapArray', and 'MapMatrix' arguments are required.")}
+  
+  if (!is.character(Crs)){stop("The argument supplied to the 'Crs' parameter must be of character type.")}
 
   #check types
   if (!inherits(Lines, "sf")){
@@ -55,9 +58,9 @@ dem_water_overlay <- function(Lines, Polygons = NULL, Extent, MapArray, MapMatri
   }
 
   #update crs of sf objects
-  Lines <- sf::st_transform(Lines, "EPSG:7844")
-  if (!is.null(Polygons)){Polygons <- sf::st_transform(Polygons, "EPSG:7844")}
-  Extent <- sf::st_transform(Extent, "EPSG:7844")
+  Lines <- sf::st_transform(Lines, Crs)
+  if (!is.null(Polygons)){Polygons <- sf::st_transform(Polygons, Crs)}
+  Extent <- sf::st_transform(Extent, Crs)
 
   #create the overlay
   water_line_overlay <- rayshader::generate_line_overlay(
