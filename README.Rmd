@@ -41,3 +41,33 @@ library(RcTools)
 ```
 
 Once you have successfully loaded the package you are good to go!
+
+# Updating the Website
+
+To update the website you will need to clone this repository as normal and make your edits on your local machine. Before pushing your edits back to the remote, run the following command:
+
+```{r}
+#| eval: FALSE
+
+usethis::use_pkgdown_github_pages()
+
+```
+
+This will update all of the necessary behind the scenes information for the website to then be updated.
+
+# Update the README
+
+To update the readme (this document) you will need to clone this repository as normal and make your edits on your local machine. Before pushing your edits back to the remote, run the following command:
+
+```{r}
+#| eval: FALSE
+
+devtools::build_readme()
+
+```
+
+This will update all of the necessary behind the scenes information for the readme to then be updated. Note that this is different to the normal way of updating the readme.
+
+# Creating/Editing Functions
+
+Creating and editing functions takes a bit more work. Refer to [R Packages 2nd Edition](https://r-pkgs.org/whole-game.html) to learn more.
